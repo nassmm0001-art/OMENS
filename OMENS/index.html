@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omni-Oracle | Quantum Entropy Lab</title>
+    <style>
+        :root {
+            --void: #0a0a0a;
+            --neon: #d946ff;
+            --cyan: #00e5ff;
+            --gold: #f0c674;
+            --text-main: #ffffff;
+            --text-dim: #b0b0b0;
+        }
+
+        body {
+            background-color: var(--void);
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        main { position: relative; z-index: 10; min-height: 100vh; }
+
+        #crystallizer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            background: #000;
+        }
+
+        .topbar {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            font-size: 13px;
+            border-bottom: 2px solid var(--neon);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-stat span { color: var(--cyan); font-weight: bold; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.9);
+            border: 2px solid #444;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+
+        input, select, button {
+            background: #1a1a1a;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        button {
+            grid-column: span 2;
+            background: transparent;
+            border: 2px solid var(--neon);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+
+        button:not(:disabled):hover {
+            background: var(--neon);
+            color: #000;
+        }
+
+        button:disabled { opacity: 0.4; border-color: #777; cursor: not-allowed; }
+
+        #output-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        #output-grid div {
+            background: #222;
+            border: 1px solid var(--cyan);
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #ai-narrative {
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(217, 70, 255, 0.1);
+            border-left: 5px solid var(--neon);
+        }
+
+        #bitstream {
+            font-size: 10px;
+            color: #00ff00;
+            word-break: break-all;
+            height: 40px;
+            overflow: hidden;
+            margin-top: 10px;
+            background: #000;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="crystallizer" aria-hidden="true"></canvas>
+
+<main>
+    <div class="topbar">
+        <div class="topbar-stat">ENTROPY: <span id="pool-count">0</span>/100</div>
+        <div class="topbar-stat">QUANTUM_SYNC: <span id="q-status">READY</span></div>
+        <div class="topbar-stat">BITSTREAM: <span id="bit-rate">0bps</span></div>
+    </div>
+
+    <div class="container">
+        <div class="glass-panel">
+            <h1 style="text-align:center; color: var(--neon);">VOID ORACLE</h1>
+            
+            <div class="controls">
+                <div>
+                    <label for="user-question" class="field-label">The Inquiry</label>
+                    <input type="text" id="user-question" placeholder="Ask the void...">
+                </div>
+                <div>
+                    <label for="data-type" class="field-label">Data Frequency</label>
+                    <select id="data-type">
+                        <option value="chaos">Pure Chaos</option>
+                        <option value="tarot">Tarot Deck</option>
+                        <option value="wiki">Wikipedia Data</option>
+                    </select>
+                </div>
+                <button id="invoke-btn" onclick="synthesize()" disabled>COLLECT ENTROPY (MOVE MOUSE)</button>
+            </div>
+
+            <div id="entropy-src-label" class="field-label">Real-time Bitstream</div>
+            <div id="bitstream" aria-live="polite">01010010 11010011...</div>
+
+            <div id="output-grid" aria-live="polite"></div>
+
+            <section id="ai-narrative" aria-labelledby="interp-header">
+                <h2 id="interp-header" class="field-label" style="color:var(--neon)">Neural Interpretation</h2>
+                <div id="ai-text">Move your mouse to agitate the vacuum. Once bits are collected, click the button to collapse reality.</div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script>
+    const canvas = document.getElementById('crystallizer');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let entropyPool = [];
+    const REQ_ENTROPY = 100;
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize;
+    resize();
+
+    window.addEventListener('mousemove', (e) => {
+        if (entropyPool.length < REQ_ENTROPY) {
+            entropyPool.push(e.clientX % 2);
+            document.getElementById('pool-count').innerText = entropyPool.length;
+            document.getElementById('bitstream').innerText += (e.clientX % 2);
+            
+            if (entropyPool.length >= REQ_ENTROPY) {
+                const btn = document.getElementById('invoke-btn');
+                btn.disabled = false;
+                btn.innerText = "COLLAPSE REALITY";
+            }
+        }
+        
+        particles.push({
+            x: e.clientX, y: e.clientY,
+            vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4,
+            life: 1.0, color: '0, 229, 255'
+        });
+    });
+
+    function animate() {
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+            ctx.fillStyle = `rgba(${p.color}, ${p.life})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
+            ctx.fill();
+            if(p.life <= 0) particles.splice(i, 1);
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    async function synthesize() {
+        const grid = document.getElementById('output-grid');
+        const aiText = document.getElementById('ai-text');
+        const question = document.getElementById('user-question').value;
+        const type = document.getElementById('data-type').value;
+
+        document.getElementById('q-status').innerText = "COLLAPSING...";
+        
+        try {
+            const qRes = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=3&type=uint8');
+            const qData = await qRes.json();
+            
+            grid.innerHTML = "";
+            let shards = [];
+
+            for(let i=0; i<3; i++) {
+                const seed = qData.data[i];
+                let val = "";
+                
+                if(type === 'tarot' || (type === 'chaos' && seed % 2 === 0)) {
+                    const deck = ["The Fool", "Death", "The Tower", "The Sun", "The Moon", "The Star", "Judgment", "The Emperor", "Strength", "10 of Cups", "10 of Pentacles"];
+                    val = deck[seed % deck.length];
+                } else {
+                    const wiki = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/summary').then(r=>r.json());
+                    val = wiki.title;
+                }
+                shards.push(val);
+                grid.innerHTML += `<div><strong>SHARD ${i+1}:</strong><br>${val}</div>`;
+            }
+
+            // Call your local Claude API route
+            const claudeReq = await fetch('/api/interpret', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question, symbols: shards })
+            });
+            
+            const claudeData = await claudeReq.json();
+            
+            // Display the first pattern from the array (or join them)
+            aiText.innerHTML = `<strong>${claudeData[0].pattern}</strong><br>${claudeData[0].reading}<br><br><em>ACTION: ${claudeData[0].action}</em>`;
+            document.getElementById('q-status').innerText = "STABLE";
+
+        } catch(e) {
+            aiText.innerText = "Connection stalled. Energy dispersed.";
+            document.getElementById('q-status').innerText = "ERROR";
+        }
+    }
+</script>
+</body>
+</html>
