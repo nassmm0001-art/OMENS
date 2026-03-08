@@ -1,6 +1,7 @@
 {
   "name": "omens-oracle",
   "version": "1.0.0",
+  "main": "api/interpret.js",
   "dependencies": {
     "node-fetch": "^3.3.0"
   }
