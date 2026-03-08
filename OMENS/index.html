@@ -43,302 +43,105 @@ body {
   overflow-x: hidden;
 }
 
-/* ── FLASH OVERLAY on cast ── */
-#flash {
-  position: fixed; inset: 0; z-index: 8000;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(196,160,240,0.25) 0%, transparent 70%);
-  pointer-events: none; opacity: 0;
-  transition: opacity 0.08s;
-}
+#flash { position: fixed; inset: 0; z-index: 8000; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(196,160,240,0.25) 0%, transparent 70%); pointer-events: none; opacity: 0; transition: opacity 0.08s; }
 #flash.fire { opacity: 1; transition: opacity 0.08s; }
-
 #trail-canvas { position:fixed; inset:0; z-index:9999; pointer-events:none; }
 
-/* ── HEADER ── */
-.hdr {
-  text-align:center; padding:40px 20px 24px; position:relative;
-}
-.hdr::after {
-  content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-  width:50px; height:1px;
-  background:linear-gradient(90deg,transparent,var(--v2),transparent);
-}
-.hdr-title {
-  font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,56px);
-  font-weight:900; font-style:italic; letter-spacing:0.04em;
-  color:var(--tx); text-shadow:0 0 80px rgba(196,160,240,0.3);
-  margin-bottom:7px; line-height:1;
-}
+.hdr { text-align:center; padding:40px 20px 24px; position:relative; }
+.hdr::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:50px; height:1px; background:linear-gradient(90deg,transparent,var(--v2),transparent); }
+.hdr-title { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,56px); font-weight:900; font-style:italic; letter-spacing:0.04em; color:var(--tx); text-shadow:0 0 80px rgba(196,160,240,0.3); margin-bottom:7px; line-height:1; }
 .hdr-title em { color:var(--v1); }
 .hdr-sub { font-size:10px; letter-spacing:4px; color:var(--tx3); text-transform:uppercase; font-weight:400; }
 
-/* ── ENTROPY PANEL ── */
-.ent-panel {
-  padding: 28px 4% 0;
-  display: flex; gap: 14px;
-  max-width: 1300px; width: 100%; margin: 0 auto;
-  overflow: visible;
-}
-
-.mouse-col {
-  flex: 0 0 auto;
-  width: clamp(280px, 38%, 520px);
-  display: flex; flex-direction: column;
-}
-.panel-card {
-  background:var(--s1); border:1px solid var(--bc);
-  border-radius:var(--r); overflow:hidden; flex:1;
-  display:flex; flex-direction:column;
-}
+.ent-panel { padding: 28px 4% 0; display: flex; gap: 14px; max-width: 1300px; width: 100%; margin: 0 auto; overflow: visible; }
+.mouse-col { flex: 0 0 auto; width: clamp(280px, 38%, 520px); display: flex; flex-direction: column; }
+.panel-card { background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); overflow:hidden; flex:1; display:flex; flex-direction:column; }
 .sources-col, .src-row { overflow:visible; }
-.panel-hd {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:9px 14px; border-bottom:1px solid var(--bc-lo); flex-shrink:0;
-}
+.panel-hd { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; border-bottom:1px solid var(--bc-lo); flex-shrink:0; }
 .panel-hd-left { display:flex; flex-direction:column; gap:2px; }
-.panel-name  { font-size:12px; font-weight:700; color:var(--tx2); }
-.panel-desc  { font-size:10px; color:var(--tx3); font-weight:300; font-style:italic; }
-.panel-val   { font-size:11px; font-weight:600; color:var(--ce); letter-spacing:0.5px; }
+.panel-name { font-size:12px; font-weight:700; color:var(--tx2); }
+.panel-desc { font-size:10px; color:var(--tx3); font-weight:300; font-style:italic; }
+.panel-val { font-size:11px; font-weight:600; color:var(--ce); letter-spacing:0.5px; }
 
-.mouse-ratio {
-  position:relative; width:100%; padding-top:56.25%; flex:1;
-}
-.mouse-ratio canvas {
-  position:absolute; inset:0; width:100%; height:100%; display:block;
-}
-.panel-ft {
-  padding:7px 14px; border-top:1px solid var(--bc-lo); flex-shrink:0;
-  font-size:9px; color:var(--tx3); font-weight:300;
-  display:flex; align-items:center; gap:6px;
-}
+.mouse-ratio { position:relative; width:100%; padding-top:56.25%; flex:1; }
+.mouse-ratio canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.panel-ft { padding:7px 14px; border-top:1px solid var(--bc-lo); flex-shrink:0; font-size:9px; color:var(--tx3); font-weight:300; display:flex; align-items:center; gap:6px; }
 .ft-dot { width:5px; height:5px; border-radius:50%; background:var(--ce); opacity:0.7; flex-shrink:0; }
 
-.sources-col {
-  flex: 1; display:flex; flex-direction:column; gap:0;
-  background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); overflow:visible;
-}
-
-.src-row {
-  display:flex; align-items:center; gap:0;
-  border-bottom:1px solid var(--bc-lo); position:relative;
-  transition: background 0.2s;
-  overflow: visible;
-}
+.sources-col { flex: 1; display:flex; flex-direction:column; gap:0; background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); overflow:visible; }
+.src-row { display:flex; align-items:center; gap:0; border-bottom:1px solid var(--bc-lo); position:relative; transition: background 0.2s; overflow: visible; }
 .src-row:last-child { border-bottom:none; }
 .src-row:hover { background: rgba(196,160,240,0.04); }
 
-.src-meta {
-  flex:0 0 160px; padding:8px 12px;
-  display:flex; flex-direction:column; gap:3px;
-  border-right:1px solid var(--bc-lo); cursor:default;
-}
+.src-meta { flex:0 0 160px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; border-right:1px solid var(--bc-lo); cursor:default; }
 .src-top-row { display:flex; align-items:center; gap:7px; }
-.src-dot {
-  width:6px; height:6px; border-radius:50%; flex-shrink:0;
-  background:var(--tx3); transition:background 0.4s, box-shadow 0.4s;
-}
-.src-dot.on-a { background:var(--ca); box-shadow:0 0 7px var(--ca); }
-.src-dot.on-b { background:var(--cb); box-shadow:0 0 7px var(--cb); }
-.src-dot.on-c { background:var(--cc); box-shadow:0 0 7px var(--cc); }
-.src-dot.on-d { background:var(--cd); box-shadow:0 0 7px var(--cd); }
-.src-dot.on-e { background:var(--ce); box-shadow:0 0 7px var(--ce); }
-.src-name  { font-size:10px; font-weight:700; color:var(--tx2); }
-.src-sub   { font-size:8px; color:var(--tx3); font-weight:300; }
-.src-num   { font-size:9px; font-weight:600; color:var(--tx3); letter-spacing:0.3px; transition:color 0.4s; }
-.src-num.ca{color:var(--ca);} .src-num.cb{color:var(--cb);}
-.src-num.cc{color:var(--cc);} .src-num.cd{color:var(--cd);} .src-num.ce{color:var(--ce);}
+.src-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; background:var(--tx3); transition:background 0.4s, box-shadow 0.4s; }
+.src-dot.on-a { background:var(--ca); box-shadow:0 0 7px var(--ca); } .src-dot.on-b { background:var(--cb); box-shadow:0 0 7px var(--cb); } .src-dot.on-c { background:var(--cc); box-shadow:0 0 7px var(--cc); } .src-dot.on-d { background:var(--cd); box-shadow:0 0 7px var(--cd); } .src-dot.on-e { background:var(--ce); box-shadow:0 0 7px var(--ce); }
+.src-name { font-size:10px; font-weight:700; color:var(--tx2); }
+.src-sub { font-size:8px; color:var(--tx3); font-weight:300; }
+.src-num { font-size:9px; font-weight:600; color:var(--tx3); letter-spacing:0.3px; transition:color 0.4s; }
+.src-num.ca{color:var(--ca);} .src-num.cb{color:var(--cb);} .src-num.cc{color:var(--cc);} .src-num.cd{color:var(--cd);} .src-num.ce{color:var(--ce);}
 
 .src-wave-wrap { flex:1; height:44px; position:relative; overflow:hidden; }
 .src-wave-wrap canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-.tooltip {
-  position:absolute; left:170px; top:0;
-  z-index:500;
-  background: var(--s3); border:1px solid var(--bc);
-  border-radius:10px; padding:12px 16px;
-  width:260px; box-shadow:0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px var(--bc-lo);
-  pointer-events:none; opacity:0;
-  transition:opacity 0.18s, transform 0.18s;
-  transform:translateX(-6px);
-}
-.src-row:hover .tooltip {
-  opacity:1; transform:translateX(0);
-}
-.tooltip::before {
-  content:''; position:absolute; left:-7px; top:14px;
-  width:0; height:0;
-  border-top:6px solid transparent; border-bottom:6px solid transparent;
-  border-right:7px solid var(--bc);
-}
-.tooltip::after {
-  content:''; position:absolute; left:-5px; top:14px;
-  width:0; height:0;
-  border-top:5px solid transparent; border-bottom:5px solid transparent;
-  border-right:6px solid var(--s3);
-}
-.tt-title  { font-size:11px; font-weight:700; color:var(--tx); margin-bottom:5px; }
-.tt-body   { font-size:11px; color:var(--tx2); line-height:1.6; font-weight:300; }
-.tt-entropy {
-  margin-top:8px; padding:6px 10px;
-  background:rgba(196,160,240,0.07); border-radius:6px;
-  font-size:10px; color:var(--tx3);
-  display:flex; justify-content:space-between; align-items:center;
-}
-.tt-entropy-bar {
-  height:4px; border-radius:2px; margin-top:6px;
-  background:linear-gradient(90deg, var(--v2), var(--v1));
-}
+.tooltip { position:absolute; left:170px; top:0; z-index:500; background: var(--s3); border:1px solid var(--bc); border-radius:10px; padding:12px 16px; width:260px; box-shadow:0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px var(--bc-lo); pointer-events:none; opacity:0; transition:opacity 0.18s, transform 0.18s; transform:translateX(-6px); }
+.src-row:hover .tooltip { opacity:1; transform:translateX(0); }
+.tooltip::before { content:''; position:absolute; left:-7px; top:14px; width:0; height:0; border-top:6px solid transparent; border-bottom:6px solid transparent; border-right:7px solid var(--bc); }
+.tooltip::after { content:''; position:absolute; left:-5px; top:14px; width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-right:6px solid var(--s3); }
+.tt-title { font-size:11px; font-weight:700; color:var(--tx); margin-bottom:5px; }
+.tt-body { font-size:11px; color:var(--tx2); line-height:1.6; font-weight:300; }
+.tt-entropy { margin-top:8px; padding:6px 10px; background:rgba(196,160,240,0.07); border-radius:6px; font-size:10px; color:var(--tx3); display:flex; justify-content:space-between; align-items:center; }
+.tt-entropy-bar { height:4px; border-radius:2px; margin-top:6px; background:linear-gradient(90deg, var(--v2), var(--v1)); }
 
-.sources-footer {
-  padding:7px 14px; border-top:1px solid var(--bc-lo);
-  display:flex; align-items:center; justify-content:space-between;
-  font-size:9px; color:var(--tx3); font-weight:300;
-}
+.sources-footer { padding:7px 14px; border-top:1px solid var(--bc-lo); display:flex; align-items:center; justify-content:space-between; font-size:9px; color:var(--tx3); font-weight:300; }
 .combined-val { font-size:12px; font-weight:700; color:var(--v1); letter-spacing:1px; }
 
-/* ── MAIN BODY ── */
-.main-body {
-  padding: 20px 4% 32px;
-  display: flex; gap: 16px;
-  max-width: 1300px; width: 100%; margin: 0 auto;
-  flex-wrap: wrap;
-}
-
-.ctrl {
-  flex: 0 0 340px; min-width: 280px;
-  background:var(--s1); border:1px solid var(--bc);
-  border-radius:var(--r); padding:26px 28px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--bc-lo);
-  display:flex; flex-direction:column; gap:0;
-  align-self: flex-start;
-}
-.ctrl-title {
-  font-family:'Playfair Display',serif; font-size:17px; font-weight:700;
-  color:var(--tx); margin-bottom:20px;
-}
+.main-body { padding: 20px 4% 32px; display: flex; gap: 16px; max-width: 1300px; width: 100%; margin: 0 auto; flex-wrap: wrap; }
+.ctrl { flex: 0 0 340px; min-width: 280px; background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); padding:26px 28px; box-shadow:0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--bc-lo); display:flex; flex-direction:column; gap:0; align-self: flex-start; }
+.ctrl-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--tx); margin-bottom:20px; }
 .fld { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
 .fld-lbl { font-size:10px; font-weight:700; color:var(--tx2); letter-spacing:0.5px; }
-select, input[type=text] {
-  background:var(--bg); border:1px solid var(--bc); border-radius:var(--rsm);
-  padding:11px 14px; color:var(--tx); font-family:'Nunito',sans-serif;
-  font-size:13px; font-weight:400; outline:none; width:100%;
-  transition:border-color 0.2s, box-shadow 0.2s; -webkit-appearance:none;
-}
+select, input[type=text] { background:var(--bg); border:1px solid var(--bc); border-radius:var(--rsm); padding:11px 14px; color:var(--tx); font-family:'Nunito',sans-serif; font-size:13px; font-weight:400; outline:none; width:100%; transition:border-color 0.2s, box-shadow 0.2s; -webkit-appearance:none; }
 select:focus, input:focus { border-color:var(--v1); box-shadow:0 0 0 3px rgba(196,160,240,0.1); }
 select option { background:#120e1c; color:var(--tx); }
 .ctrl-divider { border:none; border-top:1px solid var(--bc-lo); margin:18px 0; }
 
-@keyframes pulse-violet {
-  0%,100% { box-shadow:0 0 0 1px var(--v2), 0 0 14px rgba(196,160,240,0.2); }
-  50%      { box-shadow:0 0 0 1px var(--v1), 0 0 32px rgba(196,160,240,0.5); }
-}
-@keyframes castBurst {
-  0%   { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); }
-  30%  { box-shadow:0 0 0 2px var(--v1), 0 0 60px rgba(196,160,240,0.7), 0 0 120px rgba(196,160,240,0.3); }
-  100% { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); }
-}
-.synth-btn {
-  width:100%; padding:15px;
-  background:transparent; border:1px solid var(--v1); border-radius:var(--rsm);
-  color:var(--v1); font-family:'Playfair Display',serif;
-  font-size:15px; font-weight:700; font-style:italic; letter-spacing:1px;
-  transition:background 0.22s, color 0.22s, box-shadow 0.22s;
-  margin-bottom:0; cursor:none;
-}
-.synth-btn:hover:not(:disabled) {
-  background:var(--v1); color:var(--bg);
-  box-shadow:0 0 32px rgba(196,160,240,0.45);
-}
+@keyframes pulse-violet { 0%,100% { box-shadow:0 0 0 1px var(--v2), 0 0 14px rgba(196,160,240,0.2); } 50% { box-shadow:0 0 0 1px var(--v1), 0 0 32px rgba(196,160,240,0.5); } }
+@keyframes castBurst { 0% { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); } 30% { box-shadow:0 0 0 2px var(--v1), 0 0 60px rgba(196,160,240,0.7), 0 0 120px rgba(196,160,240,0.3); } 100% { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); } }
+.synth-btn { width:100%; padding:15px; background:transparent; border:1px solid var(--v1); border-radius:var(--rsm); color:var(--v1); font-family:'Playfair Display',serif; font-size:15px; font-weight:700; font-style:italic; letter-spacing:1px; transition:background 0.22s, color 0.22s, box-shadow 0.22s; margin-bottom:0; cursor:none; }
+.synth-btn:hover:not(:disabled) { background:var(--v1); color:var(--bg); box-shadow:0 0 32px rgba(196,160,240,0.45); }
 .synth-btn:disabled { opacity:0.5; animation:pulse-violet 1.5s ease-in-out infinite; }
 .synth-btn.fired { animation:castBurst 0.8s ease-out forwards; }
 
-#output {
-  margin-top:18px; line-height:1.85; font-size:14px; font-weight:400; color:var(--tx2);
-}
-#output .blk {
-  border-left:2px solid rgba(196,160,240,0.22); background:rgba(196,160,240,0.03);
-  border-radius:0 var(--rsm) var(--rsm) 0; padding:10px 14px; margin-bottom:12px;
-}
-#output .blk-lbl {
-  font-size:9px; font-weight:700; letter-spacing:3px; color:var(--v1);
-  text-transform:uppercase; display:block; margin-bottom:5px;
-}
+#output { margin-top:18px; line-height:1.85; font-size:14px; font-weight:400; color:var(--tx2); }
+#output .blk { border-left:2px solid rgba(196,160,240,0.22); background:rgba(196,160,240,0.03); border-radius:0 var(--rsm) var(--rsm) 0; padding:10px 14px; margin-bottom:12px; }
+#output .blk-lbl { font-size:9px; font-weight:700; letter-spacing:3px; color:var(--v1); text-transform:uppercase; display:block; margin-bottom:5px; }
 
-.symbols-col {
-  flex:1; min-width:280px;
-  display:flex; flex-direction:column;
-}
-.symbols-hd {
-  font-size:9px; letter-spacing:4px; font-weight:600;
-  color:var(--tx3); text-transform:uppercase; margin-bottom:16px;
-}
-#shard-grid {
-  display:flex; flex-wrap:wrap; gap:10px;
-}
+.symbols-col { flex:1; min-width:280px; display:flex; flex-direction:column; }
+.symbols-hd { font-size:9px; letter-spacing:4px; font-weight:600; color:var(--tx3); text-transform:uppercase; margin-bottom:16px; }
+#shard-grid { display:flex; flex-wrap:wrap; gap:10px; }
 
-@keyframes cardReveal {
-  from { opacity:0; transform:translateY(22px) scale(0.92); filter:blur(6px); }
-  to   { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
-}
-@keyframes cardGlow {
-  0%   { box-shadow: 0 0 0px rgba(196,160,240,0); }
-  40%  { box-shadow: 0 0 40px rgba(196,160,240,0.5), 0 0 80px rgba(196,160,240,0.2); }
-  100% { box-shadow: 0 0 0px rgba(196,160,240,0); }
-}
+@keyframes cardReveal { from { opacity:0; transform:translateY(22px) scale(0.92); filter:blur(6px); } to { opacity:1; transform:translateY(0) scale(1); filter:blur(0); } }
+@keyframes cardGlow { 0% { box-shadow: 0 0 0px rgba(196,160,240,0); } 40% { box-shadow: 0 0 40px rgba(196,160,240,0.5), 0 0 80px rgba(196,160,240,0.2); } 100% { box-shadow: 0 0 0px rgba(196,160,240,0); } }
 
 /* ── SHARD & LORE TOOLTIP ── */
-.shard {
-  background:var(--s1); border:1px solid var(--bc); border-radius:var(--r);
-  width:130px; min-height:185px; padding:12px 10px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; position: relative;
-  transition:background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-  animation:cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both;
-}
+.shard { background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); width:130px; min-height:185px; padding:12px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position: relative; transition:background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s; animation:cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both; }
 .shard.glow { animation: cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both, cardGlow 1.2s ease-out both; }
-.shard:hover {
-  background:var(--s2); border-color:var(--bc-hi);
-  box-shadow:0 0 28px rgba(196,160,240,0.15), 0 10px 32px rgba(0,0,0,0.5);
-  transform:translateY(-7px);
-}
+.shard:hover { background:var(--s2); border-color:var(--bc-hi); box-shadow:0 0 28px rgba(196,160,240,0.15), 0 10px 32px rgba(0,0,0,0.5); transform:translateY(-7px); z-index: 50; }
 
-.shard-tooltip {
-  position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%) translateY(10px);
-  width: 240px; background: var(--s3); border: 1px solid var(--bc);
-  border-radius: 10px; padding: 14px; text-align: left; z-index: 1000;
-  pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.8);
-}
+.shard-tooltip { position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%) translateY(10px); width: 250px; background: var(--s3); border: 1px solid var(--bc); border-radius: 10px; padding: 14px; text-align: left; z-index: 1000; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; box-shadow: 0 12px 48px rgba(0,0,0,0.8); }
 .shard:hover .shard-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
-.shard-tooltip::after {
-  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  border-width: 8px; border-style: solid; border-color: var(--bc) transparent transparent transparent;
-}
+.shard-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 8px; border-style: solid; border-color: var(--bc) transparent transparent transparent; }
 .stt-head { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; color:var(--v1); margin-bottom:6px; border-bottom:1px solid var(--bc-lo); padding-bottom:4px; }
 .stt-core { font-size:11px; font-weight:700; color:var(--tx); margin-bottom:8px; line-height:1.3; }
 .stt-keys { font-size:9px; color:var(--ce); margin-bottom:8px; font-style:italic; letter-spacing:0.3px; }
 .stt-mean { font-size:11px; color:var(--tx2); line-height:1.5; font-weight:300; }
 
-.shard-img {
-  width:100%; height:90px; object-fit:contain; margin-bottom:12px;
-  filter:brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(1800%) hue-rotate(225deg);
-  opacity:0.9;
-}
-.hex-char {
-  font-size:64px; color:var(--v1);
-  text-shadow:0 0 20px rgba(196,160,240,0.6), 0 0 48px rgba(196,160,240,0.2);
-  height:90px; display:flex; align-items:center; justify-content:center; user-select:none;
-}
-.shard-noimg {
-  width:100%; height:90px; background:var(--v4); border:1px dashed var(--bc);
-  border-radius:var(--rsm); margin-bottom:12px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:8px; color:var(--tx3); letter-spacing:2px;
-}
-.shard-name {
-  font-family:'Playfair Display',serif; color:var(--tx);
-  font-weight:700; font-size:11px; margin-bottom:4px; line-height:1.3;
-}
+.shard-img { width:100%; height:90px; object-fit:contain; margin-bottom:12px; filter:brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(1800%) hue-rotate(225deg); opacity:0.9; }
+.hex-char { font-size:64px; color:var(--v1); text-shadow:0 0 20px rgba(196,160,240,0.6), 0 0 48px rgba(196,160,240,0.2); height:90px; display:flex; align-items:center; justify-content:center; user-select:none; margin-bottom:6px; line-height:1;}
+.shard-noimg { width:100%; height:90px; background:var(--v4); border:1px dashed var(--bc); border-radius:var(--rsm); margin-bottom:12px; display:flex; align-items:center; justify-content:center; font-size:8px; color:var(--tx3); letter-spacing:2px; }
+.shard-name { font-family:'Playfair Display',serif; color:var(--tx); font-weight:700; font-size:11px; margin-bottom:4px; line-height:1.3; }
 .shard-seed { font-size:8px; color:var(--tx3); font-weight:300; }
 </style>
 </head>
@@ -362,96 +165,38 @@ select option { background:#120e1c; color:var(--tx); }
         </div>
         <div class="panel-val" id="mouse-val">gathering…</div>
       </div>
-      <div class="mouse-ratio">
-        <canvas id="mouse-canvas"></canvas>
-      </div>
-      <div class="panel-ft">
-        <div class="ft-dot"></div>
-        Path · velocity · hesitations hashed live — never stops recording
-      </div>
+      <div class="mouse-ratio"><canvas id="mouse-canvas"></canvas></div>
+      <div class="panel-ft"><div class="ft-dot"></div>Path · velocity · hesitations hashed live — never stops recording</div>
     </div>
   </div>
 
   <div class="sources-col">
     <div class="src-row">
-      <div class="src-meta">
-        <div class="src-top-row"><div class="src-dot" id="dot-a"></div><span class="src-name">ANU Quantum</span></div>
-        <div class="src-sub">Vacuum fluctuations · Canberra</div>
-        <div class="src-num" id="val-a">fetching…</div>
-      </div>
+      <div class="src-meta"><div class="src-top-row"><div class="src-dot" id="dot-a"></div><span class="src-name">ANU Quantum</span></div><div class="src-sub">Vacuum fluctuations · Canberra</div><div class="src-num" id="val-a">fetching…</div></div>
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="0"></canvas></div>
-      <div class="tooltip">
-        <div class="tt-title">ANU Quantum Vacuum</div>
-        <div class="tt-body">A laser at the Australian National University measures the noise floor of quantum vacuum fluctuations. True physical randomness.</div>
-        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ca);font-weight:700">Maximum</span></div>
-        <div class="tt-entropy-bar" style="width:100%"></div>
-      </div>
+      <div class="tooltip"><div class="tt-title">ANU Quantum Vacuum</div><div class="tt-body">A laser at the Australian National University measures the noise floor of quantum vacuum fluctuations. True physical randomness.</div><div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ca);font-weight:700">Maximum</span></div><div class="tt-entropy-bar" style="width:100%"></div></div>
     </div>
-
     <div class="src-row">
-      <div class="src-meta">
-        <div class="src-top-row"><div class="src-dot" id="dot-b"></div><span class="src-name">Atmosphere</span></div>
-        <div class="src-sub">Wind · pressure · humidity</div>
-        <div class="src-num" id="val-b">fetching…</div>
-      </div>
+      <div class="src-meta"><div class="src-top-row"><div class="src-dot" id="dot-b"></div><span class="src-name">Atmosphere</span></div><div class="src-sub">Wind · pressure · humidity</div><div class="src-num" id="val-b">fetching…</div></div>
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="1"></canvas></div>
-      <div class="tooltip">
-        <div class="tt-title">Atmospheric Chaos</div>
-        <div class="tt-body">Live weather data near you. Fractional physical measurements are computationally irreducible chaotic systems.</div>
-        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cb);font-weight:700">High</span></div>
-        <div class="tt-entropy-bar" style="width:82%"></div>
-      </div>
+      <div class="tooltip"><div class="tt-title">Atmospheric Chaos</div><div class="tt-body">Live weather data near you. Fractional physical measurements are computationally irreducible chaotic systems.</div><div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cb);font-weight:700">High</span></div><div class="tt-entropy-bar" style="width:82%"></div></div>
     </div>
-
     <div class="src-row">
-      <div class="src-meta">
-        <div class="src-top-row"><div class="src-dot" id="dot-c"></div><span class="src-name">OS Hardware</span></div>
-        <div class="src-sub">crypto.getRandomValues pool</div>
-        <div class="src-num" id="val-c">sampling…</div>
-      </div>
+      <div class="src-meta"><div class="src-top-row"><div class="src-dot" id="dot-c"></div><span class="src-name">OS Hardware</span></div><div class="src-sub">crypto.getRandomValues pool</div><div class="src-num" id="val-c">sampling…</div></div>
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="2"></canvas></div>
-      <div class="tooltip">
-        <div class="tt-title">OS Hardware Entropy Pool</div>
-        <div class="tt-body">Entropy fed by hardware interrupts, thermal noise, and disk jitter. XOR'd for security.</div>
-        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cc);font-weight:700">High</span></div>
-        <div class="tt-entropy-bar" style="width:78%"></div>
-      </div>
+      <div class="tooltip"><div class="tt-title">OS Hardware Entropy Pool</div><div class="tt-body">Entropy fed by hardware interrupts, thermal noise, and disk jitter. XOR'd for security.</div><div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cc);font-weight:700">High</span></div><div class="tt-entropy-bar" style="width:78%"></div></div>
     </div>
-
     <div class="src-row">
-      <div class="src-meta">
-        <div class="src-top-row"><div class="src-dot" id="dot-d"></div><span class="src-name">Timing Jitter</span></div>
-        <div class="src-sub">CPU execution variance</div>
-        <div class="src-num" id="val-d">sampling…</div>
-      </div>
+      <div class="src-meta"><div class="src-top-row"><div class="src-dot" id="dot-d"></div><span class="src-name">Timing Jitter</span></div><div class="src-sub">CPU execution variance</div><div class="src-num" id="val-d">sampling…</div></div>
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="3"></canvas></div>
-      <div class="tooltip">
-        <div class="tt-title">CPU Timing Jitter</div>
-        <div class="tt-body">Sub-microsecond variance in execution time caused by cache misses and pipeline noise.</div>
-        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cd);font-weight:700">Med–High</span></div>
-        <div class="tt-entropy-bar" style="width:65%"></div>
-      </div>
+      <div class="tooltip"><div class="tt-title">CPU Timing Jitter</div><div class="tt-body">Sub-microsecond variance in execution time caused by cache misses and pipeline noise.</div><div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cd);font-weight:700">Med–High</span></div><div class="tt-entropy-bar" style="width:65%"></div></div>
     </div>
-
     <div class="src-row">
-      <div class="src-meta">
-        <div class="src-top-row"><div class="src-dot" id="dot-e"></div><span class="src-name">Your Movement</span></div>
-        <div class="src-sub">Path · velocity · pauses</div>
-        <div class="src-num" id="val-e">recording…</div>
-      </div>
+      <div class="src-meta"><div class="src-top-row"><div class="src-dot" id="dot-e"></div><span class="src-name">Your Movement</span></div><div class="src-sub">Path · velocity · pauses</div><div class="src-num" id="val-e">recording…</div></div>
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="4"></canvas></div>
-      <div class="tooltip">
-        <div class="tt-title">Personal Entropy</div>
-        <div class="tt-body">Every mouse movement is hashed in real time. No two people move the same way. Completely personal source.</div>
-        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ce);font-weight:700">Personal</span></div>
-        <div class="tt-entropy-bar" style="width:60%"></div>
-      </div>
+      <div class="tooltip"><div class="tt-title">Personal Entropy</div><div class="tt-body">Every mouse movement is hashed in real time. No two people move the same way. Completely personal source.</div><div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ce);font-weight:700">Personal</span></div><div class="tt-entropy-bar" style="width:60%"></div></div>
     </div>
-
-    <div class="sources-footer">
-      <span>Combined seed</span>
-      <span class="combined-val" id="combined-val">—</span>
-    </div>
+    <div class="sources-footer"><span>Combined seed</span><span class="combined-val" id="combined-val">—</span></div>
   </div>
 </div>
 
@@ -484,101 +229,222 @@ select option { background:#120e1c; color:var(--tx); }
   <div class="symbols-col">
     <div class="symbols-hd">Drawn Symbols</div>
     <div id="shard-grid">
-      <div class="shard">
-        <div class="shard-noimg">ready</div>
-        <div class="shard-name">Awaiting your question</div>
-        <div class="shard-seed">—</div>
-      </div>
+      <div class="shard"><div class="shard-noimg">ready</div><div class="shard-name">Awaiting your question</div><div class="shard-seed">—</div></div>
     </div>
   </div>
 </div>
 
 <script>
-// ── FULL COMPREHENSIVE LORE DICTIONARY ──
+// ── FULL OBJECTIVE LORE DICTIONARY ──
+// Removed all prescriptive guidance. Focused strictly on objective interpretation of the energetic symbol.
 const MEANINGS = {
-  /* --- RUNES --- */
-  "Fehu": { core: "ᚠ Wealth, energy in motion.", keys: "Resources, momentum, flow", mean: "Something is generating value or power." },
-  "Uruz": { core: "ᚢ Raw strength and vitality.", keys: "Primal force, health, endurance", mean: "A surge of physical or creative energy is available." },
-  "Thurisaz": { core: "ᚦ The thorn; reactive force.", keys: "Protection, catalyst, boundaries", mean: "A sharp realization or a necessary defense is required." },
-  "Ansuz": { core: "ᚨ The breath; divine signals.", keys: "Wisdom, communication, truth", mean: "Listen for a message; your expression is currently heightened." },
-  "Raidho": { core: "ᚱ The journey; right action.", keys: "Movement, rhythm, perspective", mean: "Trust the process; the journey is the destination." },
-  "Kenaz": { core: "ᚲ The torch; inner light.", keys: "Vision, creativity, technical skill", mean: "A moment of clarity allows you to create or solve." },
-  "Gebo": { core: "ᚻ The gift; equal exchange.", keys: "Partnership, balance, sacrifice", mean: "Harmony is found through mutual giving and taking." },
-  "Wunjo": { core: "ᚹ Joy and harmony.", keys: "Success, fellowship, alignment", mean: "Things are coming together in a state of grace." },
-  "Hagalaz": { core: "ᚺ Hail; natural disruption.", keys: "Change, crisis, clearing", mean: "External forces are breaking old patterns to make room." },
-  "Nauthiz": { core: "ᚾ Necessity; the shadow.", keys: "Constraint, resistance, survival", mean: "Identify your true needs versus your superficial wants." },
-  "Isa": { core: "ᛁ Ice; stillness.", keys: "Waiting, cooling, consolidation", mean: "Action is frozen. Use this time for internal strengthening." },
-  "Jera": { core: "ᚹ Harvest; cyclic time.", keys: "Results, patience, natural laws", mean: "You are reaping what you sowed. Be patient with the cycle." },
-  "Eihwaz": { core: "ᛇ The Yew; endurance.", keys: "Resilience, death/rebirth, protection", mean: "Transformation through endurance; the deep roots sustain you." },
-  "Perthro": { core: "ᛈ The dice cup; fate.", keys: "Mystery, chance, hidden talents", mean: "The unknown is at play. Trust the hidden mechanics of luck." },
-  "Algiz": { core: "ᛉ Protection; the elk.", keys: "Shielding, connection, higher self", mean: "You are protected. Stay grounded but reach for the divine." },
-  "Sowilo": { core: "ᛊ The Sun; victory.", keys: "Clarity, success, vital power", mean: "A period of total clarity and success is approaching." },
-  "Tiwaz": { core: "ᛏ Justice; the warrior.", keys: "Honor, sacrifice, leadership", mean: "Win through integrity. Sacrifice a part for the whole." },
-  "Berkano": { core: "ᛒ The Birch; growth.", keys: "Fertility, renewal, nurturing", mean: "A new idea or life is taking root; nurture it carefully." },
-  "Ehwaz": { core: "ᛖ The horse; partnership.", keys: "Trust, cooperation, progress", mean: "Movement is achieved through harmonic partnership." },
-  "Mannaz": { core: "ᛗ Humanity; the self.", keys: "Community, identity, intellect", mean: "Your place in the collective is shifting. Know yourself." },
-  "Laguz": { core: "ᛚ Water; the flow.", keys: "Intuition, emotion, subconscious", mean: "Go with the current of your feelings; logic is secondary now." },
-  "Ingwaz": { core: "ᛜ Seed; inner growth.", keys: "Potential, storage, completion", mean: "Energy is gathering within. A period of rest before birth." },
-  "Dagaz": { core: "ᛞ Daybreak; breakthrough.", keys: "Awakening, transformation, light", mean: "A sudden shift into total awareness; a long cycle ends." },
-  "Othala": { core: "ᛟ Heritage; ancestral land.", keys: "Legacy, home, foundations", mean: "Focus on long-term stability and your inherited gifts." },
+  // --- TAROT: MAJOR ARCANA ---
+  "The Fool": { core: "The unformed potential.", keys: "Innocence, raw energy, the void, risk", mean: "The state of zero before manifestation; acting without preconceived conditions or baggage." },
+  "The Magician": { core: "Conscious will.", keys: "Focus, utility, manifestation, skill", mean: "The active manipulation of available resources to bend reality or achieve a material outcome." },
+  "The High Priestess": { core: "The subconscious repository.", keys: "Intuition, the hidden, memory, stillness", mean: "Information that is sensed but not spoken; the veil between the known and unknown." },
+  "The Empress": { core: "Generative force.", keys: "Fertility, nature, sensory experience, abundance", mean: "The principle of continuous creation, physical nurturing, and unchecked growth." },
+  "The Emperor": { core: "Structural boundaries.", keys: "Law, order, authority, defense", mean: "Imposing logic, system, and boundary upon chaotic energy to ensure stability." },
+  "The Hierophant": { core: "Institutionalized paradigm.", keys: "Tradition, orthodoxy, systems of belief", mean: "Adherence to established social, educational, or spiritual frameworks and structures." },
+  "The Lovers": { core: "Harmonic alignment.", keys: "Choice, values, union, duality", mean: "The synthesis of two opposing forces; a defining choice based on personal truth." },
+  "The Chariot": { core: "Directional momentum.", keys: "Willpower, triumph, control, velocity", mean: "Harnessing disparate forces and steering them forcefully toward a singular objective." },
+  "Strength": { core: "Tamed instinct.", keys: "Endurance, compassion, soft power, influence", mean: "Mastering primal or volatile urges through gentle but unyielding persistence." },
+  "The Hermit": { core: "Internal illumination.", keys: "Isolation, introspection, the seeker", mean: "Voluntary withdrawal from the collective to synthesize knowledge and find internal truth." },
+  "Wheel of Fortune": { core: "The mechanics of fate.", keys: "Cycles, shifting luck, inevitability", mean: "A pivot point in the natural cycle; circumstances altering outside of personal control." },
+  "Justice": { core: "Objective equilibrium.", keys: "Cause and effect, karma, truth, law", mean: "The inevitable balancing of scales; actions rendering their exact and equal consequences." },
+  "The Hanged Man": { core: "Suspension and inversion.", keys: "Sacrifice, pause, altered perspective", mean: "A state of stasis required to view a situation from a completely inverted angle." },
+  "Death": { core: "The universal solvent.", keys: "Endings, elimination, transition, decay", mean: "The necessary and organic conclusion of a cycle, clearing space for new forms." },
+  "Temperance": { core: "Alchemical synthesis.", keys: "Moderation, blending, equilibrium", mean: "The careful combination of volatile elements to create a stable and superior hybrid." },
+  "The Devil": { core: "Material gravity.", keys: "Bondage, shadow, primal urges, obsession", mean: "Attachment to the physical or base desires; the illusions that bind or restrict freedom." },
+  "The Tower": { core: "Violent structural collapse.", keys: "Upheaval, sudden change, paradigm shift", mean: "The sudden and explosive dismantling of false premises, structures, or ego." },
+  "The Star": { core: "Ethereal renewal.", keys: "Hope, clarity, inspiration, the aftermath", mean: "The calm and restorative energy that follows chaos; clear access to spiritual guiding lights." },
+  "The Moon": { core: "The realm of distortion.", keys: "Illusion, dreams, anxiety, the subconscious", mean: "Navigating by unreliable light; the surfacing of deep fears, instincts, and unresolved shadows." },
+  "The Sun": { core: "Absolute exposure.", keys: "Vitality, joy, logic, undeniable truth", mean: "Total illumination of reality; life-giving energy that banishes all ambiguity and shadow." },
+  "Judgement": { core: "The final accounting.", keys: "Absolution, awakening, the calling", mean: "A state of reckoning where past actions are evaluated, leading to a permanent paradigm upgrade." },
+  "The World": { core: "Systemic completion.", keys: "Wholeness, integration, the finished cycle", mean: "The successful synthesis of all elements; a macro-cycle reaching its ultimate conclusion." },
 
-  /* --- TAROT (Major + Minor Samples) --- */
-  "The Fool": { core: "Infinite potential; the leap.", keys: "Innocence, risk, beginnings", mean: "Trust the universe and start without heavy baggage." },
-  "The Magician": { core: "Conscious manifestation.", keys: "Skill, focus, willpower", mean: "You have the tools; bridge the gap between idea and reality." },
-  "The High Priestess": { core: "Intuition; the sub-surface.", keys: "Mystery, stillness, secrets", mean: "The answer isn't logical. Look into the shadows and wait." },
-  "The Empress": { core: "Abundance and Creation.", keys: "Fertility, nature, sensuality", mean: "Nurture what you have created; abundance is flowing." },
-  "The Emperor": { core: "Structure and Authority.", keys: "Logic, stability, protection", mean: "Apply order and discipline to achieve your goals." },
-  "The Hierophant": { core: "Tradition and Wisdom.", keys: "Education, belief, systems", mean: "Seek a mentor or follow established paths for now." },
-  "The Lovers": { core: "Alignment and Choice.", keys: "Harmony, values, relationship", mean: "A decision must be made based on your core values." },
-  "The Chariot": { core: "Willpower and Victory.", keys: "Control, drive, momentum", mean: "Stay focused. You can conquer opposing forces through will." },
-  "Strength": { core: "Compassionate Power.", keys: "Patience, courage, influence", mean: "Tame your impulses with kindness, not brute force." },
-  "The Hermit": { core: "Inner Guidance.", keys: "Solitude, reflection, truth", mean: "Withdraw from the noise to find your own light." },
-  "Wheel of Fortune": { core: "Cycles and Karma.", keys: "Fate, change, inevitability", mean: "The wheel turns. Accept the change with grace." },
-  "Justice": { core: "Truth and Balance.", keys: "Law, cause/effect, integrity", mean: "The scales are evening out. Total honesty is required." },
-  "The Hanged Man": { core: "New Perspective.", keys: "Letting go, pause, sacrifice", mean: "Surrender your current view to see a different truth." },
-  "Death": { core: "Transformation; clearing the field.", keys: "Endings, rebirth, transition", mean: "Let go of dead weight so something new can breathe." },
-  "Temperance": { core: "Alchemy and Moderation.", keys: "Patience, blending, purpose", mean: "Find the middle path; combine elements slowly." },
-  "The Devil": { core: "Shadow and Bondage.", keys: "Addiction, materialism, play", mean: "Break the chains of your own making; confront the shadow." },
-  "The Tower": { core: "Sudden collapse of structures.", keys: "Upheaval, revelation, break-free", mean: "A false foundation is falling to make room for truth." },
-  "The Star": { core: "Hope and Healing.", keys: "Inspiration, serenity, faith", mean: "The worst is over. Trust the light in the distance." },
-  "The Moon": { core: "Subconscious and Illusion.", keys: "Dreams, fear, uncertainty", mean: "Not everything is as it seems. Trust your gut over your eyes." },
-  "The Sun": { core: "Vitality and Joy.", keys: "Success, warmth, truth", mean: "Everything is illuminated. Success is virtually guaranteed." },
-  "Judgement": { core: "Absolution and Calling.", keys: "Renewal, verdict, purpose", mean: "You are being called to a higher level of existence." },
-  "The World": { core: "Completion and Integration.", keys: "Success, travel, wholeness", mean: "The cycle is complete. You have arrived." },
+  // --- TAROT: MINOR ARCANA (WANDS / FIRE) ---
+  "Ace of Wands": { core: "The spark of will.", keys: "Inspiration, surge, pure fire", mean: "The initial, unshaped burst of creative or physical energy." },
+  "Two of Wands": { core: "The calculus of potential.", keys: "Planning, discovery, observing the field", mean: "Assessing options and anticipating the trajectory of an initiated action." },
+  "Three of Wands": { core: "Forward projection.", keys: "Expansion, foresight, awaiting returns", mean: "Energy has been set in motion and is actively expanding outward." },
+  "Four of Wands": { core: "The stable hearth.", keys: "Celebration, foundation, harmonic event", mean: "A momentary peak of stability and joyous alignment in the physical world." },
+  "Five of Wands": { core: "Kinetic friction.", keys: "Conflict, competition, chaotic interactions", mean: "Clashing energies or egos creating heat and noise without lethal intent." },
+  "Six of Wands": { core: "Public elevation.", keys: "Victory, recognition, validation", mean: "The successful external manifestation of will being acknowledged by the collective." },
+  "Seven of Wands": { core: "Defensive posture.", keys: "Resistance, holding ground, defiance", mean: "Maintaining one's position or integrity against a localized surge of opposition." },
+  "Eight of Wands": { core: "Unhindered velocity.", keys: "Speed, communication, rapid development", mean: "Forces moving swiftly toward their target with zero friction or delay." },
+  "Nine of Wands": { core: "Exhausted resilience.", keys: "Fatigue, boundaries, the final guard", mean: "Nearing the end of a cycle, sustaining damage but maintaining the perimeter." },
+  "Ten of Wands": { core: "The density of obligation.", keys: "Burden, overextension, the heavy load", mean: "The point where the accumulation of responsibility or ambition becomes physically crushing." },
+  "Page of Wands": { core: "The volatile catalyst.", keys: "Curiosity, the instigator, restless energy", mean: "A fast, unpredictable spark of news or impulse entering the situation." },
+  "Knight of Wands": { core: "Combustion in motion.", keys: "Impulsiveness, passion, aggressive pursuit", mean: "High-speed, highly focused energy that prioritizes action over foresight." },
+  "Queen of Wands": { core: "Radiant magnetism.", keys: "Charisma, confidence, independent will", mean: "Energy directed inward to create an attractive, undeniable center of gravity." },
+  "King of Wands": { core: "The architect of vision.", keys: "Leadership, bold direction, sustained fire", mean: "The mastering of creative force to build empires or command the environment." },
 
-  /* --- ASTROLOGY --- */
-  "Sun": { core: "The Self and Vitality.", keys: "Ego, identity, radiance", mean: "Your core essence is highlighted. Shine brightly." },
-  "Moon": { core: "The Soul and Emotions.", keys: "Receptivity, habit, intuition", mean: "Listen to your inner tides and emotional needs." },
-  "Mercury": { core: "The Communicator.", keys: "Logic, speed, data", mean: "Focus on the details and clear communication." },
-  "Venus": { core: "The Lover.", keys: "Art, value, harmony", mean: "Attract what you desire through beauty and grace." },
-  "Mars": { core: "The Warrior.", keys: "Action, desire, conflict", mean: "It is time to push forward and take what is yours." },
-  "Jupiter": { core: "The Great Expander.", keys: "Luck, growth, philosophy", mean: "A window of opportunity is opening; think bigger." },
-  "Saturn": { core: "The Great Teacher.", keys: "Discipline, limits, karma", mean: "Growth comes through boundaries and responsibility." },
-  "Uranus": { core: "The Innovator.", keys: "Rebellion, shock, genius", mean: "Expect the unexpected. Break the status quo." },
-  "Neptune": { core: "The Dreamer.", keys: "Mysticism, fog, art", mean: "Dissolve boundaries. Focus on the spiritual and poetic." },
-  "Pluto": { core: "The Alchemist.", keys: "Power, depth, rebirth", mean: "Total transformation. Go to the roots to rebuild." },
-  "Aries": { core: "The Pioneer.", keys: "Impulse, fire, start", mean: "Initiate action now without hesitation." },
-  "Scorpio": { core: "The Transformer.", keys: "Intensity, depth, secrets", mean: "Dig deeper. The power lies in what is hidden." },
+  // --- TAROT: MINOR ARCANA (CUPS / WATER) ---
+  "Ace of Cups": { core: "The source of feeling.", keys: "Pure emotion, intuition, the open vessel", mean: "An upwelling of new emotional, spiritual, or relational energy." },
+  "Two of Cups": { core: "Symmetrical resonance.", keys: "Connection, partnership, mutual flow", mean: "Two distinct emotional frequencies synchronizing into a balanced loop." },
+  "Three of Cups": { core: "Collective effervescence.", keys: "Community, shared joy, tribal bonding", mean: "The pooling of emotional resources to create a shared, elevated state." },
+  "Four of Cups": { core: "Emotional stasis.", keys: "Apathy, introspection, the ignored offer", mean: "A state of internal absorption resulting in detachment from external stimuli." },
+  "Five of Cups": { core: "The focal point of grief.", keys: "Loss, regret, the shattered vessel", mean: "Attention locked onto depleted resources, ignoring what remains intact." },
+  "Six of Cups": { core: "The anchor of memory.", keys: "Nostalgia, childhood, the familiar", mean: "Resonance with the past; a return to foundational or innocent emotional states." },
+  "Seven of Cups": { core: "The spectrum of illusion.", keys: "Choice, fantasy, the mirage", mean: "The dispersion of focus across multiple ungrounded possibilities or desires." },
+  "Eight of Cups": { core: "Voluntary withdrawal.", keys: "Abandonment, the search, moving on", mean: "The conscious decision to walk away from a functional but spiritually empty dynamic." },
+  "Nine of Cups": { core: "Emotional saturation.", keys: "Satisfaction, indulgence, the fulfilled wish", mean: "A localized state of deep personal contentment and sensory fulfillment." },
+  "Ten of Cups": { core: "The harmonic network.", keys: "Total alignment, family, enduring peace", mean: "Emotional energy achieving maximum stability and joy within a localized group." },
+  "Page of Cups": { core: "The intuitive whisper.", keys: "Synchronicity, innocence, emotional news", mean: "A gentle, unexpected surface ripple revealing subconscious or emotional data." },
+  "Knight of Cups": { core: "The romantic vector.", keys: "Idealism, the quest, pursuit of the heart", mean: "Action driven entirely by an idealized emotional vision or aesthetic." },
+  "Queen of Cups": { core: "The emotional fathom.", keys: "Empathy, psychic depth, the quiet mirror", mean: "Mastery of the internal landscape; feeling deeply without losing structural integrity." },
+  "King of Cups": { core: "The diplomatic vessel.", keys: "Emotional control, tolerance, calm waters", mean: "The regulation of volatile emotional environments through calm, authoritative presence." },
 
-  /* --- I CHING (Base mappings) --- */
-  "1. Qian": { core: "The Creative.", keys: "Heaven, power, persistence", mean: "Pure yang energy. Great success through persistence." },
-  "2. Kun": { core: "The Receptive.", keys: "Earth, devotion, yielding", mean: "Pure yin energy. Success through following, not leading." },
-  "3. Zhun": { core: "Difficulty at the Beginning.", keys: "Sprouting, potential, chaos", mean: "Growth is happening, but it is fragile and difficult." },
-  "4. Meng": { core: "Youthful Folly.", keys: "Learning, innocence, teacher", mean: "Acknowledge what you do not know to find the path." }
+  // --- TAROT: MINOR ARCANA (SWORDS / AIR) ---
+  "Ace of Swords": { core: "The absolute edge.", keys: "Clarity, logic, the sudden realization", mean: "A pure, uncompromising strike of truth or mental clarity." },
+  "Two of Swords": { core: "The mental deadlock.", keys: "Stalemate, denial, the blocked vision", mean: "Two opposing logical vectors creating a state of paralyzed equilibrium." },
+  "Three of Swords": { core: "The piercing of illusion.", keys: "Heartbreak, sharp reality, the painful truth", mean: "A necessary, often painful severance or realization that disrupts the emotional field." },
+  "Four of Swords": { core: "The enforced offline state.", keys: "Rest, recovery, cognitive quarantine", mean: "Temporary withdrawal from the active field to allow mental processing and repair." },
+  "Five of Swords": { core: "The pyrrhic victory.", keys: "Hostility, self-interest, the hollow win", mean: "A tactical success achieved at the cost of the surrounding environment or relationships." },
+  "Six of Swords": { core: "The transitional vector.", keys: "Migration, moving from turbulence", mean: "The logical navigation away from a chaotic state toward a neutral baseline." },
+  "Seven of Swords": { core: "The asymmetric tactic.", keys: "Stealth, strategy, the hidden motive", mean: "Employing evasion, subversion, or unorthodoxy to bypass direct confrontation." },
+  "Eight of Swords": { core: "The localized trap.", keys: "Restriction, mental loops, assumed powerlessness", mean: "A cognitive prison built on perceived limitations rather than physical barriers." },
+  "Nine of Swords": { core: "The nightmare sequence.", keys: "Anxiety, recursive fear, mental overload", mean: "The mind attacking itself through looping, ungrounded catastrophic projections." },
+  "Ten of Swords": { core: "The absolute bottom.", keys: "Overkill, the final severance, unavoidable end", mean: "The exhaustive conclusion of a destructive mental or situational cycle. No further damage possible." },
+  "Page of Swords": { core: "The data gatherer.", keys: "Vigilance, investigation, the sharp question", mean: "Agile, unrefined intellect probing the environment for inconsistencies or information." },
+  "Knight of Swords": { core: "The kinetic argument.", keys: "Ruthlessness, absolute certainty, the blitz", mean: "High-velocity intellectual aggression; executing a logic-based objective without hesitation." },
+  "Queen of Swords": { core: "The boundary of truth.", keys: "Objectivity, clear communication, the skeptic", mean: "The refinement of intellect to separate fact from emotion; strict boundaries." },
+  "King of Swords": { core: "The architecture of law.", keys: "Authority, systems, the objective judge", mean: "The application of cold logic and established rules to maintain macro-level order." },
+
+  // --- TAROT: MINOR ARCANA (PENTACLES / EARTH) ---
+  "Ace of Pentacles": { core: "The physical seed.", keys: "Material origin, health, the tangible asset", mean: "The introduction of a concrete, physical resource or opportunity into the environment." },
+  "Two of Pentacles": { core: "The kinetic equilibrium.", keys: "Fluctuation, juggling, time management", mean: "The continuous management of shifting variables to maintain material balance." },
+  "Three of Pentacles": { core: "The physical architecture.", keys: "Collaboration, skill, the blueprint", mean: "The synthesis of distinct expertise to construct a tangible, lasting structure." },
+  "Four of Pentacles": { core: "The closed system.", keys: "Conservation, hoarding, the rigid boundary", mean: "The contraction of resources to prevent loss, leading to a state of material stagnation." },
+  "Five of Pentacles": { core: "The material void.", keys: "Scarcity, exposure, the physical trial", mean: "A localized state of physical, financial, or bodily depletion and vulnerability." },
+  "Six of Pentacles": { core: "The resource gradient.", keys: "Distribution, charity, the power dynamic", mean: "The managed flow of resources from areas of high density to areas of deficit." },
+  "Seven of Pentacles": { core: "The yield assessment.", keys: "Patience, investment, the slow growth", mean: "A pause in kinetic action to evaluate the trajectory and return on physical effort." },
+  "Eight of Pentacles": { core: "The repetitive function.", keys: "Craftsmanship, detail, the grind", mean: "Hyper-focus on the methodical, repetitive refinement of a skill or physical task." },
+  "Nine of Pentacles": { core: "The cultivated environment.", keys: "Self-sufficiency, luxury, the private garden", mean: "The attainment of material independence and the enjoyment of one's own labor." },
+  "Ten of Pentacles": { core: "The macro-structure.", keys: "Legacy, family wealth, the establishment", mean: "The ultimate culmination of material effort into a self-sustaining, multi-generational system." },
+  "Page of Pentacles": { core: "The physical student.", keys: "Application, study, the slow start", mean: "The initial, grounded approach to learning a new system or building a material base." },
+  "Knight of Pentacles": { core: "The steady vector.", keys: "Routine, reliability, unyielding pace", mean: "Methodical, unglamorous forward movement that prioritizes endurance over speed." },
+  "Queen of Pentacles": { core: "The pragmatist.", keys: "Nurturing, practical care, bodily awareness", mean: "The mastery of maintaining the immediate physical environment and the living things within it." },
+  "King of Pentacles": { core: "The apex of the physical.", keys: "Empire, extreme stability, the provider", mean: "Absolute command over the material and financial realm; heavy, immovable stability." },
+
+  // --- ELDER FUTHARK RUNES ---
+  "Fehu": { core: "ᚠ Mobile energy.", keys: "Circulation, wealth, kinetic resources", mean: "Value or power that is currently active, generating friction, or in circulation." },
+  "Uruz": { core: "ᚢ Unshaped force.", keys: "Vitality, primal health, raw momentum", mean: "A dense surge of unrefined physical or creative power entering the field." },
+  "Thurisaz": { core: "ᚦ The reactive catalyst.", keys: "Conflict, the thorn, defensive barrier", mean: "A sharp, aggressive energy that either destroys an obstacle or acts as a hostile barrier." },
+  "Ansuz": { core: "ᚨ The transmission.", keys: "Breath, language, divine signal", mean: "Information, consciousness, or frequency being broadcast or received." },
+  "Raidho": { core: "ᚱ The rhythmic vector.", keys: "Journey, right action, sequence", mean: "Movement that is aligned with universal rhythms; the mechanics of the path itself." },
+  "Kenaz": { core: "ᚲ The controlled burn.", keys: "Illumination, technical skill, the forge", mean: "Energy harnessed and focused into a tool for creation or revelation." },
+  "Gebo": { core: "ᚻ The harmonic exchange.", keys: "Partnership, the gift, equilibrium", mean: "The binding of two entities through the equal transfer of energy or resources." },
+  "Wunjo": { core: "ᚹ Total alignment.", keys: "Joy, fellowship, frictionless state", mean: "A state of perfect resonance where internal will matches external reality." },
+  "Hagalaz": { core: "ᚺ The disruptive variable.", keys: "Hail, crisis, the natural reset", mean: "An external, uncontrollable force that shatters current structures to enforce a reset." },
+  "Nauthiz": { core: "ᚾ The friction of restriction.", keys: "Necessity, survival, the shadow", mean: "A severe limitation or lack that generates the friction required for adaptation." },
+  "Isa": { core: "ᛁ Absolute zero.", keys: "Ice, stasis, the contracted state", mean: "Energy frozen into form; a complete cessation of movement or development." },
+  "Jera": { core: "ᚹ The geometric cycle.", keys: "Harvest, time, cause and effect", mean: "The natural culmination of a process; the exact physical result of previous actions." },
+  "Eihwaz": { core: "ᛇ The vertical axis.", keys: "The yew, endurance, life/death", mean: "The enduring structure that connects the macro to the micro; surviving transition." },
+  "Perthro": { core: "ᛈ The chaotic variable.", keys: "The dice cup, probability, the unknown", mean: "The element of chance; forces operating completely outside of calculable logic." },
+  "Algiz": { core: "ᛉ The antenna.", keys: "Protection, higher connection, the shield", mean: "An active defense mechanism generated by connecting to a higher frequency or system." },
+  "Sowilo": { core: "ᛊ The solar strike.", keys: "Victory, total clarity, undeniable force", mean: "A massive influx of positive, illuminating energy that ensures success." },
+  "Tiwaz": { core: "ᛏ The directional arrow.", keys: "Justice, sacrifice, the objective law", mean: "A rigid adherence to order and truth, often requiring the sacrifice of the self for the whole." },
+  "Berkano": { core: "ᛒ The slow emergence.", keys: "The birch, fertility, gradual growth", mean: "The quiet, organic process of bringing a new form from potential into reality." },
+  "Ehwaz": { core: "ᛖ The dual engine.", keys: "The horse, trust, synchronized progress", mean: "Two distinct forces operating in perfect tandem to achieve rapid forward momentum." },
+  "Mannaz": { core: "ᛗ The local node.", keys: "Humanity, the self, social matrix", mean: "The individual's relationship to the collective intelligence and social structure." },
+  "Laguz": { core: "ᛚ The fluid dynamic.", keys: "Water, the subconscious, the current", mean: "Unseen emotional or psychic currents that guide action beneath the level of logic." },
+  "Ingwaz": { core: "ᛜ The closed container.", keys: "The seed, gestation, internal potential", mean: "Energy isolated and stored internally to mature before explosive release." },
+  "Dagaz": { core: "ᛞ The quantum flip.", keys: "Dawn, awakening, the sudden shift", mean: "An instantaneous paradigm shift; moving completely from one state into its opposite." },
+  "Othala": { core: "ᛟ The inherited structure.", keys: "Estate, ancestry, the perimeter", mean: "Assets, traits, or boundaries established by the past that define the current operating space." },
+
+  // --- ASTROLOGY: PLANETS & SIGNS ---
+  "Sun": { core: "The central core.", keys: "Ego, vitality, identity, conscious will", mean: "The absolute center of gravity in the system; the driving life force and self-image." },
+  "Moon": { core: "The responsive tide.", keys: "Emotion, habit, the subconscious, memory", mean: "The fluctuating, reactive layer of the psyche; emotional baseline and instinctual needs." },
+  "Mercury": { core: "The data processor.", keys: "Communication, logic, speed, local travel", mean: "The mechanics of transmitting, receiving, and analyzing information." },
+  "Venus": { core: "The harmonic attractor.", keys: "Aesthetics, value, relationship, magnetism", mean: "The principle of drawing things together through resonance, beauty, or mutual value." },
+  "Mars": { core: "The kinetic penetrator.", keys: "Action, aggression, desire, separation", mean: "The aggressive outward thrust of energy required to conquer, divide, or initiate." },
+  "Jupiter": { core: "The macro-expander.", keys: "Growth, philosophy, luck, inflation", mean: "The principle of endless expansion, synthesis of meaning, and amplification of scale." },
+  "Saturn": { core: "The rigid limit.", keys: "Time, restriction, structure, gravity", mean: "The application of pressure, boundary, and consequence to force maturation and form." },
+  "Uranus": { core: "The electrical disruption.", keys: "Shock, rebellion, genius, the fracture", mean: "Sudden, erratic voltage that shatters the established paradigm to force evolution." },
+  "Neptune": { core: "The universal solvent.", keys: "Illusion, mysticism, the fog, unity", mean: "The dissolving of all boundaries; accessing the collective unconscious and abstract reality." },
+  "Pluto": { core: "The deep reactor.", keys: "Power, destruction, rebirth, the subterranean", mean: "The slow, extreme alchemical process of completely destroying a form to extract its core power." },
+  "Aries": { core: "The cardinal fire.", keys: "Initiation, the pioneer, pure impulse", mean: "The aggressive, unthinking spark that forces existence out of nothingness." },
+  "Taurus": { core: "The fixed earth.", keys: "Density, sustenance, the anchor", mean: "The accumulation and stabilization of matter to ensure long-term physical security." },
+  "Gemini": { core: "The mutable air.", keys: "Data collection, duality, the nervous system", mean: "Rapid, localized movement aimed at gathering and exchanging diverse information." },
+  "Cancer": { core: "The cardinal water.", keys: "The shell, nurturing, emotional origin", mean: "The creation of a protective emotional perimeter to safely harbor vulnerable growth." },
+  "Leo": { core: "The fixed fire.", keys: "Radiance, sovereignty, sustained expression", mean: "The continuous, confident broadcasting of the self to organize the surrounding environment." },
+  "Virgo": { core: "The mutable earth.", keys: "Analysis, the filter, refinement, utility", mean: "The methodical breakdown of complex systems to extract purity and maximize efficiency." },
+  "Libra": { core: "The cardinal air.", keys: "The mirror, equilibrium, aesthetic geometry", mean: "The active balancing of asymmetric forces to achieve objective harmony and justice." },
+  "Scorpio": { core: "The fixed water.", keys: "Intensity, the depths, psychological fusion", mean: "The focused penetration of the emotional or psychological shadow to find absolute truth." },
+  "Sagittarius": { core: "The mutable fire.", keys: "The trajectory, ideology, the far horizon", mean: "The synthesis of local data into a macro-philosophy; the desire to physically or mentally expand." },
+  "Capricorn": { core: "The cardinal earth.", keys: "The apex, authority, the long ascent", mean: "The ambitious, calculated manipulation of material reality to achieve the highest possible structure." },
+  "Aquarius": { core: "The fixed air.", keys: "The network, the alien, systemic reform", mean: "The rigid adherence to an idealized, often futuristic concept that serves the macro-collective." },
+  "Pisces": { core: "The mutable water.", keys: "The ocean, surrender, the final dissolution", mean: "The ultimate diffusion of the ego into the universal field; empathy without borders." },
+
+  // --- I CHING: ALL 64 HEXAGRAMS (Strictly Descriptive) ---
+  "1. Qian": { core: "Pure kinetic force.", keys: "Heaven, unyielding motion, the creative", mean: "Absolute Yang. Relentless, unbending forward energy and total generative power." },
+  "2. Kun": { core: "Pure receptive mass.", keys: "Earth, yielding, the spatial field", mean: "Absolute Yin. The ultimate capacity to receive, support, and give form to energy." },
+  "3. Zhun": { core: "The chaotic sprout.", keys: "Difficulty, initial friction, the breakthrough", mean: "The intense struggle of new life or a new system forcing its way into existence." },
+  "4. Meng": { core: "The blank slate.", keys: "Folly, the student, the unformed mind", mean: "A state of profound ignorance or inexperience that requires external structuring." },
+  "5. Xu": { core: "The calculated pause.", keys: "Waiting, nourishment, the holding pattern", mean: "Inhibiting forward momentum while gathering the resources necessary for the next phase." },
+  "6. Song": { core: "The asymmetric clash.", keys: "Conflict, friction, the blocked vector", mean: "Two opposing forces colliding without resolution, generating heat and gridlock." },
+  "7. Shi": { core: "The organized collective.", keys: "The army, discipline, centralized command", mean: "Mass energy organized and directed by a single, strict authoritative center." },
+  "8. Bi": { core: "The gravitational cluster.", keys: "Holding together, alliance, the center", mean: "Distinct elements naturally coalescing around a strong, stable point of gravity." },
+  "9. Xiao Chu": { core: "The minor constraint.", keys: "Small taming, the gentle wind, preparation", mean: "Subtle forces temporarily holding back a greater pressure; a buildup of micro-tensions." },
+  "10. Lu": { core: "The dangerous threshold.", keys: "Treading, the tiger's tail, conduct", mean: "Moving through a highly volatile or dangerous environment requiring precise behavior." },
+  "11. Tai": { core: "The perfect interlock.", keys: "Peace, harmonic exchange, the golden era", mean: "Heaven and Earth interacting seamlessly; maximum flow and macro-stability." },
+  "12. Pi": { core: "The absolute disconnect.", keys: "Stagnation, the void, separated forces", mean: "Opposing forces pulling away from each other; zero communication and systemic decay." },
+  "13. Tong Ren": { core: "The open network.", keys: "Fellowship, public space, aligned goals", mean: "Organization based on shared universal principles rather than localized or tribal bonds." },
+  "14. Da You": { core: "The peak accumulation.", keys: "Great possession, sovereignty, the sun", mean: "Massive resources or power held centrally and radiating outward with absolute clarity." },
+  "15. Qian": { core: "The leveled field.", keys: "Modesty, the equalizer, the lowered peak", mean: "The physical law of erosion; high places are brought low and valleys are filled." },
+  "16. Yu": { core: "The resonant wave.", keys: "Enthusiasm, the drumbeat, kinetic alignment", mean: "Energy transferring rapidly through a system via shared frequency and anticipation." },
+  "17. Sui": { core: "The synchronized wake.", keys: "Following, adaptation, the slipstream", mean: "Adjusting one's own trajectory to perfectly match the dominant moving force." },
+  "18. Gu": { core: "The systemic rot.", keys: "Decay, the corrupted code, required repair", mean: "A structure compromised from within; the necessary work of dismantling and purging poison." },
+  "19. Lin": { core: "The advancing front.", keys: "Approach, the rising tide, oversight", mean: "A powerful, positive force steadily moving in to oversee and elevate the environment." },
+  "20. Guan": { core: "The high vantage.", keys: "Contemplation, the watchtower, objective view", mean: "Stepping completely outside the kinetic field to observe the macro-pattern." },
+  "21. Shi He": { core: "The jaw closing.", keys: "Biting through, punishment, clearing the block", mean: "The aggressive, forceful removal of an obstruction to restore flow or justice." },
+  "22. Bi": { core: "The surface aesthetic.", keys: "Grace, the facade, superficial harmony", mean: "Form applied over function; making the external structure beautiful or palatable." },
+  "23. Bo": { core: "The structural collapse.", keys: "Splitting apart, the avalanche, erosion", mean: "The foundational failure of a system; the inevitable collapse when the base rots." },
+  "24. Fu": { core: "The kinetic return.", keys: "The turning point, the solstice, the spark", mean: "The absolute lowest point has been reached, and the first pulse of upward movement begins." },
+  "25. Wu Wang": { core: "The uncalculated act.", keys: "Innocence, the unexpected, zero projection", mean: "Action taken without anticipation of reward or outcome; the pure reality of the moment." },
+  "26. Da Chu": { core: "The massive battery.", keys: "Great taming, stored kinetic energy, the dam", mean: "A vast amount of potential energy being held in check, accumulating extreme density." },
+  "27. Yi": { core: "The metabolic intake.", keys: "Nourishment, the mouth, the input", mean: "The physical or mental material being consumed and how it alters the internal state." },
+  "28. Da Guo": { core: "The overloaded beam.", keys: "Preponderance of the great, the breaking point", mean: "Too much mass concentrated on a fragile structure; a system nearing critical failure." },
+  "29. Kan": { core: "The recursive trap.", keys: "The abyss, deep water, objective danger", mean: "A hazardous, enclosed situation with no lateral exits; one must move straight through." },
+  "30. Li": { core: "The clinging fire.", keys: "Radiance, the network, dependent energy", mean: "Brilliant energy that requires constant fuel and a structure to cling to in order to exist." },
+  "31. Xian": { core: "The magnetic response.", keys: "Influence, the spark, the immediate pull", mean: "The instantaneous, unspoken energetic attraction between two distinct entities." },
+  "32. Heng": { core: "The enduring orbit.", keys: "Duration, consistency, the macro-rhythm", mean: "A system locked into a stable, long-term repetitive cycle; massive inertia." },
+  "33. Dun": { core: "The tactical retreat.", keys: "Yielding, withdrawal, preserving the core", mean: "The calculated removal of oneself from a hostile field to prevent destruction." },
+  "34. Da Zhuang": { core: "The battering ram.", keys: "Great power, the bull, unchecked momentum", mean: "A massive surge of forward energy that risks causing damage if not carefully aimed." },
+  "35. Jin": { core: "The rising sun.", keys: "Progress, rapid expansion, total visibility", mean: "A period of unhindered upward trajectory and expanding influence in the open." },
+  "36. Ming Yi": { core: "The eclipsed light.", keys: "Darkening of the light, the bunker, survival", mean: "A highly hostile environment where brilliance must be hidden to avoid drawing fire." },
+  "37. Jia Ren": { core: "The internal cell.", keys: "The family, localized roles, the inside", mean: "The strict division of labor and energy within a closed, intimate system." },
+  "38. Kui": { core: "The polarized field.", keys: "Opposition, the divergent vectors, alienation", mean: "Two forces moving in entirely opposite directions; fundamental incompatibility." },
+  "39. Jian": { core: "The vertical wall.", keys: "Obstruction, the limp, the hard stop", mean: "A massive obstacle blocking forward momentum; requiring an immediate change of vector." },
+  "40. Xie": { core: "The sudden thaw.", keys: "Deliverance, the knot untied, pressure released", mean: "The rapid dissolution of tension and obstacles, allowing energy to rush forward freely." },
+  "41. Sun": { core: "The intentional drain.", keys: "Decrease, subtraction, the required loss", mean: "The strategic reduction of the lower elements to fortify the higher elements." },
+  "42. Yi": { core: "The massive influx.", keys: "Increase, the downpour, sudden expansion", mean: "A surge of energy or resources pouring into the system from an external source." },
+  "43. Guai": { core: "The absolute rupture.", keys: "Breakthrough, the final push, the verdict", mean: "The violent expulsion of the final piece of resistance; a dam breaking completely." },
+  "44. Gou": { core: "The shadow infiltrator.", keys: "Coming to meet, the subtle infection", mean: "A small, seemingly insignificant negative element quietly entering a stable system." },
+  "45. Cui": { core: "The gravitational mass.", keys: "Gathering together, the reservoir, density", mean: "Resources or entities pooling into a central location, creating high cultural or material density." },
+  "46. Sheng": { core: "The vertical ascent.", keys: "Pushing upward, the tree, slow steady climb", mean: "Growth that encounters no resistance, pulling itself steadily upward through the layers." },
+  "47. Kun": { core: "The dried well.", keys: "Oppression, exhaustion, the enclosed space", mean: "A state of total depletion and restriction; the environment offers absolutely zero support." },
+  "48. Jing": { core: "The inexhaustible source.", keys: "The well, the baseline, the deep root", mean: "The foundational source of nourishment that remains constant regardless of surface changes." },
+  "49. Ge": { core: "The paradigm death.", keys: "Revolution, molting, the fiery reset", mean: "The absolute dismantling of an old order to install a completely new operating system." },
+  "50. Ding": { core: "The alchemical vessel.", keys: "The cauldron, transmutation, the synthesis", mean: "The container where raw materials are broken down and forged into a higher spiritual or social form." },
+  "51. Zhen": { core: "The seismic shock.", keys: "The arousing, thunder, the jumpstart", mean: "A sudden, terrifying burst of energy that resets the nervous system and forces awareness." },
+  "52. Gen": { core: "The immovable mass.", keys: "Keeping still, the mountain, the hard block", mean: "Absolute cessation of kinetic energy; the imposing boundary that cannot be moved." },
+  "53. Jian": { core: "The geometric progression.", keys: "Gradual development, the flock, step by step", mean: "Slow, highly structured advancement where each phase must be completed before the next begins." },
+  "54. Gui Mei": { core: "The compromised position.", keys: "The marrying maiden, subordinate status", mean: "Entering a situation where one has zero systemic power or foundational rights." },
+  "55. Feng": { core: "The zenith density.", keys: "Abundance, the peak, the blinding light", mean: "The absolute maximum state of expansion and energy; the moment right before the decline begins." },
+  "56. Lu": { core: "The unanchored vector.", keys: "The wanderer, the transient, the loose element", mean: "Moving through an environment without roots, connections, or structural support." },
+  "57. Xun": { core: "The penetrating frequency.", keys: "The gentle, wind, the subtle influence", mean: "A soft but continuous force that gradually permeates and shapes an entire environment." },
+  "58. Dui": { core: "The conductive surface.", keys: "The joyous, the lake, open exchange", mean: "The open, communicative interface between two systems allowing for unhindered exchange." },
+  "59. Huan": { core: "The total dispersion.", keys: "Dispersion, the thaw, scattering", mean: "Rigid structures or blockages being dissolved and spread outward across the environment." },
+  "60. Jie": { core: "The structured grid.", keys: "Limitation, the joints, the calendar", mean: "Imposing necessary limits, borders, and measuring points onto a continuous flow." },
+  "61. Zhong Fu": { core: "The resonant core.", keys: "Inner truth, the hollow center, the frequency", mean: "Absolute internal coherence that projects outward and forces the environment to align with it." },
+  "62. Xiao Guo": { core: "The low-altitude flight.", keys: "Preponderance of the small, the detail", mean: "A situation demanding extreme caution, small movements, and hyper-focus on minor variables." },
+  "63. Ji Ji": { core: "The completed sequence.", keys: "After completion, the fragile perfect state", mean: "The exact moment of total equilibrium; highly unstable because any movement disrupts the balance." },
+  "64. Wei Ji": { core: "The final threshold.", keys: "Before completion, the last step, chaos", mean: "The chaotic state right before a new order locks into place; requires absolute focus to cross the finish line." }
 };
 
-// Fill in missing Minor Arcana and Hexagrams dynamically or with defaults
 function getLore(name) {
-  if(MEANINGS[name]) return MEANINGS[name];
-  
-  // Logical Fallbacks for Minor Arcana
-  if(name.includes("Ace")) return { core: "Pure Potential.", keys: "Seed, start, spark", mean: "A new energy in this suit is manifesting." };
-  if(name.includes("Wands")) return { core: "Will and Fire.", keys: "Passion, energy, creation", mean: "Focus on your ambition and creative drive." };
-  if(name.includes("Cups")) return { core: "Emotion and Water.", keys: "Love, feeling, relationship", mean: "Focus on your heart and intuitive connections." };
-  if(name.includes("Swords")) return { core: "Mind and Air.", keys: "Logic, conflict, truth", mean: "Focus on clear thinking and mental boundaries." };
-  if(name.includes("Pentacles")) return { core: "Body and Earth.", keys: "Work, money, health", mean: "Focus on the physical world and tangible results." };
-
-  return { core: "Quantum Signature.", keys: "Variable, shifting, specific", mean: "This symbol has been drawn from the void. Observe its resonance." };
+  return MEANINGS[name] || { core: "Quantum Signature.", keys: "Variable, shifting, specific", mean: "This symbol has been drawn from the void. Observe its resonance." };
 }
 
 // ── UTILS ──
@@ -598,56 +464,29 @@ let tp=[];
 function resizeT(){ tc.width=innerWidth; tc.height=innerHeight; }
 addEventListener('resize',resizeT); resizeT();
 class TP {
-  constructor(x,y){
-    this.x=x; this.y=y; this.r=Math.random()*2.2+0.4;
-    this.life=1; this.d=0.028+Math.random()*0.024; this.h=260+Math.random()*45;
-  }
+  constructor(x,y){ this.x=x; this.y=y; this.r=Math.random()*2.2+0.4; this.life=1; this.d=0.028+Math.random()*0.024; this.h=260+Math.random()*45; }
   step(){ this.life-=this.d; }
-  draw(){
-    tctx.beginPath(); tctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-    tctx.fillStyle=`hsla(${this.h},72%,72%,${this.life*.52})`;
-    tctx.shadowColor=`hsla(${this.h},80%,72%,${this.life*.65})`;
-    tctx.shadowBlur=8; tctx.fill(); tctx.shadowBlur=0;
-  }
+  draw(){ tctx.beginPath(); tctx.arc(this.x,this.y,this.r,0,Math.PI*2); tctx.fillStyle=`hsla(${this.h},72%,72%,${this.life*.52})`; tctx.shadowColor=`hsla(${this.h},80%,72%,${this.life*.65})`; tctx.shadowBlur=8; tctx.fill(); tctx.shadowBlur=0; }
 }
 addEventListener('mousemove',e=>{ for(let i=0;i<3;i++) tp.push(new TP(e.clientX,e.clientY)); });
 (function tloop(){ tctx.clearRect(0,0,tc.width,tc.height); tp=tp.filter(p=>p.life>0); tp.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(tloop); })();
 
 // ── MOUSE ENTROPY ──
 const mouseCanvas=document.getElementById('mouse-canvas'), mctx=mouseCanvas.getContext('2d');
-let mousePoints=[];
-let mouseHash=0, mouseEvt=0, lastMX=0,lastMY=0,lastMT=0;
-let dirChanges=0, lastDX=0,lastDY=0, dwellCount=0;
+let mousePoints=[]; let mouseHash=0, mouseEvt=0, lastMX=0,lastMY=0,lastMT=0; let dirChanges=0, lastDX=0,lastDY=0, dwellCount=0;
 
-function resizeMC(){
-  const dpr=devicePixelRatio||1;
-  mouseCanvas.width=mouseCanvas.offsetWidth*dpr;
-  mouseCanvas.height=mouseCanvas.offsetHeight*dpr;
-  mctx.setTransform(dpr,0,0,dpr,0,0);
-}
+function resizeMC(){ const dpr=devicePixelRatio||1; mouseCanvas.width=mouseCanvas.offsetWidth*dpr; mouseCanvas.height=mouseCanvas.offsetHeight*dpr; mctx.setTransform(dpr,0,0,dpr,0,0); }
 addEventListener('resize',resizeMC); setTimeout(resizeMC,60);
 
 addEventListener('mousemove',e=>{
-  const now=performance.now(), x=e.clientX, y=e.clientY;
-  const dt=(now-lastMT)||1;
-  const dx=x-lastMX, dy=y-lastMY;
-  const spd=Math.sqrt(dx*dx+dy*dy)/dt;
-  if(lastDX||lastDY){ if(dx*lastDX+dy*lastDY<0) dirChanges++; }
-  lastDX=dx; lastDY=dy;
+  const now=performance.now(), x=e.clientX, y=e.clientY; const dt=(now-lastMT)||1;
+  const dx=x-lastMX, dy=y-lastMY; const spd=Math.sqrt(dx*dx+dy*dy)/dt;
+  if(lastDX||lastDY){ if(dx*lastDX+dy*lastDY<0) dirChanges++; } lastDX=dx; lastDY=dy;
   if(spd<0.05&&dt>60) dwellCount++;
-  mouseHash=mix(mouseHash,u16(x*7));
-  mouseHash=mix(mouseHash,u16(y*11));
-  mouseHash=mix(mouseHash,u16(Math.round(spd*1000)*13));
-  mouseHash=mix(mouseHash,u16(Math.round(now)*3));
-  mousePoints.push({x,y,t:now});
-  if(mousePoints.length>1200) mousePoints.shift();
-  mouseEvt++;
-  lastMX=x; lastMY=y; lastMT=now;
+  mouseHash=mix(mouseHash,u16(x*7)); mouseHash=mix(mouseHash,u16(y*11)); mouseHash=mix(mouseHash,u16(Math.round(spd*1000)*13)); mouseHash=mix(mouseHash,u16(Math.round(now)*3));
+  mousePoints.push({x,y,t:now}); if(mousePoints.length>1200) mousePoints.shift(); mouseEvt++; lastMX=x; lastMY=y; lastMT=now;
   const fh=u16(mouseHash^u16(dirChanges*997)^u16(dwellCount*503));
-  document.getElementById('val-e').textContent=`${fh} · ${mouseEvt} events`;
-  document.getElementById('val-e').className='src-num ce';
-  document.getElementById('dot-e').className='src-dot on-e';
-  document.getElementById('mouse-val').textContent=`${mouseEvt} events · ${fh}`;
+  document.getElementById('val-e').textContent=`${fh} · ${mouseEvt} events`; document.getElementById('val-e').className='src-num ce'; document.getElementById('dot-e').className='src-dot on-e'; document.getElementById('mouse-val').textContent=`${mouseEvt} events · ${fh}`;
   SRAWS.e=fh; updateCombined();
 });
 
@@ -655,28 +494,20 @@ function getMouseSeed(){ return u16(mouseHash^u16(dirChanges*997)^u16(dwellCount
 
 function drawMouseTrace(){
   const W=mouseCanvas.offsetWidth, H=mouseCanvas.offsetHeight;
-  if(!W||!H){ requestAnimationFrame(drawMouseTrace); return; }
-  mctx.clearRect(0,0,W,H);
+  if(!W||!H){ requestAnimationFrame(drawMouseTrace); return; } mctx.clearRect(0,0,W,H);
   if(mousePoints.length<2){ requestAnimationFrame(drawMouseTrace); return; }
   const xs=mousePoints.map(p=>p.x), ys=mousePoints.map(p=>p.y);
-  const minX=Math.min(...xs),maxX=Math.max(...xs);
-  const minY=Math.min(...ys),maxY=Math.max(...ys);
-  const rX=(maxX-minX)||1, rY=(maxY-minY)||1;
-  const pad=12;
+  const minX=Math.min(...xs),maxX=Math.max(...xs), minY=Math.min(...ys),maxY=Math.max(...ys);
+  const rX=(maxX-minX)||1, rY=(maxY-minY)||1, pad=12;
   function toC(p){ return { x:pad+((p.x-minX)/rX)*(W-pad*2), y:pad+((p.y-minY)/rY)*(H-pad*2) }; }
   const now=performance.now(), maxAge=18000;
   for(let i=1;i<mousePoints.length;i++){
-    const age=now-mousePoints[i].t;
-    if(age>maxAge) continue;
-    const alpha=(1-age/maxAge)*0.78;
-    const a=toC(mousePoints[i-1]), b=toC(mousePoints[i]);
+    const age=now-mousePoints[i].t; if(age>maxAge) continue;
+    const alpha=(1-age/maxAge)*0.78, a=toC(mousePoints[i-1]), b=toC(mousePoints[i]);
     const dx2=mousePoints[i].x-mousePoints[i-1].x, dy2=mousePoints[i].y-mousePoints[i-1].y;
-    const spd2=Math.sqrt(dx2*dx2+dy2*dy2);
-    const hue=270-Math.min(spd2*1.8,75);
+    const spd2=Math.sqrt(dx2*dx2+dy2*dy2), hue=270-Math.min(spd2*1.8,75);
     mctx.beginPath(); mctx.moveTo(a.x,a.y); mctx.lineTo(b.x,b.y);
-    mctx.strokeStyle=`hsla(${hue},75%,68%,${alpha})`;
-    mctx.lineWidth=1.5; mctx.shadowColor=`hsla(${hue},90%,68%,${alpha*.55})`; mctx.shadowBlur=4;
-    mctx.stroke(); mctx.shadowBlur=0;
+    mctx.strokeStyle=`hsla(${hue},75%,68%,${alpha})`; mctx.lineWidth=1.5; mctx.shadowColor=`hsla(${hue},90%,68%,${alpha*.55})`; mctx.shadowBlur=4; mctx.stroke(); mctx.shadowBlur=0;
   }
   requestAnimationFrame(drawMouseTrace);
 }
@@ -684,103 +515,36 @@ drawMouseTrace();
 
 // ── ENTROPY SOURCES ──
 const SRAWS={a:0,b:0,c:0,d:0,e:0};
-function combineSources(){
-  return (SRAWS.a^rot16(SRAWS.b,3)^rot16(SRAWS.c,7)^rot16(SRAWS.d,11)^rot16(SRAWS.e,5))&0xffff;
-}
-function setSrc(key,raw,display,dotCls,valCls){
-  SRAWS[key]=raw&0xffff;
-  document.getElementById(`dot-${key}`).className=`src-dot ${dotCls}`;
-  const ve=document.getElementById(`val-${key}`);
-  ve.textContent=display; ve.className=`src-num ${valCls}`;
-  updateCombined();
-}
-function updateCombined(){
-  SRAWS.e=getMouseSeed();
-  document.getElementById('combined-val').textContent=combineSources().toString().padStart(5,'0');
-}
+function combineSources(){ return (SRAWS.a^rot16(SRAWS.b,3)^rot16(SRAWS.c,7)^rot16(SRAWS.d,11)^rot16(SRAWS.e,5))&0xffff; }
+function setSrc(key,raw,display,dotCls,valCls){ SRAWS[key]=raw&0xffff; document.getElementById(`dot-${key}`).className=`src-dot ${dotCls}`; const ve=document.getElementById(`val-${key}`); ve.textContent=display; ve.className=`src-num ${valCls}`; updateCombined(); }
+function updateCombined(){ SRAWS.e=getMouseSeed(); document.getElementById('combined-val').textContent=combineSources().toString().padStart(5,'0'); }
 
-async function fetchANU(){
-  try{
-    const r=await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
-    const d=await r.json(); const v=d.data[0];
-    setSrc('a',v,`${v} — quantum vacuum`,'on-a','ca'); return v;
-  }catch{
-    const fb=new Uint16Array(1); crypto.getRandomValues(fb);
-    setSrc('a',fb[0],`${fb[0]} — fallback`,'on-a','ca'); return fb[0];
-  }
-}
-async function fetchAtmo(){
-  try{
-    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.22&longitude=6.90&current=wind_speed_10m,surface_pressure,relative_humidity_2m,wind_direction_10m,precipitation&timezone=auto');
-    const d=await r.json(); const c=d.current;
-    const wind=c.wind_speed_10m||0,press=c.surface_pressure||0;
-    const v=(Math.round((wind%1)*10000)*97+Math.floor(press)*43)&0xffff;
-    setSrc('b',v,`${wind}m/s · ${Math.round(press)}hPa`,'on-b','cb'); return v;
-  }catch{
-    const fb=new Uint16Array(1); crypto.getRandomValues(fb);
-    setSrc('b',fb[0],`${fb[0]} — fallback`,'on-b','cb'); return fb[0];
-  }
-}
-function fetchOS(){
-  const buf=new Uint16Array(4); crypto.getRandomValues(buf);
-  const v=(buf[0]^buf[1]^buf[2]^buf[3])&0xffff;
-  setSrc('c',v,`${v} — hw pool`,'on-c','cc'); return v;
-}
-function fetchJitter(){
-  let acc=0;
-  for(let i=0;i<512;i++){ const f=Math.round((performance.now()%1)*1e6); acc=u16(acc^u16(f*(i+1)*6364)); }
-  setSrc('d',acc,`${acc} — 512 samples`,'on-d','cd'); return acc;
-}
+async function fetchANU(){ try{ const r=await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16'); const d=await r.json(); const v=d.data[0]; setSrc('a',v,`${v} — quantum vacuum`,'on-a','ca'); return v; }catch{ const fb=new Uint16Array(1); crypto.getRandomValues(fb); setSrc('a',fb[0],`${fb[0]} — fallback`,'on-a','ca'); return fb[0]; } }
+async function fetchAtmo(){ try{ const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.22&longitude=6.90&current=wind_speed_10m,surface_pressure,relative_humidity_2m,wind_direction_10m,precipitation&timezone=auto'); const d=await r.json(); const c=d.current; const wind=c.wind_speed_10m||0,press=c.surface_pressure||0; const v=(Math.round((wind%1)*10000)*97+Math.floor(press)*43)&0xffff; setSrc('b',v,`${wind}m/s · ${Math.round(press)}hPa`,'on-b','cb'); return v; }catch{ const fb=new Uint16Array(1); crypto.getRandomValues(fb); setSrc('b',fb[0],`${fb[0]} — fallback`,'on-b','cb'); return fb[0]; } }
+function fetchOS(){ const buf=new Uint16Array(4); crypto.getRandomValues(buf); const v=(buf[0]^buf[1]^buf[2]^buf[3])&0xffff; setSrc('c',v,`${v} — hw pool`,'on-c','cc'); return v; }
+function fetchJitter(){ let acc=0; for(let i=0;i<512;i++){ const f=Math.round((performance.now()%1)*1e6); acc=u16(acc^u16(f*(i+1)*6364)); } setSrc('d',acc,`${acc} — 512 samples`,'on-d','cd'); return acc; }
 
 fetchOS(); fetchJitter(); fetchANU(); fetchAtmo();
 
-// ── MINI WAVE CANVASES ──
+// ── MINI WAVES ──
 const MINI_COLORS=['#a78bfa','#fbbf24','#f472b6','#6ee7b7','#e2c887'];
 const MINI_DIMS=['rgba(167,139,250,','rgba(251,191,36,','rgba(244,114,182,','rgba(110,231,183,','rgba(226,200,135,'];
-const miniCanvases=[...document.querySelectorAll('.mini-wave')];
-let miniWaves=[[],[],[],[],[]];
-let miniIdleT=0, miniBurst=0;
+const miniCanvases=[...document.querySelectorAll('.mini-wave')]; let miniWaves=[[],[],[],[],[]]; let miniIdleT=0, miniBurst=0;
 
-function resizeMinis(){
-  miniCanvases.forEach(cv=>{
-    const dpr=devicePixelRatio||1;
-    cv.width=cv.offsetWidth*dpr; cv.height=cv.offsetHeight*dpr;
-    cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
-  });
-}
+function resizeMinis(){ miniCanvases.forEach(cv=>{ const dpr=devicePixelRatio||1; cv.width=cv.offsetWidth*dpr; cv.height=cv.offsetHeight*dpr; cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0); }); }
 addEventListener('resize',resizeMinis); setTimeout(resizeMinis,100);
 
-function lcgExpand(seed,n){
-  const pts=[]; let s=seed>>>0;
-  for(let i=0;i<n;i++){ s=Math.imul(s,1664525)+1013904223>>>0; pts.push((s%10000)/10000); }
-  return pts;
-}
-function idleWave(t,x,phi){
-  return 0.5+0.18*Math.sin(x*3+t*.6+phi)+0.09*Math.sin(x*7.5-t*.95+phi*.7);
-}
+function lcgExpand(seed,n){ const pts=[]; let s=seed>>>0; for(let i=0;i<n;i++){ s=Math.imul(s,1664525)+1013904223>>>0; pts.push((s%10000)/10000); } return pts; }
+function idleWave(t,x,phi){ return 0.5+0.18*Math.sin(x*3+t*.6+phi)+0.09*Math.sin(x*7.5-t*.95+phi*.7); }
 
 (function miniLoop(){
-  miniIdleT+=0.01;
-  if(miniBurst>0) miniBurst=Math.max(0,miniBurst-0.006);
+  miniIdleT+=0.01; if(miniBurst>0) miniBurst=Math.max(0,miniBurst-0.006);
   miniCanvases.forEach((cv,li)=>{
-    const ctx2=cv.getContext('2d');
-    const W=cv.offsetWidth, H=cv.offsetHeight;
-    if(!W||!H) return;
-    ctx2.clearRect(0,0,W,H);
-    const cy=H/2, amp=H*.38, N=100;
-    const wave=miniWaves[li]||[];
-    const pts=new Float32Array(N+1);
-    for(let i=0;i<=N;i++){
-      const xn=i/N;
-      let v=wave.length>0 ? wave[Math.floor(xn*(wave.length-1))]*miniBurst+idleWave(miniIdleT,xn,li*1.2)*(1-miniBurst) : idleWave(miniIdleT,xn,li*1.2);
-      pts[i]=cy-amp*(v-.5)*2;
-    }
-    ctx2.beginPath();
-    for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]);
-    ctx2.strokeStyle=MINI_COLORS[li]; ctx2.globalAlpha=0.4+miniBurst*0.5; ctx2.lineWidth=1.5;
-    ctx2.stroke(); ctx2.globalAlpha=1;
-  });
-  requestAnimationFrame(miniLoop);
+    const ctx2=cv.getContext('2d'), W=cv.offsetWidth, H=cv.offsetHeight; if(!W||!H) return; ctx2.clearRect(0,0,W,H);
+    const cy=H/2, amp=H*.38, N=100, wave=miniWaves[li]||[], pts=new Float32Array(N+1);
+    for(let i=0;i<=N;i++){ const xn=i/N; let v=wave.length>0 ? wave[Math.floor(xn*(wave.length-1))]*miniBurst+idleWave(miniIdleT,xn,li*1.2)*(1-miniBurst) : idleWave(miniIdleT,xn,li*1.2); pts[i]=cy-amp*(v-.5)*2; }
+    ctx2.beginPath(); for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]); ctx2.strokeStyle=MINI_COLORS[li]; ctx2.globalAlpha=0.4+miniBurst*0.5; ctx2.lineWidth=1.5; ctx2.stroke(); ctx2.globalAlpha=1;
+  }); requestAnimationFrame(miniLoop);
 })();
 
 // ── REPOS ──
@@ -791,52 +555,30 @@ const REPOS={
   astrology:["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto","Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"]
 };
 function toFile(n){ return n.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/(^_|_$)/g,'')+ '.svg'; }
-function cardSeed(combined,i){
-  let h=u16(combined^u16(i*2654435761));
-  h=u16(Math.imul(h^(h>>>5),0x45d9));
-  return u16(h^(h>>>5));
-}
+function cardSeed(combined,i){ let h=u16(combined^u16(i*2654435761)); h=u16(Math.imul(h^(h>>>5),0x45d9)); return u16(h^(h>>>5)); }
 
 // ── SYNTHESIS ──
 let interpretAbort=null;
 
 function runSynthesis(){
-  const grid=document.getElementById('shard-grid');
-  const out=document.getElementById('output');
-  const btn=document.getElementById('synth-btn');
-  const type=document.getElementById('src-type').value;
-  const count=parseInt(document.getElementById('shard-count').value);
-  const q=document.getElementById('question').value;
-
+  const grid=document.getElementById('shard-grid'), out=document.getElementById('output'), btn=document.getElementById('synth-btn'), type=document.getElementById('src-type').value, count=parseInt(document.getElementById('shard-count').value), q=document.getElementById('question').value;
   if(interpretAbort){ interpretAbort.abort(); interpretAbort=null; }
 
-  btn.classList.add('fired');
-  setTimeout(()=>btn.classList.remove('fired'),900);
-  grid.innerHTML=''; out.innerHTML='';
-  document.getElementById('flash').classList.add('fire');
-  setTimeout(()=>document.getElementById('flash').classList.remove('fire'),350);
+  btn.classList.add('fired'); setTimeout(()=>btn.classList.remove('fired'),900);
+  grid.innerHTML=''; out.innerHTML=''; document.getElementById('flash').classList.add('fire'); setTimeout(()=>document.getElementById('flash').classList.remove('fire'),350);
 
-  fetchOS(); fetchJitter();
-  SRAWS.e=getMouseSeed();
-  const combined=combineSources();
-  const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0);
-  miniWaves=allRaws.map(s=>lcgExpand(s,60)); miniBurst=1.0;
-
-  const combo_all=[...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology];
-  const deck=type==='chaos'?combo_all:REPOS[type];
+  fetchOS(); fetchJitter(); SRAWS.e=getMouseSeed(); const combined=combineSources();
+  const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0); miniWaves=allRaws.map(s=>lcgExpand(s,60)); miniBurst=1.0;
+  const combo_all=[...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology]; const deck=type==='chaos'?combo_all:REPOS[type];
   let shards=[];
 
   for(let i=0;i<count;i++){
-    const cs=cardSeed(combined,i);
-    let val,folder;
-    if(type==='chaos'){
-      val=combo_all[cs%combo_all.length];
-      folder=REPOS.tarot.includes(val)?'tarot':REPOS.runes.includes(val)?'runes':REPOS.iching.includes(val)?'iching':'astrology';
-    }else{ val=REPOS[type][cs%REPOS[type].length]; folder=type; }
+    const cs=cardSeed(combined,i); let val,folder;
+    if(type==='chaos'){ val=combo_all[cs%combo_all.length]; folder=REPOS.tarot.includes(val)?'tarot':REPOS.runes.includes(val)?'runes':REPOS.iching.includes(val)?'iching':'astrology'; }
+    else{ val=REPOS[type][cs%REPOS[type].length]; folder=type; }
     shards.push(val);
 
-    const lore = getLore(val);
-    let vis;
+    const lore = getLore(val); let vis;
     if(folder==='iching'){
       const ch=String.fromCharCode(19904+parseInt(val.split('.')[0])-1);
       vis=`<div class="hex-char">${ch}</div>`;
@@ -846,30 +588,14 @@ function runSynthesis(){
 
     grid.innerHTML+=`
       <div class="shard glow" style="animation-delay:${i*60}ms">
-        <div class="shard-tooltip">
-          <div class="stt-head">${val}</div>
-          <div class="stt-core">${lore.core}</div>
-          <div class="stt-keys">Keywords: ${lore.keys}</div>
-          <div class="stt-mean">Meaning: ${lore.mean}</div>
-        </div>
-        ${vis}
-        <div class="shard-name">${val}</div>
-        <div class="shard-seed">${cs%deck.length} / ${deck.length}</div>
+        <div class="shard-tooltip"><div class="stt-head">${val}</div><div class="stt-core">${lore.core}</div><div class="stt-keys">Keywords: ${lore.keys}</div><div class="stt-mean">Meaning: ${lore.mean}</div></div>
+        ${vis}<div class="shard-name">${val}</div><div class="shard-seed">${cs%deck.length} / ${deck.length}</div>
       </div>`;
   }
 
-  interpretAbort=new AbortController();
-  out.innerHTML=`<span style="color:var(--tx3);font-size:12px;font-style:italic;opacity:0.55">reading the field…</span>`;
-  fetch('/api/interpret',{
-    method:'POST', signal:interpretAbort.signal,
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({question:q,symbols:shards})
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    interpretAbort=null;
-    out.innerHTML=`<div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div><div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div><div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`;
-  })
+  interpretAbort=new AbortController(); out.innerHTML=`<span style="color:var(--tx3);font-size:12px;font-style:italic;opacity:0.55">reading the field…</span>`;
+  fetch('/api/interpret',{ method:'POST', signal:interpretAbort.signal, headers:{'Content-Type':'application/json'}, body:JSON.stringify({question:q,symbols:shards}) })
+  .then(r=>r.json()).then(data=>{ interpretAbort=null; out.innerHTML=`<div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div><div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div><div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`; })
   .catch(err=>{ if(err.name!=='AbortError') out.innerHTML=`<span style="color:var(--tx3);font-size:13px;font-style:italic">API offline.</span>`; });
   fetchANU(); fetchAtmo();
 }
