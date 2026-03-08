@@ -36,7 +36,6 @@
             pointer-events: none;
         }
 
-        /* Top Visualization Section */
         .visualization-area {
             width: 100%;
             padding: 40px 5%;
@@ -78,8 +77,6 @@
             justify-content: center;
             text-align: center;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
         .shard-box:hover {
@@ -123,7 +120,6 @@
             opacity: 0.7;
         }
 
-        /* Main Interaction Area */
         .main-container {
             flex-grow: 1;
             display: flex;
@@ -171,10 +167,7 @@
             font-size: 14px;
             outline: none;
             width: 100%;
-            transition: border-color 0.3s;
         }
-
-        select:focus, input:focus { border-color: var(--cyan); }
 
         .synthesize-btn {
             width: 100%;
@@ -196,24 +189,14 @@
             box-shadow: 0 0 20px var(--cyan);
         }
         
-        .synthesize-btn:disabled {
-            opacity: 0.5;
-            border-color: #555;
-            color: #555;
-            box-shadow: none;
-        }
-
         #ai-output {
             padding-top: 30px;
             border-top: 1px solid var(--border);
             line-height: 1.8;
             font-size: 1.1rem;
-            min-height: 100px;
         }
 
-        .output-section { margin-bottom: 20px; }
         .output-label { color: var(--gold); font-size: 12px; letter-spacing: 2px; display: block; margin-bottom: 5px; }
-        .output-action { font-style: italic; border-left: 2px solid var(--cyan); padding-left: 15px; margin-top: 20px; color: var(--text-bright); }
 
     </style>
 </head>
@@ -239,11 +222,10 @@
                 <label>Category</label>
                 <select id="source-type">
                     <option value="tarot">Tarot (78 Cards)</option>
-                    <option value="runes">Elder Futhark Runes (24)</option>
-                    <option value="iching">I Ching Hexagrams (64)</option>
-                    <option value="elements">Periodic Elements (118)</option>
-                    <option value="wikipedia">Wikipedia (Infinite)</option>
-                    <option value="chaos">Pure Chaos (Omni-Mix)</option>
+                    <option value="runes">Runes (24)</option>
+                    <option value="iching">I Ching (64)</option>
+                    <option value="astrology">Celestial (Planets & Signs)</option>
+                    <option value="chaos">Omni-Mix (Chaos)</option>
                 </select>
             </div>
             <div class="input-group">
@@ -254,34 +236,31 @@
 
         <div class="input-group" style="margin-bottom: 30px;">
             <label>Neural Inquiry</label>
-            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank for open channel...">
+            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank...">
         </div>
 
         <button id="synth-btn" class="synthesize-btn" onclick="runSynthesis()">INITIATE SYNTHESIS</button>
 
-        <div id="ai-output">
-            </div>
+        <div id="ai-output"></div>
     </div>
 </div>
 
 <script>
-    // 1. POPULATE QUANTITY DROPDOWN
+    // POPULATE DROPDOWN
     const countSelect = document.getElementById('shard-count');
     for(let i=1; i<=20; i++) {
         let opt = document.createElement('option');
-        opt.value = i;
-        opt.innerHTML = i;
+        opt.value = i; opt.innerHTML = i;
         if(i === 3) opt.selected = true; 
         countSelect.appendChild(opt);
     }
 
-    // 2. CURSOR TRAIL LOGIC
+    // CURSOR TRAIL
     const canvas = document.getElementById('trail-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
     function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize);
-    resize();
+    window.addEventListener('resize', resize); resize();
 
     class Particle {
         constructor(x, y) {
@@ -291,16 +270,11 @@
             this.color = `rgba(0, 229, 255, ${Math.random()})`;
         }
         update() { this.life -= 2; }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.size, this.size);
-        }
+        draw() { ctx.fillStyle = this.color; ctx.fillRect(this.x, this.y, this.size, this.size); }
     }
-
     window.addEventListener('mousemove', (e) => {
         for(let i=0; i<2; i++) particles.push(new Particle(e.clientX, e.clientY));
     });
-
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles = particles.filter(p => p.life > 0);
@@ -309,43 +283,26 @@
     }
     animate();
 
-    // 3. FULL SYMBOL REPOSITORY
     const REPOS = {
         tarot: [
-            "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", 
-            "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", 
-            "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", 
-            "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World",
+            "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World",
             "Ace of Wands", "Two of Wands", "Three of Wands", "Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands", "Eight of Wands", "Nine of Wands", "Ten of Wands", "Page of Wands", "Knight of Wands", "Queen of Wands", "King of Wands",
             "Ace of Cups", "Two of Cups", "Three of Cups", "Four of Cups", "Five of Cups", "Six of Cups", "Seven of Cups", "Eight of Cups", "Nine of Cups", "Ten of Cups", "Page of Cups", "Knight of Cups", "Queen of Cups", "King of Cups",
             "Ace of Swords", "Two of Swords", "Three of Swords", "Four of Swords", "Five of Swords", "Six of Swords", "Seven of Swords", "Eight of Swords", "Nine of Swords", "Ten of Swords", "Page of Swords", "Knight of Swords", "Queen of Swords", "King of Swords",
             "Ace of Pentacles", "Two of Pentacles", "Three of Pentacles", "Four of Pentacles", "Five of Pentacles", "Six of Pentacles", "Seven of Pentacles", "Eight of Pentacles", "Nine of Pentacles", "Ten of Pentacles", "Page of Pentacles", "Knight of Pentacles", "Queen of Pentacles", "King of Pentacles"
         ],
-        runes: [
-            "Fehu", "Uruz", "Thurisaz", "Ansuz", "Raidho", "Kenaz", "Gebo", "Wunjo", 
-            "Hagalaz", "Nauthiz", "Isa", "Jera", "Eihwaz", "Perthro", "Algiz", "Sowilo", 
-            "Tiwaz", "Berkano", "Ehwaz", "Mannaz", "Laguz", "Ingwaz", "Dagaz", "Othala"
-        ],
+        runes: ["Fehu", "Uruz", "Thurisaz", "Ansuz", "Raidho", "Kenaz", "Gebo", "Wunjo", "Hagalaz", "Nauthiz", "Isa", "Jera", "Eihwaz", "Perthro", "Algiz", "Sowilo", "Tiwaz", "Berkano", "Ehwaz", "Mannaz", "Laguz", "Ingwaz", "Dagaz", "Othala"],
         iching: [
-            "1. Qian (The Creative)", "2. Kun (The Receptive)", "3. Zhun (Difficulty at the Beginning)", "4. Meng (Youthful Folly)", "5. Xu (Waiting)", "6. Song (Conflict)", "7. Shi (The Army)", "8. Bi (Holding Together)", "9. Xiao Chu (Small Taming)", "10. Lu (Treading)",
-            "11. Tai (Peace)", "12. Pi (Standstill)", "13. Tong Ren (Fellowship)", "14. Da You (Possession in Great Measure)", "15. Qian (Modesty)", "16. Yu (Enthusiasm)", "17. Sui (Following)", "18. Gu (Work on what has been spoiled)", "19. Lin (Approach)", "20. Guan (Contemplation)",
-            "21. Shi He (Biting Through)", "22. Bi (Grace)", "23. Bo (Splitting Apart)", "24. Fu (Return)", "25. Wu Wang (Innocence)", "26. Da Chu (Taming Power of the Great)", "27. Yi (Corners of the Mouth)", "28. Da Guo (Preponderance of the Great)", "29. Kan (The Abysmal)", "30. Li (The Clinging)",
-            "31. Xian (Influence)", "32. Heng (Duration)", "33. Dun (Retreat)", "34. Da Zhuang (Power of the Great)", "35. Jin (Progress)", "36. Ming Yi (Darkening of the Light)", "37. Jia Ren (The Family)", "38. Kui (Opposition)", "39. Jian (Obstruction)", "40. Xie (Deliverance)",
-            "41. Sun (Decrease)", "42. Yi (Increase)", "43. Guai (Breakthrough)", "44. Gou (Coming to Meet)", "45. Cui (Gathering Together)", "46. Sheng (Pushing Upward)", "47. Kun (Oppression)", "48. Jing (The Well)", "49. Ge (Revolution)", "50. Ding (The Caldron)",
-            "51. Zhen (The Arousing)", "52. Gen (Keeping Still)", "53. Jian (Development)", "54. Gui Mei (The Marrying Maiden)", "55. Feng (Abundance)", "56. Lu (The Wanderer)", "57. Xun (The Gentle)", "58. Dui (The Joyous)", "59. Huan (Dispersion)", "60. Jie (Limitation)",
-            "61. Zhong Fu (Inner Truth)", "62. Xiao Guo (Preponderance of the Small)", "63. Ji Ji (After Completion)", "64. Wei Ji (Before Completion)"
+            "1. Qian", "2. Kun", "3. Zhun", "4. Meng", "5. Xu", "6. Song", "7. Shi", "8. Bi", "9. Xiao Chu", "10. Lu", "11. Tai", "12. Pi", "13. Tong Ren", "14. Da You", "15. Qian", "16. Yu", "17. Sui", "18. Gu", "19. Lin", "20. Guan", "21. Shi He", "22. Bi", "23. Bo", "24. Fu", "25. Wu Wang", "26. Da Chu", "27. Yi", "28. Da Guo", "29. Kan", "30. Li", "31. Xian", "32. Heng", "33. Dun", "34. Da Zhuang", "35. Jin", "36. Ming Yi", "37. Jia Ren", "38. Kui", "39. Jian", "40. Xie", "41. Sun", "42. Yi", "43. Guai", "44. Gou", "45. Cui", "46. Sheng", "47. Kun", "48. Jing", "49. Ge", "50. Ding", "51. Zhen", "52. Gen", "53. Jian", "54. Gui Mei", "55. Feng", "56. Lu", "57. Xun", "58. Dui", "59. Huan", "60. Jie", "61. Zhong Fu", "62. Xiao Guo", "63. Ji Ji", "64. Wei Ji"
         ],
-        elements: [
-            "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", "Tellurium", "Iodine", "Xenon", "Cesium", "Barium", "Lanthanum", "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine", "Oganesson"
+        astrology: [
+            "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", 
+            "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
         ]
     };
 
-    // Helper to convert names to clean image filenames (e.g., "1. Qian (The Creative)" -> "1_qian_the_creative.jpg")
-    function nameToFilename(name) {
-        return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.jpg';
-    }
+    function nameToFilename(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.jpg'; }
 
-    // 4. CORE SYNTHESIS LOGIC
     async function runSynthesis() {
         const grid = document.getElementById('shard-grid');
         const output = document.getElementById('ai-output');
@@ -354,10 +311,8 @@
         const count = parseInt(document.getElementById('shard-count').value);
         const question = document.getElementById('user-question').value;
 
-        btn.disabled = true;
-        btn.innerText = "COLLAPSING REALITY...";
-        grid.innerHTML = "";
-        output.innerHTML = "<span style='color:var(--cyan)'>Establishing quantum link...</span>";
+        btn.disabled = true; grid.innerHTML = "";
+        output.innerHTML = "<span style='color:var(--cyan)'>Syncing...</span>";
 
         try {
             const seedRes = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
@@ -366,78 +321,46 @@
 
             let shards = [];
             for (let i = 0; i < count; i++) {
-                let val = "";
-                let folder = type;
+                let val = ""; let folder = type;
                 const localSeed = baseSeed + (i * 1337); 
 
-                if (type === 'tarot') {
-                    val = REPOS.tarot[localSeed % REPOS.tarot.length];
-                } else if (type === 'runes') {
-                    val = REPOS.runes[localSeed % REPOS.runes.length];
-                } else if (type === 'iching') {
-                    val = REPOS.iching[localSeed % REPOS.iching.length];
-                } else if (type === 'elements') {
-                    val = REPOS.elements[localSeed % REPOS.elements.length];
-                } else if (type === 'wikipedia') {
-                    const wiki = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/summary').then(r => r.json());
-                    val = wiki.title;
-                    folder = 'wiki';
-                } else {
-                    // Chaos mode: Pull from all 4 arrays
-                    const combined = [...REPOS.tarot, ...REPOS.runes, ...REPOS.iching, ...REPOS.elements];
+                if (type === 'tarot') val = REPOS.tarot[localSeed % REPOS.tarot.length];
+                else if (type === 'runes') val = REPOS.runes[localSeed % REPOS.runes.length];
+                else if (type === 'iching') val = REPOS.iching[localSeed % REPOS.iching.length];
+                else if (type === 'astrology') val = REPOS.astrology[localSeed % REPOS.astrology.length];
+                else {
+                    const combined = [...REPOS.tarot, ...REPOS.runes, ...REPOS.iching, ...REPOS.astrology];
                     val = combined[localSeed % combined.length];
-                    
-                    // Figure out which folder it belongs to for the image path
                     if (REPOS.tarot.includes(val)) folder = 'tarot';
                     else if (REPOS.runes.includes(val)) folder = 'runes';
                     else if (REPOS.iching.includes(val)) folder = 'iching';
-                    else folder = 'elements';
+                    else folder = 'astrology';
                 }
-                
                 shards.push(val);
-                
-                const imgFilename = nameToFilename(val);
-                const imgPath = `/assets/${folder}/${imgFilename}`;
-
+                const imgPath = `/assets/${folder}/${nameToFilename(val)}`;
                 grid.innerHTML += `
                     <div class="shard-box">
                         <img class="shard-image" src="${imgPath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${val}">
-                        <div class="shard-img-placeholder">[ NO IMG DATA ]</div>
+                        <div class="shard-img-placeholder">[ NO DATA ]</div>
                         <div class="shard-name">${val}</div>
                         <div class="shard-index">SIG_${String(i+1).padStart(2, '0')}</div>
                     </div>
                 `;
             }
 
-            // Call Backend API
             const res = await fetch('/api/interpret', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question, symbols: shards })
             });
-
-            if (!res.ok) throw new Error("Backend connection failed.");
-
             const data = await res.json();
-            
             output.innerHTML = `
-                <div class="output-section">
-                    <span class="output-label">RECOGNIZED PATTERN</span>
-                    <div>${data[0].pattern}</div>
-                </div>
-                <div class="output-section">
-                    <span class="output-label">NEURAL TRANSLATION</span>
-                    <div>${data[0].reading}</div>
-                </div>
-                <div class="output-action">↳ ${data[0].action}</div>
+                <div><span class="output-label">PATTERN</span>${data[0].pattern}</div>
+                <div style="margin-top:15px;"><span class="output-label">READING</span>${data[0].reading}</div>
+                <div style="margin-top:15px; font-style:italic; color:var(--cyan);">↳ ${data[0].action}</div>
             `;
-
-        } catch (e) {
-            output.innerHTML = `<span style="color:#ff4757;">LINK_FAILURE: ${e.message} Make sure your /api/interpret.js is deployed correctly.</span>`;
-        }
-
+        } catch (e) { output.innerHTML = "LINK_FAILURE."; }
         btn.disabled = false;
-        btn.innerText = "INITIATE SYNTHESIS";
     }
 </script>
 </body>
