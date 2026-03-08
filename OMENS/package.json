@@ -1,8 +1,11 @@
 {
-  "name": "omens-oracle",
-  "version": "1.0.0",
-  "main": "api/interpret.js",
+  "name": "omni-oracle-2026",
+  "version": "1.2.0",
+  "private": true,
   "dependencies": {
     "node-fetch": "^3.3.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
