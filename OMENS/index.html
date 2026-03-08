@@ -7,47 +7,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* ── Background layers ── */
-  --bg:      #0c0812;
-  --s1:      #130e1e;
-  --s2:      #1a1228;
-  --s3:      #221830;
-
-  /* ── Primary accent: violet / lilac ── */
-  --v1:      #c4a0f0;   /* main violet — labels, borders active    */
-  --v2:      #9b6ed4;   /* mid violet — borders resting            */
-  --v3:      rgba(196,160,240,0.18);  /* dim fill                  */
-  --v4:      rgba(196,160,240,0.08);  /* subtlest fill             */
-  --v-glow:  rgba(196,160,240,0.35);
-
-  /* ── Text ── */
-  --tx:      #ede8f8;   /* primary — near-white with violet tint   */
-  --tx2:     #b8acd4;   /* secondary — readable lavender           */
-  --tx3:     #7a6e96;   /* tertiary — muted purple-grey            */
-
-  /* ── Source accent colors (all high-contrast on dark bg) ── */
-  --ca:      #a78bfa;   /* ANU: violet-blue   */
-  --cb:      #fbbf24;   /* Atmosphere: amber  */
-  --cc:      #f472b6;   /* OS: rose           */
-  --cd:      #6ee7b7;   /* Timing: sage-mint  */
-  --ce:      #e2c887;   /* Mouse: warm gold   */
-
-  /* ── Border ── */
-  --bc:      rgba(196,160,240,0.2);
-  --bc-lo:   rgba(196,160,240,0.09);
-  --bc-hi:   rgba(196,160,240,0.45);
-
-  --r:   12px;
-  --rsm: 7px;
+  --bg:    #0b0812;
+  --s1:    #120e1c;
+  --s2:    #1a1228;
+  --s3:    #221830;
+  --v1:    #c4a0f0;
+  --v2:    #9b6ed4;
+  --v3:    rgba(196,160,240,0.18);
+  --v4:    rgba(196,160,240,0.07);
+  --tx:    #ede8f8;
+  --tx2:   #b8acd4;
+  --tx3:   #7a6e96;
+  --ca:    #a78bfa;
+  --cb:    #fbbf24;
+  --cc:    #f472b6;
+  --cd:    #6ee7b7;
+  --ce:    #e2c887;
+  --bc:    rgba(196,160,240,0.2);
+  --bc-lo: rgba(196,160,240,0.08);
+  --bc-hi: rgba(196,160,240,0.5);
+  --r:     12px;
+  --rsm:   7px;
 }
-
-* { cursor: none; box-sizing: border-box; margin: 0; padding: 0; }
+* { cursor:none; box-sizing:border-box; margin:0; padding:0; }
 
 body {
   background: var(--bg);
   background-image:
-    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(80,40,140,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 75% 85%, rgba(60,20,100,0.15) 0%, transparent 55%);
+    radial-gradient(ellipse 90% 55% at 35% 5%, rgba(70,30,130,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 40% at 80% 90%, rgba(50,15,90,0.18) 0%, transparent 55%);
   color: var(--tx);
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
@@ -55,257 +43,300 @@ body {
   overflow-x: hidden;
 }
 
-/* ── CUSTOM CURSOR ── */
-#trail-canvas { position: fixed; inset: 0; z-index: 9999; pointer-events: none; }
+/* ── FLASH OVERLAY on cast ── */
+#flash {
+  position: fixed; inset: 0; z-index: 8000;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(196,160,240,0.25) 0%, transparent 70%);
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.08s;
+}
+#flash.fire { opacity: 1; transition: opacity 0.08s; }
+
+#trail-canvas { position:fixed; inset:0; z-index:9999; pointer-events:none; }
 
 /* ── HEADER ── */
 .hdr {
-  text-align: center;
-  padding: 58px 20px 32px;
-  position: relative;
+  text-align:center; padding:40px 20px 24px; position:relative;
 }
 .hdr::after {
-  content: '';
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 60px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--v2), transparent);
+  content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:50px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--v2),transparent);
 }
 .hdr-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 6vw, 64px);
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: 0.04em;
-  color: var(--tx);
-  text-shadow: 0 0 80px rgba(196,160,240,0.3), 0 2px 4px rgba(0,0,0,0.5);
-  margin-bottom: 10px;
-  line-height: 1;
+  font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,56px);
+  font-weight:900; font-style:italic; letter-spacing:0.04em;
+  color:var(--tx); text-shadow:0 0 80px rgba(196,160,240,0.3);
+  margin-bottom:7px; line-height:1;
 }
-.hdr-title em { color: var(--v1); font-style: italic; }
-.hdr-sub {
-  font-size: 11px; letter-spacing: 4px; font-weight: 400;
-  color: var(--tx3); text-transform: uppercase;
+.hdr-title em { color:var(--v1); }
+.hdr-sub { font-size:10px; letter-spacing:4px; color:var(--tx3); text-transform:uppercase; font-weight:400; }
+
+/* ── ENTROPY PANEL ── */
+.ent-panel {
+  padding: 28px 4% 0;
+  display: flex; gap: 14px;
+  max-width: 1300px; width: 100%; margin: 0 auto;
+  overflow: visible;
 }
 
-/* ── MOUSE ENTROPY TRACE ── */
-.mouse-section {
-  width: 100%; padding: 36px 5% 0;
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
+/* LEFT: mouse canvas — 16:9 */
+.mouse-col {
+  flex: 0 0 auto;
+  width: clamp(280px, 38%, 520px);
+  display: flex; flex-direction: column;
 }
-.mouse-box {
-  width: 100%; max-width: 1200px;
-  background: var(--s1); border: 1px solid var(--bc);
-  border-radius: var(--r); overflow: hidden;
-  position: relative;
+.panel-card {
+  background:var(--s1); border:1px solid var(--bc);
+  border-radius:var(--r); overflow:hidden; flex:1;
+  display:flex; flex-direction:column;
 }
-.mouse-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 18px; border-bottom: 1px solid var(--bc-lo);
+.sources-col, .src-row { overflow:visible; }
+.panel-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 14px; border-bottom:1px solid var(--bc-lo); flex-shrink:0;
 }
-.mouse-header-left { display: flex; align-items: center; gap: 10px; }
-.mouse-title { font-size: 12px; font-weight: 600; color: var(--tx2); letter-spacing: 0.5px; }
-.mouse-hint  { font-size: 11px; color: var(--tx3); font-weight: 300; font-style: italic; }
-.mouse-entropy-val {
-  font-size: 11px; color: var(--ce); font-weight: 500; letter-spacing: 1px;
-  transition: opacity 0.4s;
+.panel-hd-left { display:flex; flex-direction:column; gap:2px; }
+.panel-name  { font-size:12px; font-weight:700; color:var(--tx2); }
+.panel-desc  { font-size:10px; color:var(--tx3); font-weight:300; font-style:italic; }
+.panel-val   { font-size:11px; font-weight:600; color:var(--ce); letter-spacing:0.5px; }
+
+/* 16:9 aspect wrapper */
+.mouse-ratio {
+  position:relative; width:100%; padding-top:56.25%; flex:1;
 }
-#mouse-canvas {
-  width: 100%; height: 120px; display: block;
-  background: var(--s1);
+.mouse-ratio canvas {
+  position:absolute; inset:0; width:100%; height:100%; display:block;
 }
-.mouse-footer {
-  padding: 7px 18px; border-top: 1px solid var(--bc-lo);
-  font-size: 10px; color: var(--tx3); font-weight: 300;
-  display: flex; gap: 6px; align-items: center;
+.panel-ft {
+  padding:7px 14px; border-top:1px solid var(--bc-lo); flex-shrink:0;
+  font-size:9px; color:var(--tx3); font-weight:300;
+  display:flex; align-items:center; gap:6px;
 }
-.mouse-footer-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--ce); opacity: 0.6;
+.ft-dot { width:5px; height:5px; border-radius:50%; background:var(--ce); opacity:0.7; flex-shrink:0; }
+
+/* RIGHT: 5 stacked source rows */
+.sources-col {
+  flex: 1; display:flex; flex-direction:column; gap:0;
+  background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); overflow:visible;
 }
 
-/* ── ENTROPY PANEL (5 sources + wave) ── */
-.ent-section {
-  width: 100%; padding: 24px 5% 36px;
-  display: flex; flex-direction: column; align-items: center;
+/* tooltip anchor */
+.src-row {
+  display:flex; align-items:center; gap:0;
+  border-bottom:1px solid var(--bc-lo); position:relative;
+  transition: background 0.2s;
+  overflow: visible;
 }
-.ent-box {
-  width: 100%; max-width: 1200px;
-  background: var(--s1); border: 1px solid var(--bc);
-  border-radius: var(--r); overflow: hidden;
+.src-row:last-child { border-bottom:none; }
+.src-row:hover { background: rgba(196,160,240,0.04); }
+
+.src-meta {
+  flex:0 0 160px; padding:8px 12px;
+  display:flex; flex-direction:column; gap:3px;
+  border-right:1px solid var(--bc-lo); cursor:default;
 }
-.ent-sources {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  border-bottom: 1px solid var(--bc-lo);
-}
-.ent-src {
-  padding: 10px 14px; border-right: 1px solid var(--bc-lo);
-  display: flex; flex-direction: column; gap: 4px; min-width: 0;
-}
-.ent-src:last-child { border-right: none; }
-.src-top { display: flex; align-items: center; gap: 7px; }
+.src-top-row { display:flex; align-items:center; gap:7px; }
 .src-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-  background: var(--tx3); transition: background 0.4s, box-shadow 0.4s;
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+  background:var(--tx3); transition:background 0.4s, box-shadow 0.4s;
 }
-.src-dot.on-a { background: var(--ca); box-shadow: 0 0 7px var(--ca); }
-.src-dot.on-b { background: var(--cb); box-shadow: 0 0 7px var(--cb); }
-.src-dot.on-c { background: var(--cc); box-shadow: 0 0 7px var(--cc); }
-.src-dot.on-d { background: var(--cd); box-shadow: 0 0 7px var(--cd); }
-.src-dot.on-e { background: var(--ce); box-shadow: 0 0 7px var(--ce); }
-.src-name  { font-size: 10px; font-weight: 600; color: var(--tx2); letter-spacing: 0.3px; }
-.src-desc  { font-size: 9px; color: var(--tx3); font-weight: 300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.src-val   { font-size: 11px; font-weight: 500; color: var(--tx3); letter-spacing: 0.5px; transition: color 0.4s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.src-val.ca { color: var(--ca); }
-.src-val.cb { color: var(--cb); }
-.src-val.cc { color: var(--cc); }
-.src-val.cd { color: var(--cd); }
-.src-val.ce { color: var(--ce); }
+.src-dot.on-a { background:var(--ca); box-shadow:0 0 7px var(--ca); }
+.src-dot.on-b { background:var(--cb); box-shadow:0 0 7px var(--cb); }
+.src-dot.on-c { background:var(--cc); box-shadow:0 0 7px var(--cc); }
+.src-dot.on-d { background:var(--cd); box-shadow:0 0 7px var(--cd); }
+.src-dot.on-e { background:var(--ce); box-shadow:0 0 7px var(--ce); }
+.src-name  { font-size:10px; font-weight:700; color:var(--tx2); }
+.src-sub   { font-size:8px; color:var(--tx3); font-weight:300; }
+.src-num   { font-size:9px; font-weight:600; color:var(--tx3); letter-spacing:0.3px; transition:color 0.4s; }
+.src-num.ca{color:var(--ca);} .src-num.cb{color:var(--cb);}
+.src-num.cc{color:var(--cc);} .src-num.cd{color:var(--cd);} .src-num.ce{color:var(--ce);}
 
-#ent-canvas { width: 100%; height: 115px; display: block; background: var(--s1); }
+/* mini wave canvas per row */
+.src-wave-wrap { flex:1; height:44px; position:relative; overflow:hidden; }
+.src-wave-wrap canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-.ent-footer {
-  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-  padding: 9px 18px; border-top: 1px solid var(--bc-lo);
+/* ── TOOLTIP CLOUD ── */
+.tooltip {
+  position:absolute; left:170px; top:0;
+  z-index:500;
+  background: var(--s3); border:1px solid var(--bc);
+  border-radius:10px; padding:12px 16px;
+  width:260px; box-shadow:0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px var(--bc-lo);
+  pointer-events:none; opacity:0;
+  transition:opacity 0.18s, transform 0.18s;
+  transform:translateX(-6px);
 }
-.leg { display: flex; align-items: center; gap: 7px; font-size: 9px; font-weight: 400; color: var(--tx3); }
-.leg-line { width: 18px; height: 2px; border-radius: 1px; flex-shrink: 0; }
-.combined-badge {
-  margin-left: auto; font-size: 10px; font-weight: 600;
-  color: var(--tx2); display: flex; align-items: center; gap: 8px;
+.src-row:hover .tooltip {
+  opacity:1; transform:translateX(0);
 }
-.combined-badge span { color: var(--v1); font-size: 13px; }
+/* cloud tail — aligns to top of tooltip */
+.tooltip::before {
+  content:''; position:absolute; left:-7px; top:14px;
+  width:0; height:0;
+  border-top:6px solid transparent; border-bottom:6px solid transparent;
+  border-right:7px solid var(--bc);
+}
+.tooltip::after {
+  content:''; position:absolute; left:-5px; top:14px;
+  width:0; height:0;
+  border-top:5px solid transparent; border-bottom:5px solid transparent;
+  border-right:6px solid var(--s3);
+}
+.tt-title  { font-size:11px; font-weight:700; color:var(--tx); margin-bottom:5px; }
+.tt-body   { font-size:11px; color:var(--tx2); line-height:1.6; font-weight:300; }
+.tt-entropy {
+  margin-top:8px; padding:6px 10px;
+  background:rgba(196,160,240,0.07); border-radius:6px;
+  font-size:10px; color:var(--tx3);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.tt-entropy-bar {
+  height:4px; border-radius:2px; margin-top:6px;
+  background:linear-gradient(90deg, var(--v2), var(--v1));
+}
 
-/* ── SHARD GRID ── */
-.shard-section {
-  width: 100%; padding: 0 5% 48px;
-  border-bottom: 1px solid var(--bc-lo);
-  min-height: 25vh; display: flex; flex-direction: column; align-items: center;
+/* bottom combined row */
+.sources-footer {
+  padding:7px 14px; border-top:1px solid var(--bc-lo);
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:9px; color:var(--tx3); font-weight:300;
 }
-.section-label {
-  font-size: 10px; letter-spacing: 4px; font-weight: 600;
-  color: var(--tx3); text-transform: uppercase; margin-bottom: 24px;
+.combined-val { font-size:12px; font-weight:700; color:var(--v1); letter-spacing:1px; }
+
+/* ── MAIN BODY: controls left, symbols right ── */
+.main-body {
+  padding: 20px 4% 32px;
+  display: flex; gap: 16px;
+  max-width: 1300px; width: 100%; margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+/* Controls panel */
+.ctrl {
+  flex: 0 0 340px; min-width: 280px;
+  background:var(--s1); border:1px solid var(--bc);
+  border-radius:var(--r); padding:26px 28px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--bc-lo);
+  display:flex; flex-direction:column; gap:0;
+  align-self: flex-start;
+}
+.ctrl-title {
+  font-family:'Playfair Display',serif; font-size:17px; font-weight:700;
+  color:var(--tx); margin-bottom:20px;
+}
+.fld { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.fld:last-of-type { margin-bottom:0; }
+.fld-lbl { font-size:10px; font-weight:700; color:var(--tx2); letter-spacing:0.5px; }
+select, input[type=text] {
+  background:var(--bg); border:1px solid var(--bc); border-radius:var(--rsm);
+  padding:11px 14px; color:var(--tx); font-family:'Nunito',sans-serif;
+  font-size:13px; font-weight:400; outline:none; width:100%;
+  transition:border-color 0.2s, box-shadow 0.2s; -webkit-appearance:none;
+}
+select:focus, input:focus { border-color:var(--v1); box-shadow:0 0 0 3px rgba(196,160,240,0.1); }
+select option { background:#120e1c; color:var(--tx); }
+input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
+.ctrl-divider { border:none; border-top:1px solid var(--bc-lo); margin:18px 0; }
+
+@keyframes pulse-violet {
+  0%,100% { box-shadow:0 0 0 1px var(--v2), 0 0 14px rgba(196,160,240,0.2); }
+  50%      { box-shadow:0 0 0 1px var(--v1), 0 0 32px rgba(196,160,240,0.5); }
+}
+@keyframes castBurst {
+  0%   { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); }
+  30%  { box-shadow:0 0 0 2px var(--v1), 0 0 60px rgba(196,160,240,0.7), 0 0 120px rgba(196,160,240,0.3); }
+  100% { box-shadow:0 0 0 1px var(--v1), 0 0 0px rgba(196,160,240,0); }
+}
+.synth-btn {
+  width:100%; padding:15px;
+  background:transparent; border:1px solid var(--v1); border-radius:var(--rsm);
+  color:var(--v1); font-family:'Playfair Display',serif;
+  font-size:15px; font-weight:700; font-style:italic; letter-spacing:1px;
+  transition:background 0.22s, color 0.22s, box-shadow 0.22s;
+  margin-bottom:0; cursor:none;
+}
+.synth-btn:hover:not(:disabled) {
+  background:var(--v1); color:var(--bg);
+  box-shadow:0 0 32px rgba(196,160,240,0.45);
+}
+.synth-btn:disabled { opacity:0.5; animation:pulse-violet 1.5s ease-in-out infinite; }
+.synth-btn.fired { animation:castBurst 0.8s ease-out forwards; }
+
+#output {
+  margin-top:18px; line-height:1.85; font-size:14px; font-weight:400; color:var(--tx2);
+}
+#output .blk {
+  border-left:2px solid rgba(196,160,240,0.22); background:rgba(196,160,240,0.03);
+  border-radius:0 var(--rsm) var(--rsm) 0; padding:10px 14px; margin-bottom:12px;
+}
+#output .blk-lbl {
+  font-size:9px; font-weight:700; letter-spacing:3px; color:var(--v1);
+  text-transform:uppercase; display:block; margin-bottom:5px;
+}
+
+/* Symbols area */
+.symbols-col {
+  flex:1; min-width:280px;
+  display:flex; flex-direction:column;
+}
+.symbols-hd {
+  font-size:9px; letter-spacing:4px; font-weight:600;
+  color:var(--tx3); text-transform:uppercase; margin-bottom:16px;
 }
 #shard-grid {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 14px; width: 100%; max-width: 1200px;
+  display:flex; flex-wrap:wrap; gap:10px;
 }
 
 @keyframes cardReveal {
-  from { opacity: 0; transform: translateY(20px) scale(0.93); filter: blur(5px); }
-  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  from { opacity:0; transform:translateY(22px) scale(0.92); filter:blur(6px); }
+  to   { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+}
+@keyframes cardGlow {
+  0%   { box-shadow: 0 0 0px rgba(196,160,240,0); }
+  40%  { box-shadow: 0 0 40px rgba(196,160,240,0.5), 0 0 80px rgba(196,160,240,0.2); }
+  100% { box-shadow: 0 0 0px rgba(196,160,240,0); }
 }
 .shard {
-  background: var(--s1); border: 1px solid var(--bc);
-  border-radius: var(--r); width: 150px; min-height: 215px;
-  padding: 15px 12px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center;
-  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-  animation: cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both;
+  background:var(--s1); border:1px solid var(--bc); border-radius:var(--r);
+  width:130px; min-height:185px; padding:12px 10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  transition:background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  animation:cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both;
 }
+.shard.glow { animation: cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both, cardGlow 1.2s ease-out both; }
 .shard:hover {
-  background: var(--s2); border-color: var(--bc-hi);
-  box-shadow: 0 0 32px rgba(196,160,240,0.15), 0 12px 40px rgba(0,0,0,0.5);
-  transform: translateY(-8px);
+  background:var(--s2); border-color:var(--bc-hi);
+  box-shadow:0 0 28px rgba(196,160,240,0.15), 0 10px 32px rgba(0,0,0,0.5);
+  transform:translateY(-7px);
 }
 .shard-img {
-  width: 100%; height: 106px; object-fit: contain; margin-bottom: 14px;
-  filter: brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(1800%) hue-rotate(225deg);
-  opacity: 0.9;
+  width:100%; height:90px; object-fit:contain; margin-bottom:12px;
+  filter:brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(1800%) hue-rotate(225deg);
+  opacity:0.9;
 }
 .hex-char {
-  font-size: 74px; color: var(--v1);
-  text-shadow: 0 0 20px rgba(196,160,240,0.6), 0 0 50px rgba(196,160,240,0.2);
-  height: 106px; display: flex; align-items: center; justify-content: center;
-  user-select: none;
+  font-size:64px; color:var(--v1);
+  text-shadow:0 0 20px rgba(196,160,240,0.6), 0 0 48px rgba(196,160,240,0.2);
+  height:90px; display:flex; align-items:center; justify-content:center; user-select:none;
 }
 .shard-noimg {
-  width: 100%; height: 106px; background: var(--v4);
-  border: 1px dashed var(--bc); border-radius: var(--rsm); margin-bottom: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; color: var(--tx3); letter-spacing: 2px; font-weight: 300;
+  width:100%; height:90px; background:var(--v4); border:1px dashed var(--bc);
+  border-radius:var(--rsm); margin-bottom:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:8px; color:var(--tx3); letter-spacing:2px;
 }
 .shard-name {
-  font-family: 'Playfair Display', serif;
-  color: var(--tx); font-weight: 700; font-size: 12px;
-  margin-bottom: 5px; line-height: 1.3;
+  font-family:'Playfair Display',serif; color:var(--tx);
+  font-weight:700; font-size:11px; margin-bottom:4px; line-height:1.3;
 }
-.shard-seed { font-size: 9px; color: var(--tx3); font-weight: 300; letter-spacing: 0.5px; }
-
-/* ── CONTROLS ── */
-.ctrl-section {
-  flex-grow: 1; display: flex; flex-direction: column;
-  align-items: center; padding: 48px 20px 80px;
-}
-.ctrl {
-  width: 100%; max-width: 820px;
-  background: var(--s1); border: 1px solid var(--bc);
-  border-radius: var(--r); padding: 36px 40px;
-  box-shadow: 0 24px 72px rgba(0,0,0,0.5), 0 0 0 1px var(--bc-lo);
-}
-.ctrl-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px; font-weight: 700; color: var(--tx); margin-bottom: 26px;
-}
-.ctrl-row { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 20px; }
-.fld { display: flex; flex-direction: column; gap: 7px; }
-.fld-lbl { font-size: 11px; font-weight: 600; color: var(--tx2); letter-spacing: 0.5px; }
-
-select, input[type=text] {
-  background: var(--bg); border: 1px solid var(--bc);
-  border-radius: var(--rsm); padding: 13px 16px;
-  color: var(--tx); font-family: 'Nunito', sans-serif;
-  font-size: 14px; font-weight: 400; outline: none; width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none;
-}
-select:focus, input:focus {
-  border-color: var(--v1);
-  box-shadow: 0 0 0 3px rgba(196,160,240,0.1);
-}
-select option { background: #130e1e; color: var(--tx); }
-input::placeholder { color: var(--tx3); font-style: italic; font-weight: 300; }
-
-.divider { border: none; border-top: 1px solid var(--bc-lo); margin: 24px 0; }
-
-@keyframes pulse-violet {
-  0%,100% { box-shadow: 0 0 0 1px var(--v2), 0 0 16px rgba(196,160,240,0.2); }
-  50%      { box-shadow: 0 0 0 1px var(--v1), 0 0 36px rgba(196,160,240,0.45); }
-}
-.synth-btn {
-  width: 100%; padding: 18px;
-  background: transparent; border: 1px solid var(--v1);
-  border-radius: var(--rsm); color: var(--v1);
-  font-family: 'Playfair Display', serif;
-  font-size: 16px; font-weight: 700; font-style: italic;
-  letter-spacing: 2px;
-  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
-  margin-bottom: 26px; cursor: none;
-}
-.synth-btn:hover:not(:disabled) {
-  background: var(--v1); color: var(--bg);
-  box-shadow: 0 0 36px rgba(196,160,240,0.45), 0 4px 20px rgba(0,0,0,0.4);
-}
-.synth-btn:disabled { opacity: 0.5; animation: pulse-violet 1.5s ease-in-out infinite; }
-
-/* ── OUTPUT ── */
-#output {
-  line-height: 1.9; font-size: 15px; font-weight: 400; color: var(--tx2);
-}
-#output .blk {
-  border-left: 2px solid rgba(196,160,240,0.25);
-  background: rgba(196,160,240,0.03);
-  border-radius: 0 var(--rsm) var(--rsm) 0;
-  padding: 12px 18px; margin-bottom: 16px;
-}
-#output .blk-lbl {
-  font-size: 10px; font-weight: 700; letter-spacing: 3px;
-  color: var(--v1); text-transform: uppercase;
-  display: block; margin-bottom: 7px;
-}
+.shard-seed { font-size:8px; color:var(--tx3); font-weight:300; }
 </style>
 </head>
 <body>
 
+<div id="flash"></div>
 <canvas id="trail-canvas"></canvas>
 
 <!-- HEADER -->
@@ -314,607 +345,486 @@ input::placeholder { color: var(--tx3); font-style: italic; font-weight: 300; }
   <div class="hdr-sub">Five-source quantum entropy divination</div>
 </div>
 
-<!-- MOUSE ENTROPY TRACE -->
-<div class="mouse-section">
-  <div class="mouse-box">
-    <div class="mouse-header">
-      <div class="mouse-header-left">
-        <div class="mouse-title">Your Presence</div>
-        <div class="mouse-hint">— move freely until you're ready to cast</div>
-      </div>
-      <div class="mouse-entropy-val" id="mouse-val">gathering…</div>
-    </div>
-    <canvas id="mouse-canvas"></canvas>
-    <div class="mouse-footer">
-      <div class="mouse-footer-dot"></div>
-      Mouse path, velocity &amp; hesitations are hashed into a personal entropy seed — unique to this moment
-    </div>
-  </div>
-</div>
+<!-- ENTROPY PANEL -->
+<div class="ent-panel">
 
-<!-- ENTROPY SOURCES + WAVE -->
-<div class="ent-section">
-  <div class="ent-box">
-    <div class="ent-sources">
-      <div class="ent-src">
-        <div class="src-top"><div class="src-dot" id="dot-a"></div><span class="src-name">ANU Quantum</span></div>
-        <div class="src-desc">Vacuum fluctuations · Canberra</div>
-        <div class="src-val" id="val-a">waiting…</div>
+  <!-- LEFT: 16:9 mouse trace -->
+  <div class="mouse-col">
+    <div class="panel-card">
+      <div class="panel-hd">
+        <div class="panel-hd-left">
+          <div class="panel-name">Your Presence</div>
+          <div class="panel-desc">move freely — your path shapes the reading</div>
+        </div>
+        <div class="panel-val" id="mouse-val">gathering…</div>
       </div>
-      <div class="ent-src">
-        <div class="src-top"><div class="src-dot" id="dot-b"></div><span class="src-name">Atmosphere</span></div>
-        <div class="src-desc">Wind · pressure · humidity</div>
-        <div class="src-val" id="val-b">waiting…</div>
+      <div class="mouse-ratio">
+        <canvas id="mouse-canvas"></canvas>
       </div>
-      <div class="ent-src">
-        <div class="src-top"><div class="src-dot" id="dot-c"></div><span class="src-name">OS Hardware</span></div>
-        <div class="src-desc">crypto.getRandomValues pool</div>
-        <div class="src-val" id="val-c">sampling…</div>
+      <div class="panel-ft">
+        <div class="ft-dot"></div>
+        Path · velocity · hesitations hashed live — never stops recording
       </div>
-      <div class="ent-src">
-        <div class="src-top"><div class="src-dot" id="dot-d"></div><span class="src-name">Timing Jitter</span></div>
-        <div class="src-desc">CPU variance · 512 samples</div>
-        <div class="src-val" id="val-d">sampling…</div>
-      </div>
-      <div class="ent-src">
-        <div class="src-top"><div class="src-dot" id="dot-e"></div><span class="src-name">Your Movement</span></div>
-        <div class="src-desc">Path hash · velocity · pauses</div>
-        <div class="src-val" id="val-e">recording…</div>
-      </div>
-    </div>
-
-    <canvas id="ent-canvas"></canvas>
-
-    <div class="ent-footer">
-      <div class="leg"><div class="leg-line" style="background:var(--ca)"></div>ANU Quantum</div>
-      <div class="leg"><div class="leg-line" style="background:var(--cb)"></div>Atmospheric</div>
-      <div class="leg"><div class="leg-line" style="background:var(--cc)"></div>OS hardware</div>
-      <div class="leg"><div class="leg-line" style="background:var(--cd)"></div>Timing jitter</div>
-      <div class="leg"><div class="leg-line" style="background:var(--ce)"></div>Your presence</div>
-      <div class="combined-badge">Combined seed <span id="combined-val">—</span></div>
     </div>
   </div>
-</div>
 
-<!-- SHARD GRID -->
-<div class="shard-section">
-  <div class="section-label">Drawn Symbols</div>
-  <div id="shard-grid">
-    <div class="shard">
-      <div class="shard-noimg">ready</div>
-      <div class="shard-name">Awaiting your question</div>
-      <div class="shard-seed">—</div>
+  <!-- RIGHT: 5 source rows with inline mini-waves + tooltips -->
+  <div class="sources-col">
+
+    <!-- ANU -->
+    <div class="src-row">
+      <div class="src-meta">
+        <div class="src-top-row"><div class="src-dot" id="dot-a"></div><span class="src-name">ANU Quantum</span></div>
+        <div class="src-sub">Vacuum fluctuations · Canberra</div>
+        <div class="src-num" id="val-a">fetching…</div>
+      </div>
+      <div class="src-wave-wrap"><canvas class="mini-wave" data-src="0"></canvas></div>
+      <div class="tooltip">
+        <div class="tt-title">ANU Quantum Vacuum</div>
+        <div class="tt-body">A laser at the Australian National University measures the noise floor of quantum vacuum fluctuations. The result is physically unpredictable — no algorithm or computation can reproduce it. This is the gold standard of true randomness.</div>
+        <div class="tt-entropy">
+          <span>Entropy quality</span><span style="color:var(--ca);font-weight:700">Maximum</span>
+        </div>
+        <div class="tt-entropy-bar" style="width:100%"></div>
+      </div>
+    </div>
+
+    <!-- Atmosphere -->
+    <div class="src-row">
+      <div class="src-meta">
+        <div class="src-top-row"><div class="src-dot" id="dot-b"></div><span class="src-name">Atmosphere</span></div>
+        <div class="src-sub">Wind · pressure · humidity</div>
+        <div class="src-num" id="val-b">fetching…</div>
+      </div>
+      <div class="src-wave-wrap"><canvas class="mini-wave" data-src="1"></canvas></div>
+      <div class="tooltip">
+        <div class="tt-title">Atmospheric Chaos</div>
+        <div class="tt-body">Live weather data from Open-Meteo — wind speed, barometric pressure, humidity, and precipitation near your location. The fractional parts of physical measurements are computationally irreducible: the atmosphere is a true chaotic system.</div>
+        <div class="tt-entropy">
+          <span>Entropy quality</span><span style="color:var(--cb);font-weight:700">High</span>
+        </div>
+        <div class="tt-entropy-bar" style="width:82%"></div>
+      </div>
+    </div>
+
+    <!-- OS hardware -->
+    <div class="src-row">
+      <div class="src-meta">
+        <div class="src-top-row"><div class="src-dot" id="dot-c"></div><span class="src-name">OS Hardware</span></div>
+        <div class="src-sub">crypto.getRandomValues pool</div>
+        <div class="src-num" id="val-c">sampling…</div>
+      </div>
+      <div class="src-wave-wrap"><canvas class="mini-wave" data-src="2"></canvas></div>
+      <div class="tooltip">
+        <div class="tt-title">OS Hardware Entropy Pool</div>
+        <div class="tt-body">Your browser exposes the operating system's entropy accumulator via <em>crypto.getRandomValues</em>. It's fed by hardware interrupt timing, thermal sensor noise, disk latency jitter, and network packet timing. Four independent samples are XOR'd together.</div>
+        <div class="tt-entropy">
+          <span>Entropy quality</span><span style="color:var(--cc);font-weight:700">High</span>
+        </div>
+        <div class="tt-entropy-bar" style="width:78%"></div>
+      </div>
+    </div>
+
+    <!-- Timing jitter -->
+    <div class="src-row">
+      <div class="src-meta">
+        <div class="src-top-row"><div class="src-dot" id="dot-d"></div><span class="src-name">Timing Jitter</span></div>
+        <div class="src-sub">CPU execution variance</div>
+        <div class="src-num" id="val-d">sampling…</div>
+      </div>
+      <div class="src-wave-wrap"><canvas class="mini-wave" data-src="3"></canvas></div>
+      <div class="tooltip">
+        <div class="tt-title">CPU Timing Jitter</div>
+        <div class="tt-body"><em>performance.now()</em> is sampled 512 times in rapid succession. The sub-microsecond variance in each reading comes from CPU pipeline noise, cache misses, branch mispredictions, and OS scheduling. Each sample is unique to this exact moment of execution.</div>
+        <div class="tt-entropy">
+          <span>Entropy quality</span><span style="color:var(--cd);font-weight:700">Medium–High</span>
+        </div>
+        <div class="tt-entropy-bar" style="width:65%"></div>
+      </div>
+    </div>
+
+    <!-- Mouse -->
+    <div class="src-row">
+      <div class="src-meta">
+        <div class="src-top-row"><div class="src-dot" id="dot-e"></div><span class="src-name">Your Movement</span></div>
+        <div class="src-sub">Path · velocity · pauses</div>
+        <div class="src-num" id="val-e">recording…</div>
+      </div>
+      <div class="src-wave-wrap"><canvas class="mini-wave" data-src="4"></canvas></div>
+      <div class="tooltip">
+        <div class="tt-title">Personal Entropy</div>
+        <div class="tt-body">Every mouse movement is hashed in real time — your path geometry, speed variations, direction changes, and moments of stillness. No two people move the same way. This source is entirely personal and continuously updates even after casting.</div>
+        <div class="tt-entropy">
+          <span>Entropy quality</span><span style="color:var(--ce);font-weight:700">Personal</span>
+        </div>
+        <div class="tt-entropy-bar" style="width:60%;background:linear-gradient(90deg,var(--gold2,#c8a640),var(--ce))"></div>
+      </div>
+    </div>
+
+    <div class="sources-footer">
+      <span>Combined seed</span>
+      <span class="combined-val" id="combined-val">—</span>
     </div>
   </div>
-</div>
 
-<!-- CONTROLS -->
-<div class="ctrl-section">
+</div><!-- /ent-panel -->
+
+<!-- MAIN BODY: controls + drawn symbols -->
+<div class="main-body">
+
+  <!-- Controls -->
   <div class="ctrl">
     <div class="ctrl-title">The Reading</div>
-    <div class="ctrl-row">
-      <div class="fld">
-        <div class="fld-lbl">Oracle system</div>
-        <select id="src-type">
-          <option value="tarot">Tarot — 78 Cards</option>
-          <option value="runes">Elder Futhark Runes — 24</option>
-          <option value="iching">I Ching Hexagrams — 64</option>
-          <option value="astrology">Celestial Signs &amp; Planets — 22</option>
-          <option value="chaos">Omni-Chaos — All Systems</option>
-        </select>
-      </div>
-      <div class="fld">
-        <div class="fld-lbl">Number of draws</div>
-        <select id="shard-count"></select>
-      </div>
+    <div class="fld">
+      <div class="fld-lbl">Oracle system</div>
+      <select id="src-type">
+        <option value="tarot">Tarot — 78 Cards</option>
+        <option value="runes">Elder Futhark Runes — 24</option>
+        <option value="iching">I Ching Hexagrams — 64</option>
+        <option value="astrology">Celestial Signs &amp; Planets — 22</option>
+        <option value="chaos">Omni-Chaos — All Systems</option>
+      </select>
     </div>
-    <div class="fld" style="margin-bottom:0">
+    <div class="fld">
+      <div class="fld-lbl">Number of draws</div>
+      <select id="shard-count"></select>
+    </div>
+    <div class="fld">
       <div class="fld-lbl">Your question</div>
-      <input type="text" id="question" placeholder="Ask something, or leave empty for pure entropy…">
+      <input type="text" id="question" placeholder="Ask something, or leave empty…">
     </div>
-    <hr class="divider">
+    <hr class="ctrl-divider">
     <button class="synth-btn" id="synth-btn" onclick="runSynthesis()">Cast the Reading</button>
     <div id="output"></div>
   </div>
+
+  <!-- Drawn symbols -->
+  <div class="symbols-col">
+    <div class="symbols-hd">Drawn Symbols</div>
+    <div id="shard-grid">
+      <div class="shard">
+        <div class="shard-noimg">ready</div>
+        <div class="shard-name">Awaiting your question</div>
+        <div class="shard-seed">—</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
+// ── UTILS ──
+function u16(n) { return ((n>>>0)&0xffff); }
+function mix(a,b){ return u16(Math.imul(u16(a^b),0x9e37)^(u16(a^b)>>>5)); }
+function rot16(n,k){ n&=0xffff; return ((n<<k)|(n>>>(16-k)))&0xffff; }
+
 // ── DROPDOWN ──
 const countSel = document.getElementById('shard-count');
-for (let i = 1; i <= 20; i++) {
-  const o = document.createElement('option');
-  o.value = i; o.textContent = i;
-  if (i === 3) o.selected = true;
-  countSel.appendChild(o);
+for(let i=1;i<=20;i++){
+  const o=document.createElement('option'); o.value=i; o.textContent=i;
+  if(i===3)o.selected=true; countSel.appendChild(o);
 }
 
-// ─────────────────────────────────────────────
-// MOUSE ENTROPY — Source 5
-// Accumulates a rolling hash of x, y, velocity,
-// direction-change count, and dwelling pauses
-// ─────────────────────────────────────────────
-const mouseCanvas  = document.getElementById('mouse-canvas');
-const mctx         = mouseCanvas.getContext('2d');
-let mousePoints    = [];   // {x, y, t} ring buffer (last 800)
-let mouseHash      = 0;    // rolling 16-bit hash
-let mouseEventCount = 0;
-let lastMX = 0, lastMY = 0, lastMT = 0;
-let dirChanges = 0, lastDX = 0, lastDY = 0;
-let dwellCount = 0;
-let mouseLocked = false;  // true after synthesis fires
-
-function resizeMC() {
-  const dpr = devicePixelRatio || 1;
-  mouseCanvas.width  = mouseCanvas.offsetWidth  * dpr;
-  mouseCanvas.height = mouseCanvas.offsetHeight * dpr;
-  mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-addEventListener('resize', resizeMC); setTimeout(resizeMC, 60);
-
-function u16(n) { return ((n >>> 0) & 0xffff); }
-function mix(a, b) { return u16(Math.imul(u16(a ^ b), 0x9e37) ^ (u16(a ^ b) >>> 5)); }
-
-addEventListener('mousemove', e => {
-  if (mouseLocked) return;
-  const now = performance.now();
-  const x = e.clientX, y = e.clientY;
-  const dt = now - lastMT || 1;
-  const dx = x - lastMX, dy = y - lastMY;
-  const speed = Math.sqrt(dx*dx + dy*dy) / dt;
-
-  // Direction change detection
-  if (lastDX !== 0 || lastDY !== 0) {
-    const dot = dx*lastDX + dy*lastDY;
-    if (dot < 0) dirChanges++;
+// ── CURSOR TRAIL (always runs, never stops) ──
+const tc=document.getElementById('trail-canvas'), tctx=tc.getContext('2d');
+let tp=[];
+function resizeT(){ tc.width=innerWidth; tc.height=innerHeight; }
+addEventListener('resize',resizeT); resizeT();
+class TP {
+  constructor(x,y){
+    this.x=x; this.y=y; this.r=Math.random()*2.2+0.4;
+    this.life=1; this.d=0.028+Math.random()*0.024; this.h=260+Math.random()*45;
   }
-  lastDX = dx; lastDY = dy;
+  step(){ this.life-=this.d; }
+  draw(){
+    tctx.beginPath(); tctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    tctx.fillStyle=`hsla(${this.h},72%,72%,${this.life*.52})`;
+    tctx.shadowColor=`hsla(${this.h},80%,72%,${this.life*.65})`;
+    tctx.shadowBlur=8; tctx.fill(); tctx.shadowBlur=0;
+  }
+}
+addEventListener('mousemove',e=>{ for(let i=0;i<3;i++) tp.push(new TP(e.clientX,e.clientY)); });
+(function tloop(){ tctx.clearRect(0,0,tc.width,tc.height); tp=tp.filter(p=>p.life>0); tp.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(tloop); })();
 
-  // Dwell detection (very slow movement)
-  if (speed < 0.05 && dt > 60) dwellCount++;
+// ── MOUSE ENTROPY — always recording, never locks ──
+const mouseCanvas=document.getElementById('mouse-canvas'), mctx=mouseCanvas.getContext('2d');
+let mousePoints=[]; // rolling 1200pt buffer
+let mouseHash=0, mouseEvt=0, lastMX=0,lastMY=0,lastMT=0;
+let dirChanges=0, lastDX=0,lastDY=0, dwellCount=0;
 
-  // Rolling hash: mix in coordinates, speed, time
-  mouseHash = mix(mouseHash, u16(x * 7));
-  mouseHash = mix(mouseHash, u16(y * 11));
-  mouseHash = mix(mouseHash, u16(Math.round(speed * 1000) * 13));
-  mouseHash = mix(mouseHash, u16(Math.round(now) * 3));
+function resizeMC(){
+  const dpr=devicePixelRatio||1;
+  mouseCanvas.width=mouseCanvas.offsetWidth*dpr;
+  mouseCanvas.height=mouseCanvas.offsetHeight*dpr;
+  mctx.setTransform(dpr,0,0,dpr,0,0);
+}
+addEventListener('resize',resizeMC); setTimeout(resizeMC,60);
 
-  mousePoints.push({ x, y, t: now });
-  if (mousePoints.length > 800) mousePoints.shift();
-
-  mouseEventCount++;
-  lastMX = x; lastMY = y; lastMT = now;
-
-  // Update display
-  const finalHash = u16(mouseHash ^ (dirChanges * 997) ^ (dwellCount * 503));
-  document.getElementById('val-e').textContent = `${finalHash} · ${mouseEventCount} events`;
-  document.getElementById('val-e').className = 'src-val ce';
-  document.getElementById('dot-e').className = 'src-dot on-e';
-  document.getElementById('mouse-val').textContent = `${mouseEventCount} events · hash ${finalHash}`;
-  updateCombined();
+addEventListener('mousemove',e=>{
+  const now=performance.now(), x=e.clientX, y=e.clientY;
+  const dt=(now-lastMT)||1;
+  const dx=x-lastMX, dy=y-lastMY;
+  const spd=Math.sqrt(dx*dx+dy*dy)/dt;
+  if(lastDX||lastDY){ if(dx*lastDX+dy*lastDY<0) dirChanges++; }
+  lastDX=dx; lastDY=dy;
+  if(spd<0.05&&dt>60) dwellCount++;
+  mouseHash=mix(mouseHash,u16(x*7));
+  mouseHash=mix(mouseHash,u16(y*11));
+  mouseHash=mix(mouseHash,u16(Math.round(spd*1000)*13));
+  mouseHash=mix(mouseHash,u16(Math.round(now)*3));
+  mousePoints.push({x,y,t:now});
+  if(mousePoints.length>1200) mousePoints.shift();
+  mouseEvt++;
+  lastMX=x; lastMY=y; lastMT=now;
+  const fh=u16(mouseHash^u16(dirChanges*997)^u16(dwellCount*503));
+  document.getElementById('val-e').textContent=`${fh} · ${mouseEvt} events`;
+  document.getElementById('val-e').className='src-num ce';
+  document.getElementById('dot-e').className='src-dot on-e';
+  document.getElementById('mouse-val').textContent=`${mouseEvt} events · ${fh}`;
+  SRAWS.e=fh; updateCombined();
 });
 
-function getMouseSeed() {
-  return u16(mouseHash ^ u16(dirChanges * 997) ^ u16(dwellCount * 503));
-}
+function getMouseSeed(){ return u16(mouseHash^u16(dirChanges*997)^u16(dwellCount*503)); }
 
-// Draw the mouse path as a glowing trace
-function drawMouseTrace() {
-  const W = mouseCanvas.offsetWidth, H = mouseCanvas.offsetHeight;
-  if (!W || !H) { requestAnimationFrame(drawMouseTrace); return; }
-  mctx.clearRect(0, 0, W, H);
-
-  if (mousePoints.length < 2) { requestAnimationFrame(drawMouseTrace); return; }
-
-  // Coordinate range for normalization
-  const xs = mousePoints.map(p => p.x);
-  const ys = mousePoints.map(p => p.y);
-  const minX = Math.min(...xs), maxX = Math.max(...xs);
-  const minY = Math.min(...ys), maxY = Math.max(...ys);
-  const rangeX = (maxX - minX) || 1, rangeY = (maxY - minY) || 1;
-  const pad = 16;
-
-  function toC(p) {
-    return {
-      x: pad + ((p.x - minX) / rangeX) * (W - pad*2),
-      y: pad + ((p.y - minY) / rangeY) * (H - pad*2)
-    };
+// Mouse trace drawing — always live
+function drawMouseTrace(){
+  const W=mouseCanvas.offsetWidth, H=mouseCanvas.offsetHeight;
+  if(!W||!H){ requestAnimationFrame(drawMouseTrace); return; }
+  mctx.clearRect(0,0,W,H);
+  if(mousePoints.length<2){ requestAnimationFrame(drawMouseTrace); return; }
+  const xs=mousePoints.map(p=>p.x), ys=mousePoints.map(p=>p.y);
+  const minX=Math.min(...xs),maxX=Math.max(...xs);
+  const minY=Math.min(...ys),maxY=Math.max(...ys);
+  const rX=(maxX-minX)||1, rY=(maxY-minY)||1;
+  const pad=12;
+  function toC(p){ return { x:pad+((p.x-minX)/rX)*(W-pad*2), y:pad+((p.y-minY)/rY)*(H-pad*2) }; }
+  const now=performance.now(), maxAge=18000;
+  for(let i=1;i<mousePoints.length;i++){
+    const age=now-mousePoints[i].t;
+    if(age>maxAge) continue;
+    const alpha=(1-age/maxAge)*0.78;
+    const a=toC(mousePoints[i-1]), b=toC(mousePoints[i]);
+    const dx2=mousePoints[i].x-mousePoints[i-1].x, dy2=mousePoints[i].y-mousePoints[i-1].y;
+    const spd2=Math.sqrt(dx2*dx2+dy2*dy2);
+    const hue=270-Math.min(spd2*1.8,75);
+    mctx.beginPath(); mctx.moveTo(a.x,a.y); mctx.lineTo(b.x,b.y);
+    mctx.strokeStyle=`hsla(${hue},75%,68%,${alpha})`;
+    mctx.lineWidth=1.5; mctx.shadowColor=`hsla(${hue},90%,68%,${alpha*.55})`; mctx.shadowBlur=4;
+    mctx.stroke(); mctx.shadowBlur=0;
   }
-
-  const now = performance.now();
-  const maxAge = 12000; // show last 12s
-
-  // Draw path segments with age-based fade
-  for (let i = 1; i < mousePoints.length; i++) {
-    const age = now - mousePoints[i].t;
-    if (age > maxAge) continue;
-    const alpha = (1 - age / maxAge) * 0.75;
-    const a = toC(mousePoints[i-1]), b = toC(mousePoints[i]);
-    // Speed-based hue: fast = violet, slow = gold
-    const dx = mousePoints[i].x - mousePoints[i-1].x;
-    const dy = mousePoints[i].y - mousePoints[i-1].y;
-    const spd = Math.sqrt(dx*dx+dy*dy);
-    const hue = 270 - Math.min(spd * 2, 80); // 270 violet → 190 blue-ish
-    mctx.beginPath();
-    mctx.moveTo(a.x, a.y); mctx.lineTo(b.x, b.y);
-    mctx.strokeStyle = `hsla(${hue},75%,70%,${alpha})`;
-    mctx.lineWidth   = 1.5;
-    mctx.shadowColor = `hsla(${hue},90%,70%,${alpha * 0.6})`;
-    mctx.shadowBlur  = 4;
-    mctx.stroke();
-    mctx.shadowBlur  = 0;
+  if(mousePoints.length>0){
+    const last=toC(mousePoints[mousePoints.length-1]);
+    mctx.beginPath(); mctx.arc(last.x,last.y,3,0,Math.PI*2);
+    mctx.fillStyle='rgba(226,200,135,0.92)'; mctx.shadowColor='rgba(226,200,135,0.8)';
+    mctx.shadowBlur=12; mctx.fill(); mctx.shadowBlur=0;
   }
-
-  // Most recent dot
-  if (mousePoints.length > 0 && !mouseLocked) {
-    const last = toC(mousePoints[mousePoints.length-1]);
-    mctx.beginPath();
-    mctx.arc(last.x, last.y, 3, 0, Math.PI*2);
-    mctx.fillStyle = 'rgba(226,200,135,0.9)';
-    mctx.shadowColor = 'rgba(226,200,135,0.8)';
-    mctx.shadowBlur = 10;
-    mctx.fill();
-    mctx.shadowBlur = 0;
-  }
-
   requestAnimationFrame(drawMouseTrace);
 }
 drawMouseTrace();
 
-// ─────────────────────────────────────────────
-// ENTROPY SOURCES 1–4
-// ─────────────────────────────────────────────
-const SRAWS = { a: null, b: null, c: null, d: null, e: null };
-
-function rot16(n, k) { n &= 0xffff; return ((n << k) | (n >>> (16-k))) & 0xffff; }
-
-function combineSources() {
-  const a = SRAWS.a || 0, b = SRAWS.b || 0;
-  const c = SRAWS.c || 0, d = SRAWS.d || 0, e = SRAWS.e || 0;
-  return (a ^ rot16(b,3) ^ rot16(c,7) ^ rot16(d,11) ^ rot16(e,5)) & 0xffff;
+// ── ENTROPY SOURCES ──
+const SRAWS={a:0,b:0,c:0,d:0,e:0};
+function combineSources(){
+  return (SRAWS.a^rot16(SRAWS.b,3)^rot16(SRAWS.c,7)^rot16(SRAWS.d,11)^rot16(SRAWS.e,5))&0xffff;
 }
-
-function setSrc(key, raw, display, dotCls, valCls) {
-  SRAWS[key] = raw & 0xffff;
-  document.getElementById(`dot-${key}`).className = `src-dot ${dotCls}`;
-  const ve = document.getElementById(`val-${key}`);
-  ve.textContent = display; ve.className = `src-val ${valCls}`;
+function setSrc(key,raw,display,dotCls,valCls){
+  SRAWS[key]=raw&0xffff;
+  document.getElementById(`dot-${key}`).className=`src-dot ${dotCls}`;
+  const ve=document.getElementById(`val-${key}`);
+  ve.textContent=display; ve.className=`src-num ${valCls}`;
   updateCombined();
 }
-
-function updateCombined() {
-  SRAWS.e = getMouseSeed();
-  document.getElementById('combined-val').textContent = combineSources().toString().padStart(5,'0');
+function updateCombined(){
+  SRAWS.e=getMouseSeed();
+  document.getElementById('combined-val').textContent=combineSources().toString().padStart(5,'0');
 }
 
-// ANU Quantum vacuum
-async function fetchANU() {
-  try {
-    const r = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
-    const d = await r.json();
-    const v = d.data[0];
-    setSrc('a', v, `${v} — quantum vacuum`, 'on-a', 'ca');
-    return v;
-  } catch {
-    const fb = new Uint16Array(1); crypto.getRandomValues(fb);
-    setSrc('a', fb[0], `${fb[0]} — crypto fallback`, 'on-a', 'ca');
-    return fb[0];
+async function fetchANU(){
+  try{
+    const r=await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
+    const d=await r.json(); const v=d.data[0];
+    setSrc('a',v,`${v} — quantum vacuum`,'on-a','ca'); return v;
+  }catch{
+    const fb=new Uint16Array(1); crypto.getRandomValues(fb);
+    setSrc('a',fb[0],`${fb[0]} — fallback`,'on-a','ca'); return fb[0];
   }
 }
-
-// Atmospheric chaos via Open-Meteo
-async function fetchAtmo() {
-  try {
-    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.22&longitude=6.90&current=wind_speed_10m,surface_pressure,relative_humidity_2m,wind_direction_10m,precipitation&timezone=auto');
-    const d = await r.json(); const c = d.current;
-    const wind = c.wind_speed_10m||0, press = c.surface_pressure||0;
-    const humid = c.relative_humidity_2m||0, wdir = c.wind_direction_10m||0;
-    const v = (Math.round((wind%1)*10000)*97 + Math.floor(press)*43 + humid*131 + Math.floor(wdir)*17) & 0xffff;
-    setSrc('b', v, `${wind}m/s · ${Math.round(press)}hPa · ${humid}%`, 'on-b', 'cb');
-    return v;
-  } catch {
-    const fb = new Uint16Array(1); crypto.getRandomValues(fb);
-    setSrc('b', fb[0], `${fb[0]} — network fallback`, 'on-b', 'cb');
-    return fb[0];
+async function fetchAtmo(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.22&longitude=6.90&current=wind_speed_10m,surface_pressure,relative_humidity_2m,wind_direction_10m,precipitation&timezone=auto');
+    const d=await r.json(); const c=d.current;
+    const wind=c.wind_speed_10m||0,press=c.surface_pressure||0,humid=c.relative_humidity_2m||0,wdir=c.wind_direction_10m||0;
+    const v=(Math.round((wind%1)*10000)*97+Math.floor(press)*43+humid*131+Math.floor(wdir)*17)&0xffff;
+    setSrc('b',v,`${wind}m/s · ${Math.round(press)}hPa`,'on-b','cb'); return v;
+  }catch{
+    const fb=new Uint16Array(1); crypto.getRandomValues(fb);
+    setSrc('b',fb[0],`${fb[0]} — fallback`,'on-b','cb'); return fb[0];
   }
 }
-
-// OS hardware entropy pool
-function fetchOS() {
-  const buf = new Uint16Array(4); crypto.getRandomValues(buf);
-  const v = (buf[0] ^ buf[1] ^ buf[2] ^ buf[3]) & 0xffff;
-  setSrc('c', v, `${v} — 4-sample XOR`, 'on-c', 'cc');
-  return v;
+function fetchOS(){
+  const buf=new Uint16Array(4); crypto.getRandomValues(buf);
+  const v=(buf[0]^buf[1]^buf[2]^buf[3])&0xffff;
+  setSrc('c',v,`${v} — hw pool`,'on-c','cc'); return v;
+}
+function fetchJitter(){
+  let acc=0;
+  for(let i=0;i<512;i++){ const f=Math.round((performance.now()%1)*1e6); acc=u16(acc^u16(f*(i+1)*6364)); }
+  setSrc('d',acc,`${acc} — 512 samples`,'on-d','cd'); return acc;
 }
 
-// CPU timing jitter
-function fetchJitter() {
-  let acc = 0;
-  for (let i = 0; i < 512; i++) {
-    const frac = Math.round((performance.now() % 1) * 1e6);
-    acc = u16(acc ^ u16(frac * (i+1) * 6364));
-  }
-  setSrc('d', acc, `${acc} — 512 timing samples`, 'on-d', 'cd');
-  return acc;
-}
-
-function u16(n) { return ((n >>> 0) & 0xffff); }
-
-// Init non-network sources immediately
 fetchOS(); fetchJitter();
+// start network sources immediately on load
+fetchANU(); fetchAtmo();
 
-// ─────────────────────────────────────────────
-// ENTROPY WAVE VISUALIZER — 5 lanes
-// ─────────────────────────────────────────────
-const ec  = document.getElementById('ent-canvas');
-const ectx = ec.getContext('2d');
+// ── MINI WAVE CANVASES ──
+const MINI_COLORS=['#a78bfa','#fbbf24','#f472b6','#6ee7b7','#e2c887'];
+const MINI_DIMS=['rgba(167,139,250,','rgba(251,191,36,','rgba(244,114,182,','rgba(110,231,183,','rgba(226,200,135,'];
+const miniCanvases=[...document.querySelectorAll('.mini-wave')];
+let miniWaves=[[],[],[],[],[]]; // LCG expansions, one per source
+let miniIdleT=0;
+let miniBurst=0;
 
-const SRC_COLORS = ['#a78bfa','#fbbf24','#f472b6','#6ee7b7','#e2c887'];
-const SRC_DIMS   = [
-  'rgba(167,139,250,', 'rgba(251,191,36,',
-  'rgba(244,114,182,', 'rgba(110,231,183,', 'rgba(226,200,135,'
-];
-
-let srcWaves    = [[],[],[],[],[]];
-let cardDots    = [];   // [{nx}] normalised x per card draw
-let waveBurst   = 0;
-let waveIdleT   = 0;
-
-function resizeEC() {
-  const dpr = devicePixelRatio || 1;
-  ec.width  = ec.offsetWidth * dpr;
-  ec.height = ec.offsetHeight * dpr;
-  ectx.setTransform(dpr, 0, 0, dpr, 0, 0);
+function resizeMinis(){
+  miniCanvases.forEach(cv=>{
+    const dpr=devicePixelRatio||1;
+    cv.width=cv.offsetWidth*dpr; cv.height=cv.offsetHeight*dpr;
+    cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+  });
 }
-addEventListener('resize', resizeEC); setTimeout(resizeEC, 80);
+addEventListener('resize',resizeMinis); setTimeout(resizeMinis,100);
 
-function lcgExpand(seed, n) {
-  const pts = []; let s = (seed >>> 0);
-  for (let i = 0; i < n; i++) {
-    s = Math.imul(s, 1664525) + 1013904223 >>> 0;
-    pts.push((s % 10000) / 10000);
-  }
+function lcgExpand(seed,n){
+  const pts=[]; let s=seed>>>0;
+  for(let i=0;i<n;i++){ s=Math.imul(s,1664525)+1013904223>>>0; pts.push((s%10000)/10000); }
   return pts;
 }
-
-function loadWaves(raws, draws) {
-  srcWaves  = raws.map(s => lcgExpand(s, 80));
-  cardDots  = draws;
-  waveBurst = 1.0;
+function idleWave(t,x,phi){
+  return 0.5+0.18*Math.sin(x*3+t*.6+phi)+0.09*Math.sin(x*7.5-t*.95+phi*.7)+0.05*Math.sin(x*14+t*.3+phi*1.4);
 }
 
-function idleLane(t, x, phi) {
-  return 0.5
-    + 0.17 * Math.sin(x*2.9 + t*0.55 + phi)
-    + 0.09 * Math.sin(x*7.1 - t*0.9  + phi*0.7)
-    + 0.05 * Math.sin(x*14  + t*0.3  + phi*1.4);
+function loadMiniWaves(raws){
+  miniWaves=raws.map(s=>lcgExpand(s,60));
+  miniBurst=1.0;
 }
 
-(function waveLoop() {
-  const W = ec.offsetWidth, H = ec.offsetHeight;
-  if (!W || !H) { requestAnimationFrame(waveLoop); return; }
-  ectx.clearRect(0,0,W,H);
-
-  waveIdleT += 0.009;
-  if (waveBurst > 0) waveBurst = Math.max(0, waveBurst - 0.005);
-
-  const LANES = 5;
-  const lH = H / LANES;
-
-  for (let li = 0; li < LANES; li++) {
-    const cy  = lH * li + lH * 0.5;
-    const amp = lH * 0.36;
-    const phi = li * 1.15;
-    const N   = 220;
-    const wave = srcWaves[li] || [];
-
-    const pts = new Float32Array(N+1);
-    for (let i = 0; i <= N; i++) {
-      const xn = i/N;
-      let v = wave.length > 0
-        ? wave[Math.floor(xn*(wave.length-1))] * waveBurst + idleLane(waveIdleT,xn,phi)*(1-waveBurst)
-        : idleLane(waveIdleT,xn,phi);
-      pts[i] = cy - amp*(v-0.5)*2;
+(function miniLoop(){
+  miniIdleT+=0.01;
+  if(miniBurst>0) miniBurst=Math.max(0,miniBurst-0.006);
+  miniCanvases.forEach((cv,li)=>{
+    const ctx2=cv.getContext('2d');
+    const W=cv.offsetWidth, H=cv.offsetHeight;
+    if(!W||!H) return;
+    ctx2.clearRect(0,0,W,H);
+    const cy=H/2, amp=H*.38, N=100;
+    const wave=miniWaves[li]||[];
+    const pts=new Float32Array(N+1);
+    for(let i=0;i<=N;i++){
+      const xn=i/N;
+      let v=wave.length>0
+        ? wave[Math.floor(xn*(wave.length-1))]*miniBurst+idleWave(miniIdleT,xn,li*1.2)*(1-miniBurst)
+        : idleWave(miniIdleT,xn,li*1.2);
+      pts[i]=cy-amp*(v-.5)*2;
     }
-
-    // Fill
-    const fa = 0.05 + waveBurst*0.08;
-    ectx.beginPath(); ectx.moveTo(0,cy);
-    for (let i=0;i<=N;i++) ectx.lineTo(i/N*W, pts[i]);
-    ectx.lineTo(W,cy); ectx.closePath();
-    const grd = ectx.createLinearGradient(0,cy-amp,0,cy+amp);
-    grd.addColorStop(0, SRC_DIMS[li] + fa.toFixed(2) + ')');
-    grd.addColorStop(1, SRC_DIMS[li] + '0)');
-    ectx.fillStyle = grd; ectx.fill();
-
-    // Line
-    ectx.beginPath();
-    for (let i=0;i<=N;i++) ectx.lineTo(i/N*W, pts[i]);
-    ectx.strokeStyle = SRC_COLORS[li];
-    ectx.globalAlpha = 0.3 + waveBurst*0.6;
-    ectx.lineWidth   = 1.5;
-    ectx.shadowColor = SRC_COLORS[li];
-    ectx.shadowBlur  = waveBurst * 7;
-    ectx.stroke(); ectx.shadowBlur = 0; ectx.globalAlpha = 1;
-
-    // Lane rule
-    if (li < LANES-1) {
-      ectx.beginPath(); ectx.moveTo(0,lH*(li+1)); ectx.lineTo(W,lH*(li+1));
-      ectx.strokeStyle='rgba(196,160,240,0.06)'; ectx.lineWidth=1; ectx.stroke();
-    }
-  }
-
-  // Card draw markers — white diamonds crossing all lanes
-  if (waveBurst > 0.04 && cardDots.length > 0) {
-    const da = waveBurst * 0.85;
-    cardDots.forEach(({nx, label}) => {
-      const x = nx * W;
-      for (let li = 0; li < LANES; li++) {
-        const cy = lH*li + lH*0.5;
-        const s = 3.5;
-        ectx.beginPath();
-        ectx.moveTo(x,cy-s); ectx.lineTo(x+s,cy); ectx.lineTo(x,cy+s); ectx.lineTo(x-s,cy);
-        ectx.closePath();
-        ectx.fillStyle = `rgba(237,232,248,${da*0.6})`;
-        ectx.fill();
-      }
-      // Label above top lane
-      ectx.fillStyle = `rgba(237,232,248,${da*0.7})`;
-      ectx.font = '300 8px Nunito, sans-serif';
-      ectx.textAlign = 'center';
-      ectx.fillText(label, x, lH*0 + 8);
-    });
-  }
-
-  requestAnimationFrame(waveLoop);
+    // fill
+    const fa=0.06+miniBurst*0.1;
+    ctx2.beginPath(); ctx2.moveTo(0,cy);
+    for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]);
+    ctx2.lineTo(W,cy); ctx2.closePath();
+    const g=ctx2.createLinearGradient(0,cy-amp,0,cy+amp);
+    g.addColorStop(0,MINI_DIMS[li]+fa.toFixed(2)+')'); g.addColorStop(1,MINI_DIMS[li]+'0)');
+    ctx2.fillStyle=g; ctx2.fill();
+    // line
+    ctx2.beginPath();
+    for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]);
+    ctx2.strokeStyle=MINI_COLORS[li];
+    ctx2.globalAlpha=0.4+miniBurst*0.5; ctx2.lineWidth=1.5;
+    ctx2.shadowColor=MINI_COLORS[li]; ctx2.shadowBlur=miniBurst*6;
+    ctx2.stroke(); ctx2.shadowBlur=0; ctx2.globalAlpha=1;
+  });
+  requestAnimationFrame(miniLoop);
 })();
 
-// ─────────────────────────────────────────────
-// REPOS
-// ─────────────────────────────────────────────
-const REPOS = {
-  tarot: [
-    "The Fool","The Magician","The High Priestess","The Empress","The Emperor","The Hierophant",
-    "The Lovers","The Chariot","Strength","The Hermit","Wheel of Fortune","Justice",
-    "The Hanged Man","Death","Temperance","The Devil","The Tower","The Star","The Moon",
-    "The Sun","Judgement","The World",
-    "Ace of Wands","Two of Wands","Three of Wands","Four of Wands","Five of Wands",
-    "Six of Wands","Seven of Wands","Eight of Wands","Nine of Wands","Ten of Wands",
-    "Page of Wands","Knight of Wands","Queen of Wands","King of Wands",
-    "Ace of Cups","Two of Cups","Three of Cups","Four of Cups","Five of Cups",
-    "Six of Cups","Seven of Cups","Eight of Cups","Nine of Cups","Ten of Cups",
-    "Page of Cups","Knight of Cups","Queen of Cups","King of Cups",
-    "Ace of Swords","Two of Swords","Three of Swords","Four of Swords","Five of Swords",
-    "Six of Swords","Seven of Swords","Eight of Swords","Nine of Swords","Ten of Swords",
-    "Page of Swords","Knight of Swords","Queen of Swords","King of Swords",
-    "Ace of Pentacles","Two of Pentacles","Three of Pentacles","Four of Pentacles","Five of Pentacles",
-    "Six of Pentacles","Seven of Pentacles","Eight of Pentacles","Nine of Pentacles","Ten of Pentacles",
-    "Page of Pentacles","Knight of Pentacles","Queen of Pentacles","King of Pentacles"
-  ],
-  runes:     ["Fehu","Uruz","Thurisaz","Ansuz","Raidho","Kenaz","Gebo","Wunjo","Hagalaz","Nauthiz","Isa","Jera","Eihwaz","Perthro","Algiz","Sowilo","Tiwaz","Berkano","Ehwaz","Mannaz","Laguz","Ingwaz","Dagaz","Othala"],
-  iching:    ["1. Qian","2. Kun","3. Zhun","4. Meng","5. Xu","6. Song","7. Shi","8. Bi","9. Xiao Chu","10. Lu","11. Tai","12. Pi","13. Tong Ren","14. Da You","15. Qian","16. Yu","17. Sui","18. Gu","19. Lin","20. Guan","21. Shi He","22. Bi","23. Bo","24. Fu","25. Wu Wang","26. Da Chu","27. Yi","28. Da Guo","29. Kan","30. Li","31. Xian","32. Heng","33. Dun","34. Da Zhuang","35. Jin","36. Ming Yi","37. Jia Ren","38. Kui","39. Jian","40. Xie","41. Sun","42. Yi","43. Guai","44. Gou","45. Cui","46. Sheng","47. Kun","48. Jing","49. Ge","50. Ding","51. Zhen","52. Gen","53. Jian","54. Gui Mei","55. Feng","56. Lu","57. Xun","58. Dui","59. Huan","60. Jie","61. Zhong Fu","62. Xiao Guo","63. Ji Ji","64. Wei Ji"],
-  astrology: ["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto","Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"]
+// ── REPOS ──
+const REPOS={
+  tarot:["The Fool","The Magician","The High Priestess","The Empress","The Emperor","The Hierophant","The Lovers","The Chariot","Strength","The Hermit","Wheel of Fortune","Justice","The Hanged Man","Death","Temperance","The Devil","The Tower","The Star","The Moon","The Sun","Judgement","The World","Ace of Wands","Two of Wands","Three of Wands","Four of Wands","Five of Wands","Six of Wands","Seven of Wands","Eight of Wands","Nine of Wands","Ten of Wands","Page of Wands","Knight of Wands","Queen of Wands","King of Wands","Ace of Cups","Two of Cups","Three of Cups","Four of Cups","Five of Cups","Six of Cups","Seven of Cups","Eight of Cups","Nine of Cups","Ten of Cups","Page of Cups","Knight of Cups","Queen of Cups","King of Cups","Ace of Swords","Two of Swords","Three of Swords","Four of Swords","Five of Swords","Six of Swords","Seven of Swords","Eight of Swords","Nine of Swords","Ten of Swords","Page of Swords","Knight of Swords","Queen of Swords","King of Swords","Ace of Pentacles","Two of Pentacles","Three of Pentacles","Four of Pentacles","Five of Pentacles","Six of Pentacles","Seven of Pentacles","Eight of Pentacles","Nine of Pentacles","Ten of Pentacles","Page of Pentacles","Knight of Pentacles","Queen of Pentacles","King of Pentacles"],
+  runes:["Fehu","Uruz","Thurisaz","Ansuz","Raidho","Kenaz","Gebo","Wunjo","Hagalaz","Nauthiz","Isa","Jera","Eihwaz","Perthro","Algiz","Sowilo","Tiwaz","Berkano","Ehwaz","Mannaz","Laguz","Ingwaz","Dagaz","Othala"],
+  iching:["1. Qian","2. Kun","3. Zhun","4. Meng","5. Xu","6. Song","7. Shi","8. Bi","9. Xiao Chu","10. Lu","11. Tai","12. Pi","13. Tong Ren","14. Da You","15. Qian","16. Yu","17. Sui","18. Gu","19. Lin","20. Guan","21. Shi He","22. Bi","23. Bo","24. Fu","25. Wu Wang","26. Da Chu","27. Yi","28. Da Guo","29. Kan","30. Li","31. Xian","32. Heng","33. Dun","34. Da Zhuang","35. Jin","36. Ming Yi","37. Jia Ren","38. Kui","39. Jian","40. Xie","41. Sun","42. Yi","43. Guai","44. Gou","45. Cui","46. Sheng","47. Kun","48. Jing","49. Ge","50. Ding","51. Zhen","52. Gen","53. Jian","54. Gui Mei","55. Feng","56. Lu","57. Xun","58. Dui","59. Huan","60. Jie","61. Zhong Fu","62. Xiao Guo","63. Ji Ji","64. Wei Ji"],
+  astrology:["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto","Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"]
 };
-
-function toFile(n) { return n.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/(^_|_$)/g,'') + '.svg'; }
-
-// Per-card seed mixing — full avalanche, not fixed stride
-function cardSeed(combined, i) {
-  let h = u16(combined ^ u16(i * 2654435761));
-  h = u16(Math.imul(h ^ (h >>> 5), 0x45d9));
-  h = u16(Math.imul(h ^ (h >>> 5), 0x45d9));
-  return u16(h ^ (h >>> 5));
+function toFile(n){ return n.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/(^_|_$)/g,'')+ '.svg'; }
+function cardSeed(combined,i){
+  let h=u16(combined^u16(i*2654435761));
+  h=u16(Math.imul(h^(h>>>5),0x45d9));
+  h=u16(Math.imul(h^(h>>>5),0x45d9));
+  return u16(h^(h>>>5));
 }
 
-// ─────────────────────────────────────────────
-// CURSOR TRAIL
-// ─────────────────────────────────────────────
-const tc  = document.getElementById('trail-canvas');
-const tctx = tc.getContext('2d');
-let tp = [];
-function resizeT() { tc.width = innerWidth; tc.height = innerHeight; }
-addEventListener('resize', resizeT); resizeT();
-class TP {
-  constructor(x,y) {
-    this.x=x; this.y=y; this.r=Math.random()*2+0.4;
-    this.life=1; this.d=0.03+Math.random()*0.025;
-    this.h=265+Math.random()*40; // violet hue range
-  }
-  step() { this.life-=this.d; }
-  draw() {
-    tctx.beginPath(); tctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-    tctx.fillStyle=`hsla(${this.h},70%,72%,${this.life*.5})`;
-    tctx.shadowColor=`hsla(${this.h},80%,72%,${this.life*.6})`;
-    tctx.shadowBlur=7; tctx.fill(); tctx.shadowBlur=0;
-  }
+// ── FLASH ANIMATION ──
+function fireFlash(){
+  const fl=document.getElementById('flash');
+  fl.classList.add('fire');
+  setTimeout(()=>fl.classList.remove('fire'),350);
 }
-addEventListener('mousemove', e => { for(let i=0;i<3;i++) tp.push(new TP(e.clientX,e.clientY)); });
-(function tloop(){ tctx.clearRect(0,0,tc.width,tc.height); tp=tp.filter(p=>p.life>0); tp.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(tloop); })();
 
-// ─────────────────────────────────────────────
-// SYNTHESIS
-// ─────────────────────────────────────────────
-async function runSynthesis() {
-  const grid  = document.getElementById('shard-grid');
-  const out   = document.getElementById('output');
-  const btn   = document.getElementById('synth-btn');
-  const type  = document.getElementById('src-type').value;
-  const count = parseInt(document.getElementById('shard-count').value);
-  const q     = document.getElementById('question').value;
+// ── SYNTHESIS ──
+async function runSynthesis(){
+  const grid=document.getElementById('shard-grid');
+  const out=document.getElementById('output');
+  const btn=document.getElementById('synth-btn');
+  const type=document.getElementById('src-type').value;
+  const count=parseInt(document.getElementById('shard-count').value);
+  const q=document.getElementById('question').value;
 
-  btn.disabled  = true;
-  grid.innerHTML = '';
-  out.innerHTML  = '';
-  mouseLocked    = true;  // freeze the mouse trace at this moment
+  btn.disabled=true; btn.classList.add('fired');
+  setTimeout(()=>btn.classList.remove('fired'),900);
+  grid.innerHTML=''; out.innerHTML='';
 
-  // Collect all sources
+  // Fire flash
+  fireFlash();
+
+  // Snapshot current entropy (mouse keeps accumulating after this)
   fetchOS(); fetchJitter();
-  SRAWS.e = getMouseSeed();
-  setSrc('e', SRAWS.e, `${SRAWS.e} — frozen at cast`, 'on-e', 'ce');
+  SRAWS.e=getMouseSeed();
+  setSrc('e',SRAWS.e,`${SRAWS.e} — snapshot at cast`,'on-e','ce');
 
-  const [anu, atmo] = await Promise.all([fetchANU(), fetchAtmo()]);
-  const allRaws = [SRAWS.a, SRAWS.b, SRAWS.c, SRAWS.d, SRAWS.e].map(v => v||0);
-  const combined = combineSources();
+  const [anu,atmo]=await Promise.all([fetchANU(),fetchAtmo()]);
+  const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0);
+  const combined=combineSources();
 
-  // Deck
-  const combined_all = [...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology];
-  const deck = type === 'chaos' ? combined_all : REPOS[type];
+  // Load mini waves with real seeds
+  loadMiniWaves(allRaws);
 
-  // Card seeds via avalanche hash
-  const cseeds = Array.from({length: count}, (_, i) => cardSeed(combined, i));
+  const combo_all=[...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology];
+  const deck=type==='chaos'?combo_all:REPOS[type];
+  const cseeds=Array.from({length:count},(_,i)=>cardSeed(combined,i));
 
-  // Feed visualizer
-  loadWaves(allRaws, cseeds.map((cs, i) => ({ nx: (cs & 0xffff) / 65535, label: String(i+1) })));
-
-  let shards = [];
-  for (let i = 0; i < count; i++) {
-    const cs = cseeds[i];
-    let val, folder;
-    if (type === 'chaos') {
-      val    = combined_all[cs % combined_all.length];
-      folder = REPOS.tarot.includes(val) ? 'tarot'
-             : REPOS.runes.includes(val) ? 'runes'
-             : REPOS.iching.includes(val)? 'iching' : 'astrology';
-    } else {
-      val    = REPOS[type][cs % REPOS[type].length];
-      folder = type;
-    }
+  let shards=[];
+  for(let i=0;i<count;i++){
+    const cs=cseeds[i]; let val,folder;
+    if(type==='chaos'){
+      val=combo_all[cs%combo_all.length];
+      folder=REPOS.tarot.includes(val)?'tarot':REPOS.runes.includes(val)?'runes':REPOS.iching.includes(val)?'iching':'astrology';
+    }else{ val=REPOS[type][cs%REPOS[type].length]; folder=type; }
     shards.push(val);
-
     let vis;
-    if (folder === 'iching') {
-      const ch = String.fromCharCode(19904 + parseInt(val.split('.')[0]) - 1);
-      vis = `<div class="hex-char">${ch}</div>`;
-    } else {
-      const p = `/assets/${folder}/${toFile(val)}`;
-      vis = `<img class="shard-img" src="${p}"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${val}">
-             <div class="shard-noimg" style="display:none">no image</div>`;
+    if(folder==='iching'){
+      const ch=String.fromCharCode(19904+parseInt(val.split('.')[0])-1);
+      vis=`<div class="hex-char">${ch}</div>`;
+    }else{
+      const p=`/assets/${folder}/${toFile(val)}`;
+      vis=`<img class="shard-img" src="${p}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${val}"><div class="shard-noimg" style="display:none">—</div>`;
     }
-
-    grid.innerHTML += `
-      <div class="shard" style="animation-delay:${i*65}ms">
-        ${vis}
-        <div class="shard-name">${val}</div>
-        <div class="shard-seed">${cs % deck.length} / ${deck.length}</div>
-      </div>`;
+    grid.innerHTML+=`<div class="shard glow" style="animation-delay:${i*60}ms">${vis}<div class="shard-name">${val}</div><div class="shard-seed">${cs%deck.length} / ${deck.length}</div></div>`;
   }
 
-  try {
-    const res  = await fetch('/api/interpret', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ question:q, symbols:shards })
-    });
-    const data = await res.json();
-    out.innerHTML = `
-      <div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div>
-      <div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div>
-      <div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`;
-  } catch {
-    out.innerHTML = `<span style="color:var(--tx3);font-size:14px;font-style:italic">
-      Interpretation API offline — your symbols have been drawn.</span>`;
+  try{
+    const res=await fetch('/api/interpret',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,symbols:shards})});
+    const data=await res.json();
+    out.innerHTML=`<div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div><div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div><div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`;
+  }catch{
+    out.innerHTML=`<span style="color:var(--tx3);font-size:13px;font-style:italic">API offline — symbols drawn successfully.</span>`;
   }
-
-  btn.disabled = false;
+  btn.disabled=false;
 }
 </script>
 </body>
