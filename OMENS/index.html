@@ -13,6 +13,7 @@
             --magenta: #d946ff;
             --gold: #f0c674;
             --border: rgba(0, 229, 255, 0.2);
+            --border-glow: rgba(0, 229, 255, 0.5);
         }
 
         * { cursor: none; box-sizing: border-box; }
@@ -41,32 +42,86 @@
             padding: 40px 5%;
             border-bottom: 1px solid var(--border);
             background: rgba(0,0,0,0.3);
-            min-height: 30vh;
+            min-height: 35vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .section-label {
             color: var(--cyan);
-            font-size: 12px;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--border-glow);
         }
 
         #shard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         .shard-box {
             background: var(--surface);
             border: 1px solid var(--border);
+            width: 160px;
+            min-height: 220px;
             padding: 15px;
-            font-size: 13px;
-            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .shard-box strong { color: var(--magenta); display: block; margin-bottom: 4px; }
+        .shard-box:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px var(--border-glow);
+            transform: translateY(-5px);
+        }
+
+        .shard-img-placeholder {
+            width: 100%;
+            height: 120px;
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px dashed var(--border);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .shard-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            display: none; 
+        }
+
+        .shard-name {
+            color: var(--magenta);
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .shard-index {
+            font-size: 10px;
+            color: var(--cyan);
+            opacity: 0.7;
+        }
 
         /* Main Interaction Area */
         .main-container {
@@ -75,13 +130,12 @@
             flex-direction: column;
             align-items: center;
             padding: 60px 20px;
-            max-width: 1000px;
-            margin: 0 auto;
             width: 100%;
         }
 
         .control-panel {
             width: 100%;
+            max-width: 900px;
             background: var(--surface);
             border: 1px solid var(--border);
             padding: 40px;
@@ -105,6 +159,7 @@
             font-size: 11px;
             color: var(--cyan);
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         select, input {
@@ -113,9 +168,13 @@
             padding: 15px;
             color: #fff;
             font-family: inherit;
+            font-size: 14px;
             outline: none;
             width: 100%;
+            transition: border-color 0.3s;
         }
+
+        select:focus, input:focus { border-color: var(--cyan); }
 
         .synthesize-btn {
             width: 100%;
@@ -124,9 +183,11 @@
             border: 1px solid var(--cyan);
             color: var(--cyan);
             font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
             font-weight: bold;
             letter-spacing: 4px;
             transition: all 0.3s;
+            margin-bottom: 30px;
         }
 
         .synthesize-btn:hover {
@@ -134,16 +195,25 @@
             color: #000;
             box-shadow: 0 0 20px var(--cyan);
         }
+        
+        .synthesize-btn:disabled {
+            opacity: 0.5;
+            border-color: #555;
+            color: #555;
+            box-shadow: none;
+        }
 
         #ai-output {
-            margin-top: 40px;
             padding-top: 30px;
             border-top: 1px solid var(--border);
             line-height: 1.8;
             font-size: 1.1rem;
+            min-height: 100px;
         }
 
-        #ai-output strong { color: var(--gold); }
+        .output-section { margin-bottom: 20px; }
+        .output-label { color: var(--gold); font-size: 12px; letter-spacing: 2px; display: block; margin-bottom: 5px; }
+        .output-action { font-style: italic; border-left: 2px solid var(--cyan); padding-left: 15px; margin-top: 20px; color: var(--text-bright); }
 
     </style>
 </head>
@@ -154,7 +224,11 @@
 <div class="visualization-area">
     <span class="section-label">QUANTUM ENTROPY FEED</span>
     <div id="shard-grid">
-        <div class="shard-box">SYSTEM_IDLE: Awaiting input...</div>
+        <div class="shard-box">
+            <div class="shard-img-placeholder">AWAITING</div>
+            <div class="shard-name">SYSTEM_IDLE</div>
+            <div class="shard-index">SIG_00</div>
+        </div>
     </div>
 </div>
 
@@ -164,25 +238,26 @@
             <div class="input-group">
                 <label>Category</label>
                 <select id="source-type">
-                    <option value="tarot">Tarot</option>
-                    <option value="runes">Runes</option>
-                    <option value="wikipedia">Wikipedia</option>
-                    <option value="chaos">Chaos</option>
+                    <option value="tarot">Tarot (78 Cards)</option>
+                    <option value="runes">Elder Futhark Runes (24)</option>
+                    <option value="iching">I Ching Hexagrams (64)</option>
+                    <option value="elements">Periodic Elements (118)</option>
+                    <option value="wikipedia">Wikipedia (Infinite)</option>
+                    <option value="chaos">Pure Chaos (Omni-Mix)</option>
                 </select>
             </div>
             <div class="input-group">
                 <label>Quantity</label>
-                <select id="shard-count">
-                    </select>
+                <select id="shard-count"></select>
             </div>
         </div>
 
         <div class="input-group" style="margin-bottom: 30px;">
-            <label>Question</label>
-            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank for open reading...">
+            <label>Neural Inquiry</label>
+            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank for open channel...">
         </div>
 
-        <button class="btn synthesize-btn" onclick="runSynthesis()">INITIATE SYNTHESIS</button>
+        <button id="synth-btn" class="synthesize-btn" onclick="runSynthesis()">INITIATE SYNTHESIS</button>
 
         <div id="ai-output">
             </div>
@@ -190,17 +265,17 @@
 </div>
 
 <script>
-    // POPULATE QUANTITY DROPDOWN
+    // 1. POPULATE QUANTITY DROPDOWN
     const countSelect = document.getElementById('shard-count');
     for(let i=1; i<=20; i++) {
         let opt = document.createElement('option');
         opt.value = i;
         opt.innerHTML = i;
-        if(i === 3) opt.selected = true;
+        if(i === 3) opt.selected = true; 
         countSelect.appendChild(opt);
     }
 
-    // CURSOR TRAIL
+    // 2. CURSOR TRAIL LOGIC
     const canvas = document.getElementById('trail-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -234,60 +309,135 @@
     }
     animate();
 
-    // CORE LOGIC
+    // 3. FULL SYMBOL REPOSITORY
+    const REPOS = {
+        tarot: [
+            "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", 
+            "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", 
+            "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", 
+            "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World",
+            "Ace of Wands", "Two of Wands", "Three of Wands", "Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands", "Eight of Wands", "Nine of Wands", "Ten of Wands", "Page of Wands", "Knight of Wands", "Queen of Wands", "King of Wands",
+            "Ace of Cups", "Two of Cups", "Three of Cups", "Four of Cups", "Five of Cups", "Six of Cups", "Seven of Cups", "Eight of Cups", "Nine of Cups", "Ten of Cups", "Page of Cups", "Knight of Cups", "Queen of Cups", "King of Cups",
+            "Ace of Swords", "Two of Swords", "Three of Swords", "Four of Swords", "Five of Swords", "Six of Swords", "Seven of Swords", "Eight of Swords", "Nine of Swords", "Ten of Swords", "Page of Swords", "Knight of Swords", "Queen of Swords", "King of Swords",
+            "Ace of Pentacles", "Two of Pentacles", "Three of Pentacles", "Four of Pentacles", "Five of Pentacles", "Six of Pentacles", "Seven of Pentacles", "Eight of Pentacles", "Nine of Pentacles", "Ten of Pentacles", "Page of Pentacles", "Knight of Pentacles", "Queen of Pentacles", "King of Pentacles"
+        ],
+        runes: [
+            "Fehu", "Uruz", "Thurisaz", "Ansuz", "Raidho", "Kenaz", "Gebo", "Wunjo", 
+            "Hagalaz", "Nauthiz", "Isa", "Jera", "Eihwaz", "Perthro", "Algiz", "Sowilo", 
+            "Tiwaz", "Berkano", "Ehwaz", "Mannaz", "Laguz", "Ingwaz", "Dagaz", "Othala"
+        ],
+        iching: [
+            "1. Qian (The Creative)", "2. Kun (The Receptive)", "3. Zhun (Difficulty at the Beginning)", "4. Meng (Youthful Folly)", "5. Xu (Waiting)", "6. Song (Conflict)", "7. Shi (The Army)", "8. Bi (Holding Together)", "9. Xiao Chu (Small Taming)", "10. Lu (Treading)",
+            "11. Tai (Peace)", "12. Pi (Standstill)", "13. Tong Ren (Fellowship)", "14. Da You (Possession in Great Measure)", "15. Qian (Modesty)", "16. Yu (Enthusiasm)", "17. Sui (Following)", "18. Gu (Work on what has been spoiled)", "19. Lin (Approach)", "20. Guan (Contemplation)",
+            "21. Shi He (Biting Through)", "22. Bi (Grace)", "23. Bo (Splitting Apart)", "24. Fu (Return)", "25. Wu Wang (Innocence)", "26. Da Chu (Taming Power of the Great)", "27. Yi (Corners of the Mouth)", "28. Da Guo (Preponderance of the Great)", "29. Kan (The Abysmal)", "30. Li (The Clinging)",
+            "31. Xian (Influence)", "32. Heng (Duration)", "33. Dun (Retreat)", "34. Da Zhuang (Power of the Great)", "35. Jin (Progress)", "36. Ming Yi (Darkening of the Light)", "37. Jia Ren (The Family)", "38. Kui (Opposition)", "39. Jian (Obstruction)", "40. Xie (Deliverance)",
+            "41. Sun (Decrease)", "42. Yi (Increase)", "43. Guai (Breakthrough)", "44. Gou (Coming to Meet)", "45. Cui (Gathering Together)", "46. Sheng (Pushing Upward)", "47. Kun (Oppression)", "48. Jing (The Well)", "49. Ge (Revolution)", "50. Ding (The Caldron)",
+            "51. Zhen (The Arousing)", "52. Gen (Keeping Still)", "53. Jian (Development)", "54. Gui Mei (The Marrying Maiden)", "55. Feng (Abundance)", "56. Lu (The Wanderer)", "57. Xun (The Gentle)", "58. Dui (The Joyous)", "59. Huan (Dispersion)", "60. Jie (Limitation)",
+            "61. Zhong Fu (Inner Truth)", "62. Xiao Guo (Preponderance of the Small)", "63. Ji Ji (After Completion)", "64. Wei Ji (Before Completion)"
+        ],
+        elements: [
+            "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", "Tellurium", "Iodine", "Xenon", "Cesium", "Barium", "Lanthanum", "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine", "Oganesson"
+        ]
+    };
+
+    // Helper to convert names to clean image filenames (e.g., "1. Qian (The Creative)" -> "1_qian_the_creative.jpg")
+    function nameToFilename(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.jpg';
+    }
+
+    // 4. CORE SYNTHESIS LOGIC
     async function runSynthesis() {
         const grid = document.getElementById('shard-grid');
         const output = document.getElementById('ai-output');
+        const btn = document.getElementById('synth-btn');
         const type = document.getElementById('source-type').value;
-        const count = document.getElementById('shard-count').value;
+        const count = parseInt(document.getElementById('shard-count').value);
         const question = document.getElementById('user-question').value;
 
+        btn.disabled = true;
+        btn.innerText = "COLLAPSING REALITY...";
         grid.innerHTML = "";
-        output.innerHTML = "Accessing quantum entropy pools...";
+        output.innerHTML = "<span style='color:var(--cyan)'>Establishing quantum link...</span>";
 
         try {
-            // Get seed from ANU Quantum RNG
             const seedRes = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
             const seedData = await seedRes.json();
-            const seed = seedData.data[0];
+            const baseSeed = seedData.data[0] || Math.floor(Math.random() * 65000);
 
             let shards = [];
             for (let i = 0; i < count; i++) {
                 let val = "";
+                let folder = type;
+                const localSeed = baseSeed + (i * 1337); 
+
                 if (type === 'tarot') {
-                    const deck = ["The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World"];
-                    val = deck[(seed + i) % deck.length];
+                    val = REPOS.tarot[localSeed % REPOS.tarot.length];
                 } else if (type === 'runes') {
-                    const runes = ["Fehu", "Uruz", "Thurisaz", "Ansuz", "Raidho", "Kenaz", "Gebo", "Wunjo", "Hagalaz", "Nauthiz", "Isa", "Jera", "Eihwaz", "Perthro", "Algiz", "Sowilo", "Tiwaz", "Berkano", "Ehwaz", "Mannaz", "Laguz", "Ingwaz", "Dagaz", "Othala"];
-                    val = runes[(seed + i) % runes.length];
+                    val = REPOS.runes[localSeed % REPOS.runes.length];
+                } else if (type === 'iching') {
+                    val = REPOS.iching[localSeed % REPOS.iching.length];
+                } else if (type === 'elements') {
+                    val = REPOS.elements[localSeed % REPOS.elements.length];
                 } else if (type === 'wikipedia') {
                     const wiki = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/summary').then(r => r.json());
                     val = wiki.title;
+                    folder = 'wiki';
                 } else {
-                    val = `HASH_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+                    // Chaos mode: Pull from all 4 arrays
+                    const combined = [...REPOS.tarot, ...REPOS.runes, ...REPOS.iching, ...REPOS.elements];
+                    val = combined[localSeed % combined.length];
+                    
+                    // Figure out which folder it belongs to for the image path
+                    if (REPOS.tarot.includes(val)) folder = 'tarot';
+                    else if (REPOS.runes.includes(val)) folder = 'runes';
+                    else if (REPOS.iching.includes(val)) folder = 'iching';
+                    else folder = 'elements';
                 }
                 
                 shards.push(val);
-                grid.innerHTML += `<div class="shard-box"><strong>SHARD ${i+1}</strong>${val}</div>`;
+                
+                const imgFilename = nameToFilename(val);
+                const imgPath = `/assets/${folder}/${imgFilename}`;
+
+                grid.innerHTML += `
+                    <div class="shard-box">
+                        <img class="shard-image" src="${imgPath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${val}">
+                        <div class="shard-img-placeholder">[ NO IMG DATA ]</div>
+                        <div class="shard-name">${val}</div>
+                        <div class="shard-index">SIG_${String(i+1).padStart(2, '0')}</div>
+                    </div>
+                `;
             }
 
-            // Call API
+            // Call Backend API
             const res = await fetch('/api/interpret', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question, symbols: shards })
             });
+
+            if (!res.ok) throw new Error("Backend connection failed.");
+
             const data = await res.json();
             
             output.innerHTML = `
-                <div style="margin-bottom:15px;"><strong>PATTERN:</strong> ${data[0].pattern}</div>
-                <div style="margin-bottom:15px;"><strong>READING:</strong> ${data[0].reading}</div>
-                <div style="font-style:italic; border-left: 2px solid var(--cyan); padding-left: 15px;">↳ ${data[0].action}</div>
+                <div class="output-section">
+                    <span class="output-label">RECOGNIZED PATTERN</span>
+                    <div>${data[0].pattern}</div>
+                </div>
+                <div class="output-section">
+                    <span class="output-label">NEURAL TRANSLATION</span>
+                    <div>${data[0].reading}</div>
+                </div>
+                <div class="output-action">↳ ${data[0].action}</div>
             `;
 
         } catch (e) {
-            output.innerHTML = "LINK_FAILURE: Entropy field unstable.";
+            output.innerHTML = `<span style="color:#ff4757;">LINK_FAILURE: ${e.message} Make sure your /api/interpret.js is deployed correctly.</span>`;
         }
+
+        btn.disabled = false;
+        btn.innerText = "INITIATE SYNTHESIS";
     }
 </script>
 </body>
