@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omni-Oracle | Quantum Entropy Lab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Cinzel:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #03060d;
@@ -12,14 +12,17 @@
             --cyan: #00e5ff;
             --magenta: #d946ff;
             --gold: #f0c674;
+            --gold-dim: rgba(240, 198, 116, 0.15);
             --border: rgba(0, 229, 255, 0.2);
             --border-glow: rgba(0, 229, 255, 0.5);
+            --text-dim: rgba(255,255,255,0.45);
         }
 
         * { cursor: none; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
+            background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 30, 50, 0.8) 0%, transparent 70%);
             color: #ffffff;
             font-family: 'Share Tech Mono', monospace;
             margin: 0;
@@ -34,6 +37,32 @@
             top: 0; left: 0;
             z-index: 9999;
             pointer-events: none;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 50px 20px 0;
+            position: relative;
+        }
+
+        .page-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(22px, 4vw, 42px);
+            font-weight: 900;
+            letter-spacing: 0.25em;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(240, 198, 116, 0.4), 0 0 80px rgba(240, 198, 116, 0.1);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 40px;
         }
 
         /* Top Visualization Section */
@@ -51,10 +80,17 @@
         .section-label {
             color: var(--cyan);
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            letter-spacing: 4px;
+            font-size: 11px;
+            letter-spacing: 5px;
             margin-bottom: 30px;
             text-shadow: 0 0 10px var(--border-glow);
+            opacity: 0.7;
+        }
+
+        /* Shard entrance animation */
+        @keyframes shardReveal {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         #shard-grid {
@@ -77,13 +113,14 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            transition: all 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            animation: shardReveal 0.5s ease both;
         }
 
         .shard-box:hover {
             border-color: var(--cyan);
-            box-shadow: 0 0 15px var(--border-glow);
-            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--border-glow), inset 0 0 20px rgba(0,229,255,0.03);
+            transform: translateY(-6px);
         }
 
         /* Holographic Image Styling */
@@ -123,17 +160,19 @@
         }
 
         .shard-name {
-            color: var(--magenta);
+            color: var(--gold);
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 5px;
         }
         
         .shard-index {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--cyan);
-            opacity: 0.7;
+            opacity: 0.4;
+            letter-spacing: 2px;
         }
 
         /* Main Interaction Area */
@@ -186,6 +225,11 @@
             width: 100%;
         }
 
+        @keyframes buttonPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(0,229,255,0.3); }
+            50%       { box-shadow: 0 0 24px rgba(0,229,255,0.7), 0 0 50px rgba(0,229,255,0.2); }
+        }
+
         .synthesize-btn {
             width: 100%;
             padding: 20px;
@@ -193,33 +237,61 @@
             border: 1px solid var(--cyan);
             color: var(--cyan);
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
-            letter-spacing: 4px;
-            transition: all 0.3s;
+            letter-spacing: 6px;
+            transition: background 0.25s, color 0.25s, box-shadow 0.25s, opacity 0.25s;
             margin-bottom: 30px;
+            cursor: none;
         }
 
-        .synthesize-btn:hover {
+        .synthesize-btn:hover:not(:disabled) {
             background: var(--cyan);
             color: #000;
-            box-shadow: 0 0 20px var(--cyan);
+            box-shadow: 0 0 25px var(--cyan), 0 0 60px rgba(0,229,255,0.2);
         }
+
+        .synthesize-btn:disabled {
+            opacity: 0.5;
+            border-color: var(--cyan);
+            color: var(--cyan);
+            animation: buttonPulse 1.2s ease-in-out infinite;
+        }
+
         
         #ai-output {
             padding-top: 30px;
             border-top: 1px solid var(--border);
-            line-height: 1.8;
-            font-size: 1.1rem;
+            line-height: 1.9;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
         }
 
-        .output-label { color: var(--gold); font-size: 12px; letter-spacing: 2px; display: block; margin-bottom: 5px; }
+        #ai-output > div {
+            border-left: 2px solid var(--gold-dim);
+            padding-left: 16px;
+            margin-bottom: 20px;
+        }
+
+        .output-label {
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 4px;
+            display: block;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
 
     </style>
 </head>
 <body>
 
 <canvas id="trail-canvas"></canvas>
+
+<div class="page-header">
+    <div class="page-title">OMNI-ORACLE</div>
+    <div class="page-subtitle">Quantum Entropy Divination Engine</div>
+</div>
 
 <div class="visualization-area">
     <span class="section-label">QUANTUM ENTROPY FEED</span>
@@ -272,7 +344,7 @@
         countSelect.appendChild(opt);
     }
 
-    // 2. CURSOR TRAIL
+    // 2. CURSOR TRAIL — glowing fading circles
     const canvas = document.getElementById('trail-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -282,15 +354,23 @@
     class Particle {
         constructor(x, y) {
             this.x = x; this.y = y;
-            this.size = Math.random() * 2 + 1;
-            this.life = 100;
-            this.color = `rgba(0, 229, 255, ${Math.random()})`;
+            this.size = Math.random() * 3 + 1;
+            this.life = 1.0;
+            this.decay = 0.03 + Math.random() * 0.03;
+            this.hue = Math.random() > 0.8 ? 290 : 185; // mostly cyan, occasional magenta
         }
-        update() { this.life -= 2; }
-        draw() { ctx.fillStyle = this.color; ctx.fillRect(this.x, this.y, this.size, this.size); }
+        update() { this.life -= this.decay; }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${this.life * 0.7})`;
+            ctx.shadowColor = `hsla(${this.hue}, 100%, 70%, ${this.life})`;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+        }
     }
     window.addEventListener('mousemove', (e) => {
-        for(let i=0; i<2; i++) particles.push(new Particle(e.clientX, e.clientY));
+        for(let i=0; i<3; i++) particles.push(new Particle(e.clientX, e.clientY));
     });
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -372,7 +452,7 @@
                 }
 
                 grid.innerHTML += `
-                    <div class="shard-box">
+                    <div class="shard-box" style="animation-delay: ${i * 80}ms">
                         ${visualHTML}
                         <div class="shard-name">${val}</div>
                         <div class="shard-index">SIG_${String(i+1).padStart(2, '0')}</div>
