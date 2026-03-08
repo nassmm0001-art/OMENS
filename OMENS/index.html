@@ -36,13 +36,12 @@
             pointer-events: none;
         }
 
-        /* Top Visualization Section */
         .visualization-area {
             width: 100%;
             padding: 40px 5%;
             border-bottom: 1px solid var(--border);
             background: rgba(0,0,0,0.3);
-            min-height: 35vh;
+            min-height: 38vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,331 +68,46 @@
         .shard-box {
             background: var(--surface);
             border: 1px solid var(--border);
-            width: 160px;
-            min-height: 220px;
+            width: 170px;
+            min-height: 240px;
             padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .shard-box:hover {
             border-color: var(--cyan);
-            box-shadow: 0 0 15px var(--border-glow);
-            transform: translateY(-5px);
+            box-shadow: 0 0 25px var(--border-glow);
+            transform: translateY(-5px) scale(1.02);
         }
 
-        /* Holographic Image Styling */
+        /* Remote Image Filter (Hologram Look) */
         .shard-image {
             width: 100%;
-            height: 120px;
+            height: 130px;
             object-fit: contain;
             margin-bottom: 15px;
-            /* Forces images to glow neon cyan */
             filter: brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(5000%) hue-rotate(150deg);
             opacity: 0.9;
         }
 
-        /* I Ching Unicode Styling */
+        /* I Ching Unicode Visuals */
         .hexagram-display {
-            font-size: 85px;
+            font-size: 95px;
             color: var(--cyan);
+            line-height: 1;
             text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--magenta);
-            height: 120px;
+            height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
-            user-select: none;
-        }
-
-        .shard-img-placeholder {
-            width: 100%;
-            height: 120px;
-            background: rgba(0, 229, 255, 0.05);
-            border: 1px dashed var(--border);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: rgba(255,255,255,0.3);
         }
 
         .shard-name {
             color: var(--magenta);
             font-weight: bold;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        
-        .shard-index {
-            font-size: 10px;
-            color: var(--cyan);
-            opacity: 0.7;
-        }
-
-        /* Main Interaction Area */
-        .main-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 60px 20px;
-            width: 100%;
-        }
-
-        .control-panel {
-            width: 100%;
-            max-width: 900px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 40px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-        }
-
-        .ui-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        label {
-            font-size: 11px;
-            color: var(--cyan);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        select, input {
-            background: #000;
-            border: 1px solid var(--border);
-            padding: 15px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-            width: 100%;
-        }
-
-        .synthesize-btn {
-            width: 100%;
-            padding: 20px;
-            background: transparent;
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 4px;
-            transition: all 0.3s;
-            margin-bottom: 30px;
-        }
-
-        .synthesize-btn:hover {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--cyan);
-        }
-        
-        #ai-output {
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        .output-label { color: var(--gold); font-size: 12px; letter-spacing: 2px; display: block; margin-bottom: 5px; }
-
-    </style>
-</head>
-<body>
-
-<canvas id="trail-canvas"></canvas>
-
-<div class="visualization-area">
-    <span class="section-label">QUANTUM ENTROPY FEED</span>
-    <div id="shard-grid">
-        <div class="shard-box">
-            <div class="shard-img-placeholder">SYSTEM_READY</div>
-            <div class="shard-name">AWAITING_INPUT</div>
-            <div class="shard-index">SIG_00</div>
-        </div>
-    </div>
-</div>
-
-<div class="main-container">
-    <div class="control-panel">
-        <div class="ui-row">
-            <div class="input-group">
-                <label>Symbolic Engine</label>
-                <select id="source-type">
-                    <option value="tarot">Tarot (78 Cards)</option>
-                    <option value="runes">Elder Futhark Runes (24)</option>
-                    <option value="iching">I Ching Hexagrams (64)</option>
-                    <option value="astrology">Celestial Signs & Planets</option>
-                    <option value="chaos">Omni-Chaos Mode</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Shards</label>
-                <select id="shard-count"></select>
-            </div>
-        </div>
-
-        <div class="input-group" style="margin-bottom: 30px;">
-            <label>Neural Inquiry</label>
-            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank for pure entropy...">
-        </div>
-
-        <button id="synth-btn" class="synthesize-btn" onclick="runSynthesis()">INITIATE SYNTHESIS</button>
-
-        <div id="ai-output"></div>
-    </div>
-</div>
-
-<script>
-    // 1. POPULATE DROPDOWN (1-20)
-    const countSelect = document.getElementById('shard-count');
-    for(let i=1; i<=20; i++) {
-        let opt = document.createElement('option');
-        opt.value = i; opt.innerHTML = i;
-        if(i === 3) opt.selected = true; 
-        countSelect.appendChild(opt);
-    }
-
-    // 2. CURSOR TRAIL
-    const canvas = document.getElementById('trail-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-
-    class Particle {
-        constructor(x, y) {
-            this.x = x; this.y = y;
-            this.size = Math.random() * 2 + 1;
-            this.life = 100;
-            this.color = `rgba(0, 229, 255, ${Math.random()})`;
-        }
-        update() { this.life -= 2; }
-        draw() { ctx.fillStyle = this.color; ctx.fillRect(this.x, this.y, this.size, this.size); }
-    }
-    window.addEventListener('mousemove', (e) => {
-        for(let i=0; i<2; i++) particles.push(new Particle(e.clientX, e.clientY));
-    });
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles = particles.filter(p => p.life > 0);
-        particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
-    }
-    animate();
-
-    // 3. FULL REPOSITORIES
-    const REPOS = {
-        tarot: [
-            "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World",
-            "Ace of Wands", "Two of Wands", "Three of Wands", "Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands", "Eight of Wands", "Nine of Wands", "Ten of Wands", "Page of Wands", "Knight of Wands", "Queen of Wands", "King of Wands",
-            "Ace of Cups", "Two of Cups", "Three of Cups", "Four of Cups", "Five of Cups", "Six of Cups", "Seven of Cups", "Eight of Cups", "Nine of Cups", "Ten of Cups", "Page of Cups", "Knight of Cups", "Queen of Cups", "King of Cups",
-            "Ace of Swords", "Two of Swords", "Three of Swords", "Four of Swords", "Five of Swords", "Six of Swords", "Seven of Swords", "Eight of Swords", "Nine of Swords", "Ten of Swords", "Page of Swords", "Knight of Swords", "Queen of Swords", "King of Swords",
-            "Ace of Pentacles", "Two of Pentacles", "Three of Pentacles", "Four of Pentacles", "Five of Pentacles", "Six of Pentacles", "Seven of Pentacles", "Eight of Pentacles", "Nine of Pentacles", "Ten of Pentacles", "Page of Pentacles", "Knight of Pentacles", "Queen of Pentacles", "King of Pentacles"
-        ],
-        runes: ["Fehu", "Uruz", "Thurisaz", "Ansuz", "Raidho", "Kenaz", "Gebo", "Wunjo", "Hagalaz", "Nauthiz", "Isa", "Jera", "Eihwaz", "Perthro", "Algiz", "Sowilo", "Tiwaz", "Berkano", "Ehwaz", "Mannaz", "Laguz", "Ingwaz", "Dagaz", "Othala"],
-        iching: [
-            "1. Qian", "2. Kun", "3. Zhun", "4. Meng", "5. Xu", "6. Song", "7. Shi", "8. Bi", "9. Xiao Chu", "10. Lu", "11. Tai", "12. Pi", "13. Tong Ren", "14. Da You", "15. Qian", "16. Yu", "17. Sui", "18. Gu", "19. Lin", "20. Guan", "21. Shi He", "22. Bi", "23. Bo", "24. Fu", "25. Wu Wang", "26. Da Chu", "27. Yi", "28. Da Guo", "29. Kan", "30. Li", "31. Xian", "32. Heng", "33. Dun", "34. Da Zhuang", "35. Jin", "36. Ming Yi", "37. Jia Ren", "38. Kui", "39. Jian", "40. Xie", "41. Sun", "42. Yi", "43. Guai", "44. Gou", "45. Cui", "46. Sheng", "47. Kun", "48. Jing", "49. Ge", "50. Ding", "51. Zhen", "52. Gen", "53. Jian", "54. Gui Mei", "55. Feng", "56. Lu", "57. Xun", "58. Dui", "59. Huan", "60. Jie", "61. Zhong Fu", "62. Xiao Guo", "63. Ji Ji", "64. Wei Ji"
-        ],
-        astrology: [
-            "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", 
-            "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-        ]
-    };
-
-    function nameToFilename(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.svg'; }
-
-    // 4. SYNTHESIS ENGINE
-    async function runSynthesis() {
-        const grid = document.getElementById('shard-grid');
-        const output = document.getElementById('ai-output');
-        const btn = document.getElementById('synth-btn');
-        const type = document.getElementById('source-type').value;
-        const count = parseInt(document.getElementById('shard-count').value);
-        const question = document.getElementById('user-question').value;
-
-        btn.disabled = true; grid.innerHTML = "";
-        output.innerHTML = "<span style='color:var(--cyan)'>Syncing Neural Link...</span>";
-
-        try {
-            const seedRes = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
-            const seedData = await seedRes.json();
-            const baseSeed = seedData.data[0] || Math.floor(Math.random() * 65000);
-
-            let shards = [];
-            for (let i = 0; i < count; i++) {
-                let val = ""; let folder = type;
-                const localSeed = baseSeed + (i * 1337); 
-
-                if (type === 'tarot') val = REPOS.tarot[localSeed % REPOS.tarot.length];
-                else if (type === 'runes') val = REPOS.runes[localSeed % REPOS.runes.length];
-                else if (type === 'iching') val = REPOS.iching[localSeed % REPOS.iching.length];
-                else if (type === 'astrology') val = REPOS.astrology[localSeed % REPOS.astrology.length];
-                else {
-                    const combined = [...REPOS.tarot, ...REPOS.runes, ...REPOS.iching, ...REPOS.astrology];
-                    val = combined[localSeed % combined.length];
-                    if (REPOS.tarot.includes(val)) folder = 'tarot';
-                    else if (REPOS.runes.includes(val)) folder = 'runes';
-                    else if (REPOS.iching.includes(val)) folder = 'iching';
-                    else folder = 'astrology';
-                }
-                shards.push(val);
-
-                let visualHTML = "";
-                if (folder === 'iching') {
-                    // Start of I Ching Unicode block is 19904
-                    const hexIndex = parseInt(val.split(".")[0]) - 1;
-                    const char = String.fromCharCode(19904 + hexIndex);
-                    visualHTML = `<div class="hexagram-display">${char}</div>`;
-                } else {
-                    const imgPath = `/assets/${folder}/${nameToFilename(val)}`;
-                    visualHTML = `
-                        <img class="shard-image" src="${imgPath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${val}">
-                        <div class="shard-img-placeholder">[ NO SIGNAL ]</div>
-                    `;
-                }
-
-                grid.innerHTML += `
-                    <div class="shard-box">
-                        ${visualHTML}
-                        <div class="shard-name">${val}</div>
-                        <div class="shard-index">SIG_${String(i+1).padStart(2, '0')}</div>
-                    </div>
-                `;
-            }
-
-            const res = await fetch('/api/interpret', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question, symbols: shards })
-            });
-            const data = await res.json();
-            output.innerHTML = `
-                <div><span class="output-label">QUANTUM PATTERN</span>${data[0].pattern}</div>
-                <div style="margin-top:15px;"><span class="output-label">NEURAL READING</span>${data[0].reading}</div>
-                <div style="margin-top:15px; font-style:italic; color:var(--cyan);">↳ ${data[0].action}</div>
-            `;
-        } catch (e) { output.innerHTML = "QUANTUM_LINK_STALLED. Verify API status."; }
-        btn.disabled = false;
-    }
-</script>
-</body>
-</html>
+            font
