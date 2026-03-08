@@ -767,7 +767,9 @@ function fireFlash(){
 }
 
 // ── SYNTHESIS ──
-async function runSynthesis(){
+let interpretAbort=null;
+
+function runSynthesis(){
   const grid=document.getElementById('shard-grid');
   const out=document.getElementById('output');
   const btn=document.getElementById('synth-btn');
@@ -775,25 +777,25 @@ async function runSynthesis(){
   const count=parseInt(document.getElementById('shard-count').value);
   const q=document.getElementById('question').value;
 
-  btn.disabled=true; btn.classList.add('fired');
+  // Cancel any previous interpret call — new cast wins immediately
+  if(interpretAbort){ interpretAbort.abort(); interpretAbort=null; }
+
+  btn.classList.add('fired');
   setTimeout(()=>btn.classList.remove('fired'),900);
   grid.innerHTML=''; out.innerHTML='';
-
-  // Fire flash
   fireFlash();
 
-  // Snapshot current entropy (mouse keeps accumulating after this)
+  // ── Snapshot synchronous entropy instantly at the moment of click ──
   fetchOS(); fetchJitter();
   SRAWS.e=getMouseSeed();
   setSrc('e',SRAWS.e,`${SRAWS.e} — snapshot at cast`,'on-e','ce');
 
-  const [anu,atmo]=await Promise.all([fetchANU(),fetchAtmo()]);
-  const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0);
+  // Use whatever network sources have already resolved (pre-fetched on load)
   const combined=combineSources();
-
-  // Load mini waves with real seeds
+  const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0);
   loadMiniWaves(allRaws);
 
+  // ── Draw cards immediately — no waiting ──
   const combo_all=[...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology];
   const deck=type==='chaos'?combo_all:REPOS[type];
   const cseeds=Array.from({length:count},(_,i)=>cardSeed(combined,i));
@@ -817,14 +819,29 @@ async function runSynthesis(){
     grid.innerHTML+=`<div class="shard glow" style="animation-delay:${i*60}ms">${vis}<div class="shard-name">${val}</div><div class="shard-seed">${cs%deck.length} / ${deck.length}</div></div>`;
   }
 
-  try{
-    const res=await fetch('/api/interpret',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,symbols:shards})});
-    const data=await res.json();
+  // ── Interpret in background — cancellable ──
+  interpretAbort=new AbortController();
+  const sig=interpretAbort.signal;
+  out.innerHTML=`<span style="color:var(--tx3);font-size:12px;font-style:italic;opacity:0.55">reading the field…</span>`;
+
+  fetch('/api/interpret',{
+    method:'POST', signal:sig,
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({question:q,symbols:shards})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    interpretAbort=null;
     out.innerHTML=`<div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div><div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div><div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`;
-  }catch{
+  })
+  .catch(err=>{
+    if(err.name==='AbortError') return; // silently dropped — new cast is running
+    interpretAbort=null;
     out.innerHTML=`<span style="color:var(--tx3);font-size:13px;font-style:italic">API offline — symbols drawn successfully.</span>`;
-  }
-  btn.disabled=false;
+  });
+
+  // Network sources refresh in background — enriches the next cast's seed
+  fetchANU(); fetchAtmo();
 }
 </script>
 </body>
