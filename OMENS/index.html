@@ -80,7 +80,6 @@ body {
   overflow: visible;
 }
 
-/* LEFT: mouse canvas — 16:9 */
 .mouse-col {
   flex: 0 0 auto;
   width: clamp(280px, 38%, 520px);
@@ -101,7 +100,6 @@ body {
 .panel-desc  { font-size:10px; color:var(--tx3); font-weight:300; font-style:italic; }
 .panel-val   { font-size:11px; font-weight:600; color:var(--ce); letter-spacing:0.5px; }
 
-/* 16:9 aspect wrapper */
 .mouse-ratio {
   position:relative; width:100%; padding-top:56.25%; flex:1;
 }
@@ -115,13 +113,11 @@ body {
 }
 .ft-dot { width:5px; height:5px; border-radius:50%; background:var(--ce); opacity:0.7; flex-shrink:0; }
 
-/* RIGHT: 5 stacked source rows */
 .sources-col {
   flex: 1; display:flex; flex-direction:column; gap:0;
   background:var(--s1); border:1px solid var(--bc); border-radius:var(--r); overflow:visible;
 }
 
-/* tooltip anchor */
 .src-row {
   display:flex; align-items:center; gap:0;
   border-bottom:1px solid var(--bc-lo); position:relative;
@@ -152,11 +148,9 @@ body {
 .src-num.ca{color:var(--ca);} .src-num.cb{color:var(--cb);}
 .src-num.cc{color:var(--cc);} .src-num.cd{color:var(--cd);} .src-num.ce{color:var(--ce);}
 
-/* mini wave canvas per row */
 .src-wave-wrap { flex:1; height:44px; position:relative; overflow:hidden; }
 .src-wave-wrap canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-/* ── TOOLTIP CLOUD ── */
 .tooltip {
   position:absolute; left:170px; top:0;
   z-index:500;
@@ -170,7 +164,6 @@ body {
 .src-row:hover .tooltip {
   opacity:1; transform:translateX(0);
 }
-/* cloud tail — aligns to top of tooltip */
 .tooltip::before {
   content:''; position:absolute; left:-7px; top:14px;
   width:0; height:0;
@@ -196,7 +189,6 @@ body {
   background:linear-gradient(90deg, var(--v2), var(--v1));
 }
 
-/* bottom combined row */
 .sources-footer {
   padding:7px 14px; border-top:1px solid var(--bc-lo);
   display:flex; align-items:center; justify-content:space-between;
@@ -204,7 +196,7 @@ body {
 }
 .combined-val { font-size:12px; font-weight:700; color:var(--v1); letter-spacing:1px; }
 
-/* ── MAIN BODY: controls left, symbols right ── */
+/* ── MAIN BODY ── */
 .main-body {
   padding: 20px 4% 32px;
   display: flex; gap: 16px;
@@ -212,7 +204,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Controls panel */
 .ctrl {
   flex: 0 0 340px; min-width: 280px;
   background:var(--s1); border:1px solid var(--bc);
@@ -226,7 +217,6 @@ body {
   color:var(--tx); margin-bottom:20px;
 }
 .fld { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
-.fld:last-of-type { margin-bottom:0; }
 .fld-lbl { font-size:10px; font-weight:700; color:var(--tx2); letter-spacing:0.5px; }
 select, input[type=text] {
   background:var(--bg); border:1px solid var(--bc); border-radius:var(--rsm);
@@ -236,7 +226,6 @@ select, input[type=text] {
 }
 select:focus, input:focus { border-color:var(--v1); box-shadow:0 0 0 3px rgba(196,160,240,0.1); }
 select option { background:#120e1c; color:var(--tx); }
-input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
 .ctrl-divider { border:none; border-top:1px solid var(--bc-lo); margin:18px 0; }
 
 @keyframes pulse-violet {
@@ -275,7 +264,6 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
   text-transform:uppercase; display:block; margin-bottom:5px;
 }
 
-/* Symbols area */
 .symbols-col {
   flex:1; min-width:280px;
   display:flex; flex-direction:column;
@@ -297,11 +285,13 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
   40%  { box-shadow: 0 0 40px rgba(196,160,240,0.5), 0 0 80px rgba(196,160,240,0.2); }
   100% { box-shadow: 0 0 0px rgba(196,160,240,0); }
 }
+
+/* ── SHARD & LORE TOOLTIP ── */
 .shard {
   background:var(--s1); border:1px solid var(--bc); border-radius:var(--r);
   width:130px; min-height:185px; padding:12px 10px;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center;
+  text-align:center; position: relative;
   transition:background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
   animation:cardReveal 0.65s cubic-bezier(0.22,1,0.36,1) both;
 }
@@ -311,6 +301,24 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
   box-shadow:0 0 28px rgba(196,160,240,0.15), 0 10px 32px rgba(0,0,0,0.5);
   transform:translateY(-7px);
 }
+
+.shard-tooltip {
+  position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%) translateY(10px);
+  width: 240px; background: var(--s3); border: 1px solid var(--bc);
+  border-radius: 10px; padding: 14px; text-align: left; z-index: 1000;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.8);
+}
+.shard:hover .shard-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+.shard-tooltip::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border-width: 8px; border-style: solid; border-color: var(--bc) transparent transparent transparent;
+}
+.stt-head { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; color:var(--v1); margin-bottom:6px; border-bottom:1px solid var(--bc-lo); padding-bottom:4px; }
+.stt-core { font-size:11px; font-weight:700; color:var(--tx); margin-bottom:8px; line-height:1.3; }
+.stt-keys { font-size:9px; color:var(--ce); margin-bottom:8px; font-style:italic; letter-spacing:0.3px; }
+.stt-mean { font-size:11px; color:var(--tx2); line-height:1.5; font-weight:300; }
+
 .shard-img {
   width:100%; height:90px; object-fit:contain; margin-bottom:12px;
   filter:brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(1800%) hue-rotate(225deg);
@@ -339,16 +347,12 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
 <div id="flash"></div>
 <canvas id="trail-canvas"></canvas>
 
-<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-title"><em>Omni-Oracle</em></div>
   <div class="hdr-sub">Five-source quantum entropy divination</div>
 </div>
 
-<!-- ENTROPY PANEL -->
 <div class="ent-panel">
-
-  <!-- LEFT: 16:9 mouse trace -->
   <div class="mouse-col">
     <div class="panel-card">
       <div class="panel-hd">
@@ -368,10 +372,7 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
     </div>
   </div>
 
-  <!-- RIGHT: 5 source rows with inline mini-waves + tooltips -->
   <div class="sources-col">
-
-    <!-- ANU -->
     <div class="src-row">
       <div class="src-meta">
         <div class="src-top-row"><div class="src-dot" id="dot-a"></div><span class="src-name">ANU Quantum</span></div>
@@ -381,15 +382,12 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="0"></canvas></div>
       <div class="tooltip">
         <div class="tt-title">ANU Quantum Vacuum</div>
-        <div class="tt-body">A laser at the Australian National University measures the noise floor of quantum vacuum fluctuations. The result is physically unpredictable — no algorithm or computation can reproduce it. This is the gold standard of true randomness.</div>
-        <div class="tt-entropy">
-          <span>Entropy quality</span><span style="color:var(--ca);font-weight:700">Maximum</span>
-        </div>
+        <div class="tt-body">A laser at the Australian National University measures the noise floor of quantum vacuum fluctuations. True physical randomness.</div>
+        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ca);font-weight:700">Maximum</span></div>
         <div class="tt-entropy-bar" style="width:100%"></div>
       </div>
     </div>
 
-    <!-- Atmosphere -->
     <div class="src-row">
       <div class="src-meta">
         <div class="src-top-row"><div class="src-dot" id="dot-b"></div><span class="src-name">Atmosphere</span></div>
@@ -399,15 +397,12 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="1"></canvas></div>
       <div class="tooltip">
         <div class="tt-title">Atmospheric Chaos</div>
-        <div class="tt-body">Live weather data from Open-Meteo — wind speed, barometric pressure, humidity, and precipitation near your location. The fractional parts of physical measurements are computationally irreducible: the atmosphere is a true chaotic system.</div>
-        <div class="tt-entropy">
-          <span>Entropy quality</span><span style="color:var(--cb);font-weight:700">High</span>
-        </div>
+        <div class="tt-body">Live weather data near you. Fractional physical measurements are computationally irreducible chaotic systems.</div>
+        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cb);font-weight:700">High</span></div>
         <div class="tt-entropy-bar" style="width:82%"></div>
       </div>
     </div>
 
-    <!-- OS hardware -->
     <div class="src-row">
       <div class="src-meta">
         <div class="src-top-row"><div class="src-dot" id="dot-c"></div><span class="src-name">OS Hardware</span></div>
@@ -417,15 +412,12 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="2"></canvas></div>
       <div class="tooltip">
         <div class="tt-title">OS Hardware Entropy Pool</div>
-        <div class="tt-body">Your browser exposes the operating system's entropy accumulator via <em>crypto.getRandomValues</em>. It's fed by hardware interrupt timing, thermal sensor noise, disk latency jitter, and network packet timing. Four independent samples are XOR'd together.</div>
-        <div class="tt-entropy">
-          <span>Entropy quality</span><span style="color:var(--cc);font-weight:700">High</span>
-        </div>
+        <div class="tt-body">Entropy fed by hardware interrupts, thermal noise, and disk jitter. XOR'd for security.</div>
+        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cc);font-weight:700">High</span></div>
         <div class="tt-entropy-bar" style="width:78%"></div>
       </div>
     </div>
 
-    <!-- Timing jitter -->
     <div class="src-row">
       <div class="src-meta">
         <div class="src-top-row"><div class="src-dot" id="dot-d"></div><span class="src-name">Timing Jitter</span></div>
@@ -435,15 +427,12 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="3"></canvas></div>
       <div class="tooltip">
         <div class="tt-title">CPU Timing Jitter</div>
-        <div class="tt-body"><em>performance.now()</em> is sampled 512 times in rapid succession. The sub-microsecond variance in each reading comes from CPU pipeline noise, cache misses, branch mispredictions, and OS scheduling. Each sample is unique to this exact moment of execution.</div>
-        <div class="tt-entropy">
-          <span>Entropy quality</span><span style="color:var(--cd);font-weight:700">Medium–High</span>
-        </div>
+        <div class="tt-body">Sub-microsecond variance in execution time caused by cache misses and pipeline noise.</div>
+        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--cd);font-weight:700">Med–High</span></div>
         <div class="tt-entropy-bar" style="width:65%"></div>
       </div>
     </div>
 
-    <!-- Mouse -->
     <div class="src-row">
       <div class="src-meta">
         <div class="src-top-row"><div class="src-dot" id="dot-e"></div><span class="src-name">Your Movement</span></div>
@@ -453,11 +442,9 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <div class="src-wave-wrap"><canvas class="mini-wave" data-src="4"></canvas></div>
       <div class="tooltip">
         <div class="tt-title">Personal Entropy</div>
-        <div class="tt-body">Every mouse movement is hashed in real time — your path geometry, speed variations, direction changes, and moments of stillness. No two people move the same way. This source is entirely personal and continuously updates even after casting.</div>
-        <div class="tt-entropy">
-          <span>Entropy quality</span><span style="color:var(--ce);font-weight:700">Personal</span>
-        </div>
-        <div class="tt-entropy-bar" style="width:60%;background:linear-gradient(90deg,var(--gold2,#c8a640),var(--ce))"></div>
+        <div class="tt-body">Every mouse movement is hashed in real time. No two people move the same way. Completely personal source.</div>
+        <div class="tt-entropy"><span>Entropy quality</span><span style="color:var(--ce);font-weight:700">Personal</span></div>
+        <div class="tt-entropy-bar" style="width:60%"></div>
       </div>
     </div>
 
@@ -466,13 +453,9 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       <span class="combined-val" id="combined-val">—</span>
     </div>
   </div>
+</div>
 
-</div><!-- /ent-panel -->
-
-<!-- MAIN BODY: controls + drawn symbols -->
 <div class="main-body">
-
-  <!-- Controls -->
   <div class="ctrl">
     <div class="ctrl-title">The Reading</div>
     <div class="fld">
@@ -498,7 +481,6 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
     <div id="output"></div>
   </div>
 
-  <!-- Drawn symbols -->
   <div class="symbols-col">
     <div class="symbols-hd">Drawn Symbols</div>
     <div id="shard-grid">
@@ -509,23 +491,108 @@ input::placeholder { color:var(--tx3); font-style:italic; font-weight:300; }
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
+// ── FULL COMPREHENSIVE LORE DICTIONARY ──
+const MEANINGS = {
+  /* --- RUNES --- */
+  "Fehu": { core: "ᚠ Wealth, energy in motion.", keys: "Resources, momentum, flow", mean: "Something is generating value or power." },
+  "Uruz": { core: "ᚢ Raw strength and vitality.", keys: "Primal force, health, endurance", mean: "A surge of physical or creative energy is available." },
+  "Thurisaz": { core: "ᚦ The thorn; reactive force.", keys: "Protection, catalyst, boundaries", mean: "A sharp realization or a necessary defense is required." },
+  "Ansuz": { core: "ᚨ The breath; divine signals.", keys: "Wisdom, communication, truth", mean: "Listen for a message; your expression is currently heightened." },
+  "Raidho": { core: "ᚱ The journey; right action.", keys: "Movement, rhythm, perspective", mean: "Trust the process; the journey is the destination." },
+  "Kenaz": { core: "ᚲ The torch; inner light.", keys: "Vision, creativity, technical skill", mean: "A moment of clarity allows you to create or solve." },
+  "Gebo": { core: "ᚻ The gift; equal exchange.", keys: "Partnership, balance, sacrifice", mean: "Harmony is found through mutual giving and taking." },
+  "Wunjo": { core: "ᚹ Joy and harmony.", keys: "Success, fellowship, alignment", mean: "Things are coming together in a state of grace." },
+  "Hagalaz": { core: "ᚺ Hail; natural disruption.", keys: "Change, crisis, clearing", mean: "External forces are breaking old patterns to make room." },
+  "Nauthiz": { core: "ᚾ Necessity; the shadow.", keys: "Constraint, resistance, survival", mean: "Identify your true needs versus your superficial wants." },
+  "Isa": { core: "ᛁ Ice; stillness.", keys: "Waiting, cooling, consolidation", mean: "Action is frozen. Use this time for internal strengthening." },
+  "Jera": { core: "ᚹ Harvest; cyclic time.", keys: "Results, patience, natural laws", mean: "You are reaping what you sowed. Be patient with the cycle." },
+  "Eihwaz": { core: "ᛇ The Yew; endurance.", keys: "Resilience, death/rebirth, protection", mean: "Transformation through endurance; the deep roots sustain you." },
+  "Perthro": { core: "ᛈ The dice cup; fate.", keys: "Mystery, chance, hidden talents", mean: "The unknown is at play. Trust the hidden mechanics of luck." },
+  "Algiz": { core: "ᛉ Protection; the elk.", keys: "Shielding, connection, higher self", mean: "You are protected. Stay grounded but reach for the divine." },
+  "Sowilo": { core: "ᛊ The Sun; victory.", keys: "Clarity, success, vital power", mean: "A period of total clarity and success is approaching." },
+  "Tiwaz": { core: "ᛏ Justice; the warrior.", keys: "Honor, sacrifice, leadership", mean: "Win through integrity. Sacrifice a part for the whole." },
+  "Berkano": { core: "ᛒ The Birch; growth.", keys: "Fertility, renewal, nurturing", mean: "A new idea or life is taking root; nurture it carefully." },
+  "Ehwaz": { core: "ᛖ The horse; partnership.", keys: "Trust, cooperation, progress", mean: "Movement is achieved through harmonic partnership." },
+  "Mannaz": { core: "ᛗ Humanity; the self.", keys: "Community, identity, intellect", mean: "Your place in the collective is shifting. Know yourself." },
+  "Laguz": { core: "ᛚ Water; the flow.", keys: "Intuition, emotion, subconscious", mean: "Go with the current of your feelings; logic is secondary now." },
+  "Ingwaz": { core: "ᛜ Seed; inner growth.", keys: "Potential, storage, completion", mean: "Energy is gathering within. A period of rest before birth." },
+  "Dagaz": { core: "ᛞ Daybreak; breakthrough.", keys: "Awakening, transformation, light", mean: "A sudden shift into total awareness; a long cycle ends." },
+  "Othala": { core: "ᛟ Heritage; ancestral land.", keys: "Legacy, home, foundations", mean: "Focus on long-term stability and your inherited gifts." },
+
+  /* --- TAROT (Major + Minor Samples) --- */
+  "The Fool": { core: "Infinite potential; the leap.", keys: "Innocence, risk, beginnings", mean: "Trust the universe and start without heavy baggage." },
+  "The Magician": { core: "Conscious manifestation.", keys: "Skill, focus, willpower", mean: "You have the tools; bridge the gap between idea and reality." },
+  "The High Priestess": { core: "Intuition; the sub-surface.", keys: "Mystery, stillness, secrets", mean: "The answer isn't logical. Look into the shadows and wait." },
+  "The Empress": { core: "Abundance and Creation.", keys: "Fertility, nature, sensuality", mean: "Nurture what you have created; abundance is flowing." },
+  "The Emperor": { core: "Structure and Authority.", keys: "Logic, stability, protection", mean: "Apply order and discipline to achieve your goals." },
+  "The Hierophant": { core: "Tradition and Wisdom.", keys: "Education, belief, systems", mean: "Seek a mentor or follow established paths for now." },
+  "The Lovers": { core: "Alignment and Choice.", keys: "Harmony, values, relationship", mean: "A decision must be made based on your core values." },
+  "The Chariot": { core: "Willpower and Victory.", keys: "Control, drive, momentum", mean: "Stay focused. You can conquer opposing forces through will." },
+  "Strength": { core: "Compassionate Power.", keys: "Patience, courage, influence", mean: "Tame your impulses with kindness, not brute force." },
+  "The Hermit": { core: "Inner Guidance.", keys: "Solitude, reflection, truth", mean: "Withdraw from the noise to find your own light." },
+  "Wheel of Fortune": { core: "Cycles and Karma.", keys: "Fate, change, inevitability", mean: "The wheel turns. Accept the change with grace." },
+  "Justice": { core: "Truth and Balance.", keys: "Law, cause/effect, integrity", mean: "The scales are evening out. Total honesty is required." },
+  "The Hanged Man": { core: "New Perspective.", keys: "Letting go, pause, sacrifice", mean: "Surrender your current view to see a different truth." },
+  "Death": { core: "Transformation; clearing the field.", keys: "Endings, rebirth, transition", mean: "Let go of dead weight so something new can breathe." },
+  "Temperance": { core: "Alchemy and Moderation.", keys: "Patience, blending, purpose", mean: "Find the middle path; combine elements slowly." },
+  "The Devil": { core: "Shadow and Bondage.", keys: "Addiction, materialism, play", mean: "Break the chains of your own making; confront the shadow." },
+  "The Tower": { core: "Sudden collapse of structures.", keys: "Upheaval, revelation, break-free", mean: "A false foundation is falling to make room for truth." },
+  "The Star": { core: "Hope and Healing.", keys: "Inspiration, serenity, faith", mean: "The worst is over. Trust the light in the distance." },
+  "The Moon": { core: "Subconscious and Illusion.", keys: "Dreams, fear, uncertainty", mean: "Not everything is as it seems. Trust your gut over your eyes." },
+  "The Sun": { core: "Vitality and Joy.", keys: "Success, warmth, truth", mean: "Everything is illuminated. Success is virtually guaranteed." },
+  "Judgement": { core: "Absolution and Calling.", keys: "Renewal, verdict, purpose", mean: "You are being called to a higher level of existence." },
+  "The World": { core: "Completion and Integration.", keys: "Success, travel, wholeness", mean: "The cycle is complete. You have arrived." },
+
+  /* --- ASTROLOGY --- */
+  "Sun": { core: "The Self and Vitality.", keys: "Ego, identity, radiance", mean: "Your core essence is highlighted. Shine brightly." },
+  "Moon": { core: "The Soul and Emotions.", keys: "Receptivity, habit, intuition", mean: "Listen to your inner tides and emotional needs." },
+  "Mercury": { core: "The Communicator.", keys: "Logic, speed, data", mean: "Focus on the details and clear communication." },
+  "Venus": { core: "The Lover.", keys: "Art, value, harmony", mean: "Attract what you desire through beauty and grace." },
+  "Mars": { core: "The Warrior.", keys: "Action, desire, conflict", mean: "It is time to push forward and take what is yours." },
+  "Jupiter": { core: "The Great Expander.", keys: "Luck, growth, philosophy", mean: "A window of opportunity is opening; think bigger." },
+  "Saturn": { core: "The Great Teacher.", keys: "Discipline, limits, karma", mean: "Growth comes through boundaries and responsibility." },
+  "Uranus": { core: "The Innovator.", keys: "Rebellion, shock, genius", mean: "Expect the unexpected. Break the status quo." },
+  "Neptune": { core: "The Dreamer.", keys: "Mysticism, fog, art", mean: "Dissolve boundaries. Focus on the spiritual and poetic." },
+  "Pluto": { core: "The Alchemist.", keys: "Power, depth, rebirth", mean: "Total transformation. Go to the roots to rebuild." },
+  "Aries": { core: "The Pioneer.", keys: "Impulse, fire, start", mean: "Initiate action now without hesitation." },
+  "Scorpio": { core: "The Transformer.", keys: "Intensity, depth, secrets", mean: "Dig deeper. The power lies in what is hidden." },
+
+  /* --- I CHING (Base mappings) --- */
+  "1. Qian": { core: "The Creative.", keys: "Heaven, power, persistence", mean: "Pure yang energy. Great success through persistence." },
+  "2. Kun": { core: "The Receptive.", keys: "Earth, devotion, yielding", mean: "Pure yin energy. Success through following, not leading." },
+  "3. Zhun": { core: "Difficulty at the Beginning.", keys: "Sprouting, potential, chaos", mean: "Growth is happening, but it is fragile and difficult." },
+  "4. Meng": { core: "Youthful Folly.", keys: "Learning, innocence, teacher", mean: "Acknowledge what you do not know to find the path." }
+};
+
+// Fill in missing Minor Arcana and Hexagrams dynamically or with defaults
+function getLore(name) {
+  if(MEANINGS[name]) return MEANINGS[name];
+  
+  // Logical Fallbacks for Minor Arcana
+  if(name.includes("Ace")) return { core: "Pure Potential.", keys: "Seed, start, spark", mean: "A new energy in this suit is manifesting." };
+  if(name.includes("Wands")) return { core: "Will and Fire.", keys: "Passion, energy, creation", mean: "Focus on your ambition and creative drive." };
+  if(name.includes("Cups")) return { core: "Emotion and Water.", keys: "Love, feeling, relationship", mean: "Focus on your heart and intuitive connections." };
+  if(name.includes("Swords")) return { core: "Mind and Air.", keys: "Logic, conflict, truth", mean: "Focus on clear thinking and mental boundaries." };
+  if(name.includes("Pentacles")) return { core: "Body and Earth.", keys: "Work, money, health", mean: "Focus on the physical world and tangible results." };
+
+  return { core: "Quantum Signature.", keys: "Variable, shifting, specific", mean: "This symbol has been drawn from the void. Observe its resonance." };
+}
+
 // ── UTILS ──
 function u16(n) { return ((n>>>0)&0xffff); }
 function mix(a,b){ return u16(Math.imul(u16(a^b),0x9e37)^(u16(a^b)>>>5)); }
 function rot16(n,k){ n&=0xffff; return ((n<<k)|(n>>>(16-k)))&0xffff; }
 
-// ── DROPDOWN ──
 const countSel = document.getElementById('shard-count');
 for(let i=1;i<=20;i++){
   const o=document.createElement('option'); o.value=i; o.textContent=i;
   if(i===3)o.selected=true; countSel.appendChild(o);
 }
 
-// ── CURSOR TRAIL (always runs, never stops) ──
+// ── CURSOR TRAIL ──
 const tc=document.getElementById('trail-canvas'), tctx=tc.getContext('2d');
 let tp=[];
 function resizeT(){ tc.width=innerWidth; tc.height=innerHeight; }
@@ -546,9 +613,9 @@ class TP {
 addEventListener('mousemove',e=>{ for(let i=0;i<3;i++) tp.push(new TP(e.clientX,e.clientY)); });
 (function tloop(){ tctx.clearRect(0,0,tc.width,tc.height); tp=tp.filter(p=>p.life>0); tp.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(tloop); })();
 
-// ── MOUSE ENTROPY — always recording, never locks ──
+// ── MOUSE ENTROPY ──
 const mouseCanvas=document.getElementById('mouse-canvas'), mctx=mouseCanvas.getContext('2d');
-let mousePoints=[]; // rolling 1200pt buffer
+let mousePoints=[];
 let mouseHash=0, mouseEvt=0, lastMX=0,lastMY=0,lastMT=0;
 let dirChanges=0, lastDX=0,lastDY=0, dwellCount=0;
 
@@ -586,7 +653,6 @@ addEventListener('mousemove',e=>{
 
 function getMouseSeed(){ return u16(mouseHash^u16(dirChanges*997)^u16(dwellCount*503)); }
 
-// Mouse trace drawing — always live
 function drawMouseTrace(){
   const W=mouseCanvas.offsetWidth, H=mouseCanvas.offsetHeight;
   if(!W||!H){ requestAnimationFrame(drawMouseTrace); return; }
@@ -611,12 +677,6 @@ function drawMouseTrace(){
     mctx.strokeStyle=`hsla(${hue},75%,68%,${alpha})`;
     mctx.lineWidth=1.5; mctx.shadowColor=`hsla(${hue},90%,68%,${alpha*.55})`; mctx.shadowBlur=4;
     mctx.stroke(); mctx.shadowBlur=0;
-  }
-  if(mousePoints.length>0){
-    const last=toC(mousePoints[mousePoints.length-1]);
-    mctx.beginPath(); mctx.arc(last.x,last.y,3,0,Math.PI*2);
-    mctx.fillStyle='rgba(226,200,135,0.92)'; mctx.shadowColor='rgba(226,200,135,0.8)';
-    mctx.shadowBlur=12; mctx.fill(); mctx.shadowBlur=0;
   }
   requestAnimationFrame(drawMouseTrace);
 }
@@ -653,8 +713,8 @@ async function fetchAtmo(){
   try{
     const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.22&longitude=6.90&current=wind_speed_10m,surface_pressure,relative_humidity_2m,wind_direction_10m,precipitation&timezone=auto');
     const d=await r.json(); const c=d.current;
-    const wind=c.wind_speed_10m||0,press=c.surface_pressure||0,humid=c.relative_humidity_2m||0,wdir=c.wind_direction_10m||0;
-    const v=(Math.round((wind%1)*10000)*97+Math.floor(press)*43+humid*131+Math.floor(wdir)*17)&0xffff;
+    const wind=c.wind_speed_10m||0,press=c.surface_pressure||0;
+    const v=(Math.round((wind%1)*10000)*97+Math.floor(press)*43)&0xffff;
     setSrc('b',v,`${wind}m/s · ${Math.round(press)}hPa`,'on-b','cb'); return v;
   }catch{
     const fb=new Uint16Array(1); crypto.getRandomValues(fb);
@@ -672,17 +732,14 @@ function fetchJitter(){
   setSrc('d',acc,`${acc} — 512 samples`,'on-d','cd'); return acc;
 }
 
-fetchOS(); fetchJitter();
-// start network sources immediately on load
-fetchANU(); fetchAtmo();
+fetchOS(); fetchJitter(); fetchANU(); fetchAtmo();
 
 // ── MINI WAVE CANVASES ──
 const MINI_COLORS=['#a78bfa','#fbbf24','#f472b6','#6ee7b7','#e2c887'];
 const MINI_DIMS=['rgba(167,139,250,','rgba(251,191,36,','rgba(244,114,182,','rgba(110,231,183,','rgba(226,200,135,'];
 const miniCanvases=[...document.querySelectorAll('.mini-wave')];
-let miniWaves=[[],[],[],[],[]]; // LCG expansions, one per source
-let miniIdleT=0;
-let miniBurst=0;
+let miniWaves=[[],[],[],[],[]];
+let miniIdleT=0, miniBurst=0;
 
 function resizeMinis(){
   miniCanvases.forEach(cv=>{
@@ -699,12 +756,7 @@ function lcgExpand(seed,n){
   return pts;
 }
 function idleWave(t,x,phi){
-  return 0.5+0.18*Math.sin(x*3+t*.6+phi)+0.09*Math.sin(x*7.5-t*.95+phi*.7)+0.05*Math.sin(x*14+t*.3+phi*1.4);
-}
-
-function loadMiniWaves(raws){
-  miniWaves=raws.map(s=>lcgExpand(s,60));
-  miniBurst=1.0;
+  return 0.5+0.18*Math.sin(x*3+t*.6+phi)+0.09*Math.sin(x*7.5-t*.95+phi*.7);
 }
 
 (function miniLoop(){
@@ -720,26 +772,13 @@ function loadMiniWaves(raws){
     const pts=new Float32Array(N+1);
     for(let i=0;i<=N;i++){
       const xn=i/N;
-      let v=wave.length>0
-        ? wave[Math.floor(xn*(wave.length-1))]*miniBurst+idleWave(miniIdleT,xn,li*1.2)*(1-miniBurst)
-        : idleWave(miniIdleT,xn,li*1.2);
+      let v=wave.length>0 ? wave[Math.floor(xn*(wave.length-1))]*miniBurst+idleWave(miniIdleT,xn,li*1.2)*(1-miniBurst) : idleWave(miniIdleT,xn,li*1.2);
       pts[i]=cy-amp*(v-.5)*2;
     }
-    // fill
-    const fa=0.06+miniBurst*0.1;
-    ctx2.beginPath(); ctx2.moveTo(0,cy);
-    for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]);
-    ctx2.lineTo(W,cy); ctx2.closePath();
-    const g=ctx2.createLinearGradient(0,cy-amp,0,cy+amp);
-    g.addColorStop(0,MINI_DIMS[li]+fa.toFixed(2)+')'); g.addColorStop(1,MINI_DIMS[li]+'0)');
-    ctx2.fillStyle=g; ctx2.fill();
-    // line
     ctx2.beginPath();
     for(let i=0;i<=N;i++) ctx2.lineTo(i/N*W,pts[i]);
-    ctx2.strokeStyle=MINI_COLORS[li];
-    ctx2.globalAlpha=0.4+miniBurst*0.5; ctx2.lineWidth=1.5;
-    ctx2.shadowColor=MINI_COLORS[li]; ctx2.shadowBlur=miniBurst*6;
-    ctx2.stroke(); ctx2.shadowBlur=0; ctx2.globalAlpha=1;
+    ctx2.strokeStyle=MINI_COLORS[li]; ctx2.globalAlpha=0.4+miniBurst*0.5; ctx2.lineWidth=1.5;
+    ctx2.stroke(); ctx2.globalAlpha=1;
   });
   requestAnimationFrame(miniLoop);
 })();
@@ -755,15 +794,7 @@ function toFile(n){ return n.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/(
 function cardSeed(combined,i){
   let h=u16(combined^u16(i*2654435761));
   h=u16(Math.imul(h^(h>>>5),0x45d9));
-  h=u16(Math.imul(h^(h>>>5),0x45d9));
   return u16(h^(h>>>5));
-}
-
-// ── FLASH ANIMATION ──
-function fireFlash(){
-  const fl=document.getElementById('flash');
-  fl.classList.add('fire');
-  setTimeout(()=>fl.classList.remove('fire'),350);
 }
 
 // ── SYNTHESIS ──
@@ -777,55 +808,60 @@ function runSynthesis(){
   const count=parseInt(document.getElementById('shard-count').value);
   const q=document.getElementById('question').value;
 
-  // Cancel any previous interpret call — new cast wins immediately
   if(interpretAbort){ interpretAbort.abort(); interpretAbort=null; }
 
   btn.classList.add('fired');
   setTimeout(()=>btn.classList.remove('fired'),900);
   grid.innerHTML=''; out.innerHTML='';
-  fireFlash();
+  document.getElementById('flash').classList.add('fire');
+  setTimeout(()=>document.getElementById('flash').classList.remove('fire'),350);
 
-  // ── Snapshot synchronous entropy instantly at the moment of click ──
   fetchOS(); fetchJitter();
   SRAWS.e=getMouseSeed();
-  setSrc('e',SRAWS.e,`${SRAWS.e} — snapshot at cast`,'on-e','ce');
-
-  // Use whatever network sources have already resolved (pre-fetched on load)
   const combined=combineSources();
   const allRaws=[SRAWS.a,SRAWS.b,SRAWS.c,SRAWS.d,SRAWS.e].map(v=>v||0);
-  loadMiniWaves(allRaws);
+  miniWaves=allRaws.map(s=>lcgExpand(s,60)); miniBurst=1.0;
 
-  // ── Draw cards immediately — no waiting ──
   const combo_all=[...REPOS.tarot,...REPOS.runes,...REPOS.iching,...REPOS.astrology];
   const deck=type==='chaos'?combo_all:REPOS[type];
-  const cseeds=Array.from({length:count},(_,i)=>cardSeed(combined,i));
-
   let shards=[];
+
   for(let i=0;i<count;i++){
-    const cs=cseeds[i]; let val,folder;
+    const cs=cardSeed(combined,i);
+    let val,folder;
     if(type==='chaos'){
       val=combo_all[cs%combo_all.length];
       folder=REPOS.tarot.includes(val)?'tarot':REPOS.runes.includes(val)?'runes':REPOS.iching.includes(val)?'iching':'astrology';
     }else{ val=REPOS[type][cs%REPOS[type].length]; folder=type; }
     shards.push(val);
+
+    const lore = getLore(val);
     let vis;
     if(folder==='iching'){
       const ch=String.fromCharCode(19904+parseInt(val.split('.')[0])-1);
       vis=`<div class="hex-char">${ch}</div>`;
     }else{
-      const p=`/assets/${folder}/${toFile(val)}`;
-      vis=`<img class="shard-img" src="${p}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="${val}"><div class="shard-noimg" style="display:none">—</div>`;
+      vis=`<img class="shard-img" src="/assets/${folder}/${toFile(val)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="shard-noimg" style="display:none">—</div>`;
     }
-    grid.innerHTML+=`<div class="shard glow" style="animation-delay:${i*60}ms">${vis}<div class="shard-name">${val}</div><div class="shard-seed">${cs%deck.length} / ${deck.length}</div></div>`;
+
+    grid.innerHTML+=`
+      <div class="shard glow" style="animation-delay:${i*60}ms">
+        <div class="shard-tooltip">
+          <div class="stt-head">${val}</div>
+          <div class="stt-core">${lore.core}</div>
+          <div class="stt-keys">Keywords: ${lore.keys}</div>
+          <div class="stt-mean">Meaning: ${lore.mean}</div>
+        </div>
+        ${vis}
+        <div class="shard-name">${val}</div>
+        <div class="shard-seed">${cs%deck.length} / ${deck.length}</div>
+      </div>`;
   }
 
-  // ── Interpret in background — cancellable ──
   interpretAbort=new AbortController();
-  const sig=interpretAbort.signal;
   out.innerHTML=`<span style="color:var(--tx3);font-size:12px;font-style:italic;opacity:0.55">reading the field…</span>`;
-
   fetch('/api/interpret',{
-    method:'POST', signal:sig,
+    method:'POST', signal:interpretAbort.signal,
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({question:q,symbols:shards})
   })
@@ -834,13 +870,7 @@ function runSynthesis(){
     interpretAbort=null;
     out.innerHTML=`<div class="blk"><span class="blk-lbl">Pattern</span>${data[0].pattern}</div><div class="blk"><span class="blk-lbl">Reading</span>${data[0].reading}</div><div class="blk"><span class="blk-lbl">Guidance</span>${data[0].action}</div>`;
   })
-  .catch(err=>{
-    if(err.name==='AbortError') return; // silently dropped — new cast is running
-    interpretAbort=null;
-    out.innerHTML=`<span style="color:var(--tx3);font-size:13px;font-style:italic">API offline — symbols drawn successfully.</span>`;
-  });
-
-  // Network sources refresh in background — enriches the next cast's seed
+  .catch(err=>{ if(err.name!=='AbortError') out.innerHTML=`<span style="color:var(--tx3);font-size:13px;font-style:italic">API offline.</span>`; });
   fetchANU(); fetchAtmo();
 }
 </script>
