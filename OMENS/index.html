@@ -36,6 +36,7 @@
             pointer-events: none;
         }
 
+        /* Top Visualization Section */
         .visualization-area {
             width: 100%;
             padding: 40px 5%;
@@ -85,6 +86,29 @@
             transform: translateY(-5px);
         }
 
+        /* Holographic Image Styling */
+        .shard-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            /* Forces images to glow neon cyan */
+            filter: brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(5000%) hue-rotate(150deg);
+            opacity: 0.9;
+        }
+
+        /* I Ching Unicode Styling */
+        .hexagram-display {
+            font-size: 85px;
+            color: var(--cyan);
+            text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--magenta);
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
         .shard-img-placeholder {
             width: 100%;
             height: 120px;
@@ -98,18 +122,10 @@
             color: rgba(255,255,255,0.3);
         }
 
-        .shard-image {
-            width: 100%;
-            height: 120px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            display: none; 
-        }
-
         .shard-name {
             color: var(--magenta);
             font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
@@ -120,6 +136,7 @@
             opacity: 0.7;
         }
 
+        /* Main Interaction Area */
         .main-container {
             flex-grow: 1;
             display: flex;
@@ -208,8 +225,8 @@
     <span class="section-label">QUANTUM ENTROPY FEED</span>
     <div id="shard-grid">
         <div class="shard-box">
-            <div class="shard-img-placeholder">AWAITING</div>
-            <div class="shard-name">SYSTEM_IDLE</div>
+            <div class="shard-img-placeholder">SYSTEM_READY</div>
+            <div class="shard-name">AWAITING_INPUT</div>
             <div class="shard-index">SIG_00</div>
         </div>
     </div>
@@ -219,24 +236,24 @@
     <div class="control-panel">
         <div class="ui-row">
             <div class="input-group">
-                <label>Category</label>
+                <label>Symbolic Engine</label>
                 <select id="source-type">
                     <option value="tarot">Tarot (78 Cards)</option>
-                    <option value="runes">Runes (24)</option>
-                    <option value="iching">I Ching (64)</option>
-                    <option value="astrology">Celestial (Planets & Signs)</option>
-                    <option value="chaos">Omni-Mix (Chaos)</option>
+                    <option value="runes">Elder Futhark Runes (24)</option>
+                    <option value="iching">I Ching Hexagrams (64)</option>
+                    <option value="astrology">Celestial Signs & Planets</option>
+                    <option value="chaos">Omni-Chaos Mode</option>
                 </select>
             </div>
             <div class="input-group">
-                <label>Quantity</label>
+                <label>Shards</label>
                 <select id="shard-count"></select>
             </div>
         </div>
 
         <div class="input-group" style="margin-bottom: 30px;">
             <label>Neural Inquiry</label>
-            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank...">
+            <input type="text" id="user-question" placeholder="Enter inquiry or leave blank for pure entropy...">
         </div>
 
         <button id="synth-btn" class="synthesize-btn" onclick="runSynthesis()">INITIATE SYNTHESIS</button>
@@ -246,7 +263,7 @@
 </div>
 
 <script>
-    // POPULATE DROPDOWN
+    // 1. POPULATE DROPDOWN (1-20)
     const countSelect = document.getElementById('shard-count');
     for(let i=1; i<=20; i++) {
         let opt = document.createElement('option');
@@ -255,7 +272,7 @@
         countSelect.appendChild(opt);
     }
 
-    // CURSOR TRAIL
+    // 2. CURSOR TRAIL
     const canvas = document.getElementById('trail-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -283,6 +300,7 @@
     }
     animate();
 
+    // 3. FULL REPOSITORIES
     const REPOS = {
         tarot: [
             "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World",
@@ -301,8 +319,9 @@
         ]
     };
 
-    function nameToFilename(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.jpg'; }
+    function nameToFilename(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/(^_|_$)/g, '') + '.svg'; }
 
+    // 4. SYNTHESIS ENGINE
     async function runSynthesis() {
         const grid = document.getElementById('shard-grid');
         const output = document.getElementById('ai-output');
@@ -312,7 +331,7 @@
         const question = document.getElementById('user-question').value;
 
         btn.disabled = true; grid.innerHTML = "";
-        output.innerHTML = "<span style='color:var(--cyan)'>Syncing...</span>";
+        output.innerHTML = "<span style='color:var(--cyan)'>Syncing Neural Link...</span>";
 
         try {
             const seedRes = await fetch('https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16');
@@ -337,11 +356,24 @@
                     else folder = 'astrology';
                 }
                 shards.push(val);
-                const imgPath = `/assets/${folder}/${nameToFilename(val)}`;
+
+                let visualHTML = "";
+                if (folder === 'iching') {
+                    // Start of I Ching Unicode block is 19904
+                    const hexIndex = parseInt(val.split(".")[0]) - 1;
+                    const char = String.fromCharCode(19904 + hexIndex);
+                    visualHTML = `<div class="hexagram-display">${char}</div>`;
+                } else {
+                    const imgPath = `/assets/${folder}/${nameToFilename(val)}`;
+                    visualHTML = `
+                        <img class="shard-image" src="${imgPath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${val}">
+                        <div class="shard-img-placeholder">[ NO SIGNAL ]</div>
+                    `;
+                }
+
                 grid.innerHTML += `
                     <div class="shard-box">
-                        <img class="shard-image" src="${imgPath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${val}">
-                        <div class="shard-img-placeholder">[ NO DATA ]</div>
+                        ${visualHTML}
                         <div class="shard-name">${val}</div>
                         <div class="shard-index">SIG_${String(i+1).padStart(2, '0')}</div>
                     </div>
@@ -355,11 +387,11 @@
             });
             const data = await res.json();
             output.innerHTML = `
-                <div><span class="output-label">PATTERN</span>${data[0].pattern}</div>
-                <div style="margin-top:15px;"><span class="output-label">READING</span>${data[0].reading}</div>
+                <div><span class="output-label">QUANTUM PATTERN</span>${data[0].pattern}</div>
+                <div style="margin-top:15px;"><span class="output-label">NEURAL READING</span>${data[0].reading}</div>
                 <div style="margin-top:15px; font-style:italic; color:var(--cyan);">↳ ${data[0].action}</div>
             `;
-        } catch (e) { output.innerHTML = "LINK_FAILURE."; }
+        } catch (e) { output.innerHTML = "QUANTUM_LINK_STALLED. Verify API status."; }
         btn.disabled = false;
     }
 </script>
